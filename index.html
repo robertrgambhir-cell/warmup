@@ -955,6 +955,73 @@
     .app.listening .talk-tray .field { max-height: 88px; }
     .app.listening .fix-ask { margin-top: 0; }
   }
+  /* version 77: the lesson's end. The ring grows to N of 5, a line counts the moves picked up, and Saturday's 40 doors fill by the lessons done */
+  .done-hero { text-align: center; margin-top: 2px; }
+  .done-hero .ring-wrap { margin: 0 auto 4px; }
+  .done-hero .h1 { margin: 0 0 4px; font-size: 28px; }
+  .done-hero .lede { margin: 0 auto; max-width: 340px; font-size: 15px; line-height: 1.45; }
+  .gain-line { margin: 4px 0 0; font-size: 14px; line-height: 1.4; font-weight: 700; color: var(--accent-ink); }
+  .ring-arc.grow { animation: ringgrow 1s cubic-bezier(.3,.7,.2,1) .25s both; }
+  @keyframes ringgrow { from { stroke-dasharray: var(--d0) var(--c); } }
+  .sat-card { margin-top: 10px; padding: 11px 14px 12px; border-radius: 20px; background: var(--card); border: 1.5px solid var(--line); }
+  .sat-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .sat-head b { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-ink); }
+  .sat-head span { font-size: 12.5px; font-weight: 600; color: var(--ink-3); }
+  .sat-doors { display: grid; grid-template-columns: repeat(20, 1fr); gap: 5px 3px; margin: 8px 0; }
+  .sat-doors i { position: relative; display: block; aspect-ratio: 5 / 7; border-radius: 6px 6px 1.5px 1.5px; background: var(--soft); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+  .sat-doors.lit i { background: var(--accent-soft); box-shadow: inset 0 0 0 1.5px var(--accent); }
+  .sat-doors.grow.first i { animation: doorlit .45s ease both; animation-delay: calc(var(--d) + .75s); }
+  @keyframes doorlit { from { background: var(--soft); box-shadow: inset 0 0 0 1px var(--line); } }
+  .sat-doors i::after { content: ""; position: absolute; right: 22%; top: 54%; width: 2.5px; height: 2.5px; border-radius: 50%; background: var(--ink-3); opacity: .55; }
+  .sat-doors b { position: absolute; inset: 0; background: var(--accent); transform-origin: 50% 100%; transform: scaleY(var(--f)); }
+  .sat-doors.grow b { animation: doorfill .45s cubic-bezier(.3,.7,.2,1) both; animation-delay: calc(var(--d) + .75s); }
+  @keyframes doorfill { from { transform: scaleY(var(--f0)); } }
+  .sat-card p { margin: 0; font-size: 14px; line-height: 1.42; color: var(--ink-2); }
+  .wrap-bar .sbar-row { display: none; }
+  .wrap-bar .sbar { margin-bottom: 8px; }
+  .when-q { margin: 0 2px; text-align: center; font-size: 13px; line-height: 1.35; color: var(--ink-2); }
+  .when-q b { color: var(--ink); font-weight: 700; }
+  .actions .time-chips, .actions .set-line { margin: 0; }
+  .actions .time-chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .actions .time-chips button, .actions .time-chips select { min-width: 0; padding: 9px 2px; font-size: 12.5px; white-space: nowrap; text-align: center; text-align-last: center; }
+  .wrap-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 14px; margin: 6px 0 0; }
+  .wrap-links .link { font-size: 13px; color: var(--ink-2); }
+  @media (max-height: 640px) { .done-hero .ring-wrap { zoom: .8; } .wrap-bar .sbar-names { display: none; } .done-hero .h1 { font-size: 26px; } }
+  /* version 77: the cutaway's lesson, sized so each screen's content sits above the caption band */
+  .cut-screen .sbar { margin-bottom: 10px; }
+  .cut-open .h1 { font-size: 30px; margin: 2px 0 8px; }
+  .cut-open .parts > div { padding: 9px 2px; }
+  .cut-try .h2, .cut-spot .h2 { margin-bottom: 8px; }
+  .cut-try .frame.mini { height: 120px; }
+  .cut-try .frame.mini svg.voter { margin-top: -56px; }
+  .cut-try .rep-quote { margin: 8px 4px 2px; }
+  .cut-try .cut-voice { margin-top: 10px; }
+  .cut-try .cut-vlabel { font-size: 15px; line-height: 1.35; }
+  .cut-said-txt:empty::before { content: "Listening. Say it your way."; }
+  .cut-door .cut-said-txt:empty::before { content: none; }
+  .cut-try .fb.try { margin-top: 10px; padding: 12px 14px; }
+  .cut-try .fb.try h3 { font-size: 20px; margin: 0 0 4px; }
+  .cut-watch .frame.wframe { height: 150px; }
+  .cut-watch .frame.wframe svg.voter { margin-top: -18px; }
+  .cut-watch .lesson-row { margin-top: 8px; }
+  .cut-watch .caption { margin: 8px 0; padding: 10px 14px; }
+  .cut-watch .caption p { font-size: 15.5px; }
+  .cut-spot .h2.spot-h { font-size: 19.5px; }
+  .cut-spot .spot-thread { padding: 2px 0 6px; gap: 6px; }
+  .cut-spot .opts { gap: 6px; }
+  .cut-spot .opt { padding: 8px 12px; font-size: 15px; cursor: default; }
+  .cut-spot .opt.lit { border-color: var(--accent); background: var(--accent-soft); }
+  .cut-spot .opt.lit .mark { background: var(--accent); border-color: var(--accent); }
+  .cut-spot .opt.lit .mark svg { opacity: 1; }
+  .vid-cut .off { display: none !important; }
+  .cut-door .frame { max-height: 150px; }
+  .cut-hero .ring-num { transition: opacity .3s; }
+  .cut-hero:not(.in) .ring-arc { stroke-dasharray: 0 1000; }
+  .cut-hero:not(.in) .ring-num { opacity: 0; }
+  .cut-sat .sat-doors b { transition: transform .45s cubic-bezier(.3,.7,.2,1) var(--d); }
+  .cut-sat:not(.in) .sat-doors b { transform: scaleY(var(--f0)); transition-delay: 0s; }
+  .cut-sat .sat-doors i { transition: background-color .45s ease var(--d), box-shadow .45s ease var(--d); }
+  .cut-sat:not(.in) .sat-doors i { background: var(--soft); box-shadow: inset 0 0 0 1px var(--line); transition-delay: 0s; }
   @media (prefers-reduced-motion: reduce) {
     .dots3 i { animation: none !important; }
     .voter .fig, .voter .eyes, .voter.knock, .bub, .sms-card, .typing i, .hl, .vid-cap p, .vid-end { animation: none !important; }
@@ -962,6 +1029,7 @@
     .vid-photo { animation: none !important; }
     .story-card, .pass, .story [class^="st-"], .story [class*=" st-"] { animation: none !important; }
     .voter .fig-wrap, .voter .door-panel, .voter .brow, .voter .look, .bar > span, .ring-arc { transition: none !important; }
+    .ring-arc.grow, .sat-doors.grow b, .sat-doors.grow i, .cut-sat .sat-doors b, .cut-sat .sat-doors i { animation: none !important; transition: none !important; }
     .content { scroll-behavior: auto; }
   }
 </style>
@@ -1830,10 +1898,18 @@ const WELCOME = {
 
 /* each line's length in seconds (from the cut points), for the story bars */
 const LINE_DUR = [5.54, 11.03, 10.675, 12.905, 14.36, 12.807];
-/* the cutaway block: when each screen starts (seconds from the phone line's start) and its beats. CUT_T[0] is the cut away from Finnegan. */
-const CUT_T = [0.45, 5.35, 6.9, 10.55];
-const CUT_ROWS = [1.0, 1.72, 2.44, 3.16, 3.88];
-const CUT_WARM = 9.45;
+/* the cutaway block (version 77, Robert): one lesson in the order the volunteer meets it, then the lesson's end.
+   CUT_T holds when each screen starts, in seconds from the phone line's start: the lesson opening, First try, See it done, Find and fix,
+   Your door, the feedback and Lesson 1 done. CUT_T[0] is the cut away from Finnegan. The phone stays up into line 6 until CUT_END
+   (seconds from line 6's start), over "Lesson one is how to open the door," then cuts back to him. */
+const CUT_T = [0.45, 2.85, 5.4, 6.85, 8.45, 10.6, 13.75];
+const CUT_ROWS = [0.95, 1.3, 1.65, 2.0];
+const CUT_LIT = [5.65, 5.95, 6.25, 6.55];
+const CUT_WARM = 9.95;
+const CUT_END = 2.4;
+/* the cutaway's story, scored by the real graders: a first try with a name and the minute question, then Kevin's door with three of the four moves */
+const CUT_TRY = "Hi, do you have a minute? I\u2019m {name}.";
+const CUT_DOOR = "Hi, do you have a minute? I\u2019m {name}. I live a few blocks over, and Election Day is Tuesday.";
 
 /* ---------- the after-shift rating survey (modeled on Airbnb's review flow) ---------- */
 const REVIEW_CATS = {
@@ -3252,7 +3328,7 @@ function tabBar(cur) {
 /* ---------- presenter notes ---------- */
 const NOTES = {
   pick: ["Every program in the cycle", "Signatures a year or more out, registration six months or more out, deep canvassing for persuasion in the months before and turnout in the final two weeks, at the door or by vote tripling at a busy site."],
-  video: ["A welcome from the candidate", "About a minute, one continuous take: Finnegan walks down a Woodbridge street, says why the campaign needs you at the door, explains that the in-person training comes first and Warmup is the head start (short lessons by text, spaced out), then his iPhone fills the frame, in his hand, with the app on it: the five lessons, a glimpse of Watch, Kevin at his door with the volunteer speaking out loud (a listening mic, a waveform, the words arriving as they are said) and Kevin talking back, then a scorecard, each timed to his words. He asks you to complete lesson 1 now. A real candidate would film this themselves; this one is a Hedra video for the demo."],
+  video: ["A welcome from the candidate", "About a minute, one continuous take. Finnegan walks down a Woodbridge street, says why the campaign needs you at the door and explains that the in-person training comes first and Warmup is the head start (short lessons by text, spaced out). Then his iPhone fills the frame, in his hand, and plays one lesson the way the volunteer will meet it, timed to his words. It opens on Lesson 1 of 5 with its four parts, then a first try at Walter\u2019s door, See it done with the moves ticking, Find and fix, Kevin\u2019s door with the volunteer speaking out loud and Kevin talking back, the feedback and Lesson 1 done, with the ring at 1/5 and Saturday\u2019s 40 doors filling. The phone stays up through \u201cLesson one is how to open the door,\u201d then he asks you to complete lesson 1 now. A real candidate would film this themselves; this one is a Hedra video for the demo."],
   sms: ["SMS-delivered", "Nobody has the campaign\u2019s number saved, so a real person signs the text and says who they\u2019re with. At sign-up the campaign says to expect it, so it never reads as spam. The link opens the lesson, with nothing to download. Testing with someone? Tell them first: you\u2019ll play a volunteer and talk out loud with a pretend voter."],
   welcome: ["Today: the plan around the shift", "Version 71 (How Warmup Teaches, approved Oct 12). One list: each lesson on its day, the Warmup Saturday at 8, the canvass at 9 and the Cooldown after. The ring shows readiness for the next shift: the five lessons, then the Warmup. One button for the next thing; a second lesson the same day opens a few hours later, so the button reads Do it now anyway. Four tabs: Today, Practice, Library, Me."],
   intake: ["Find your starting point (off the main path since version 64)", "One question: their experience. The heads-up that practice happens out loud comes right before they first speak: before the opener for veterans, after the four cards for first-timers. Each answer is reflected back, and the name comes from the sign-up list."],
@@ -3268,7 +3344,7 @@ const NOTES = {
   main: ["Your door", "A whole door from the knock. Today\u2019s moves sit on screen as chips; earlier lessons come from memory and get a light check on the scorecard. Lesson 1 is the opener only: Kevin answers and the door closes. A perfect first try lands here straight away."],
   door: ["Your door", "Claude plays the person and grades the conversation. Version 72: one mic button and no typing prompt. In claude.ai the page can\u2019t use the mic, so the button opens the keyboard\u2019s own dictation, and on a phone the screen folds up so the voter stays in view above the keyboard. A page opened on its own (a hosted copy, or the backup file in a browser) listens directly, with no keyboard. Ask the campaign: a voter\u2019s question the volunteer can\u2019t answer gets a line from the campaign\u2019s notes, and the campaign logs it."],
   score: ["Feedback, then say it now", "Three blocks: what you did right, what to fix and my tip, with earlier lessons under From memory. Then the volunteer says the tip out loud once, so the lesson ends on a clean rep."],
-  close: ["The wrap", "Today\u2019s check, then When\u2019s lesson N? with time chips, so spacing becomes the plan Mia\u2019s next text follows. Optional: a one-minute campaign note (the campaign minute moved out of lessons) and Another door, which opens Practice. After lesson 5: You\u2019re 5 by 5, radio talk for loud and clear."],
+  close: ["The lesson\u2019s end", "Lesson N done, with the ring growing to N of 5 (You\u2019re 1/5 warmed up) and, when the door beat the first try, how many new moves the volunteer picked up. Below it, Saturday\u2019s 40 doors fill by the lessons done, so one lesson visibly reaches every door on the list. Then When\u2019s lesson N? with time chips pinned above the button, so spacing becomes the plan Mia\u2019s next text follows, plus links to another door, a retake and a one-minute campaign note. After lesson 5, You\u2019re 5 by 5, radio talk for loud and clear."],
   ready: ["Visible readiness", "Preparation shows up as a badge and a record that carries across shifts."],
   sms2: ["The cooldown text", "One text, sent when the shift ends, opens the cooldown while it\u2019s fresh."],
   debrief: ["Cooldown", "The stars and the four ratings stay for the campaign. New in version 71: one spoken question, Tell me about one door you\u2019ll remember. The coach names the Tough door it points to and adds one like it to the next Warmup. It ends on Sign up for your next shift?"],
@@ -4010,21 +4086,39 @@ function videoScene() {
   return `<g class="vid-cam" id="vid-cam"><image class="vid-photo" href="${CAND_PHOTO}" x="0" y="0" width="360" height="640" preserveAspectRatio="xMidYMid slice"/></g>`;
 }
 function videoCut() {
-  /* the cutaway block (version 60): the five-lesson path, Watch, Kevin's door and the scorecard, timed to line 5's words.
-     Beats are seconds from the line's start (data-at); cutRun() turns them on from the audio clock. Nothing here is live. */
-  const sk = SKILLS.open, name = esc(me());
-  const rows = LESSONS5.map((L, j) => `<li class="p5 ${j === 0 ? "today" : "soon"} cut-rev" data-at="${CUT_ROWS[j]}"><div><span class="p5-dot">${L.n}</span><span class="p5-txt"><b>${L.title}</b>${j === 0 ? `<small>How to open the door \u00b7 5 min</small>` : ""}</span>${j === 0 ? `<span class="p5-tag">Today</span>` : ""}</div></li>`).join("");
-  const path = `<div class="cut-screen cut-path"><div class="p5-head"><div class="ring-wrap" style="width:56px;height:56px">${ring(0, 56, 8)}<span class="ring-num num" style="font-size:15px">0/5</span></div><div><p class="kicker">${name}\u2019s warmup</p><h2 class="h2" style="margin:0">5 lessons \u00b7 5 minutes each</h2></div></div><ol class="path5">${rows}</ol><div class="cut-btn cut-rev" data-at="${CUT_ROWS[4]}"><span class="btn">Start lesson 1</span></div></div>`;
-  const play = `<span class="cut-play" data-at="${CUT_T[1] + 0.4}" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 1.5 L12.5 7 L3.5 12.5 Z" fill="currentColor"/></svg></span>`;
-  const watch = `<div class="cut-screen cut-watch"><div class="frame">${scene("door", "walter", { crop: true, label: "Walter at his front door" })}<span class="who-tag"><b>Walter</b> supporter on the list</span>${play}<div class="hl"><small>Move 1</small><b>${sk.moves[0]}</b></div></div><div class="caption you"><span class="cap-who">You</span><p>Hi there! I\u2019m ${name}.</p></div></div>`;
-  const door = `<div class="cut-screen cut-door"><div class="frame" data-at="${CUT_T[2] + 0.05}">${scene("door", "kevin", { crop: true, label: "Kevin at the door of apartment 3B" })}<span class="who-tag"><b>Kevin</b> Supporter on your list, 29</span></div><div class="thread"><div class="bub them cut-rev" data-at="${CUT_T[2] + 0.2}">Hey. Can I help you?</div><div class="bub you cut-rev" data-at="${CUT_T[2] + 1.25}"><span class="cut-said" aria-hidden="true">${ICON.mic}</span><span class="cut-said-txt" data-full="Hi, I\u2019m ${name}. I\u2019m volunteering for Finnegan James. Election Day is Tuesday, so I\u2019m checking in with supporters."></span></div><div class="bub them cut-rev" data-at="${CUT_WARM}">Oh, okay. Yeah, I\u2019m voting for him.</div></div><div class="cut-voice"><span class="cut-mic"><span class="cut-pulse"></span><span class="cut-pulse p2"></span>${ICON.mic}</span><span><span class="cut-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><p class="cut-vlabel">Listening. Say it your way.</p></span></div></div>`;
-  const hits = [true, false, true, true];
-  const score = `<div class="cut-screen cut-score" data-at="${CUT_T[3] + 0.2}"><div class="score-top compact"><div class="ring-wrap" style="width:64px;height:64px">${ring(0.75, 64, 9)}<span class="ring-num num" style="font-size:18px">3/4</span></div><h2 class="h1 verdict-h" style="margin:0"><span class="emo" aria-hidden="true">${VERDICT.ok[0]}</span>${VERDICT.ok[1]}</h2></div><div class="card3">${fbSections({ rightList: sk.hitNames.filter((_, i) => hits[i]), fixList: sk.missNames.filter((_, i) => !hits[i]) })}<div class="fb-sec tip cut-rev" data-at="${CUT_T[3] + 2.1}"><b>My tip</b><p>${esc(sk.tips[1])}</p></div></div></div>`;
+  /* the cutaway block (version 77, Robert): one lesson the way the volunteer meets it, then the lesson's end, so the phone sets the right picture of what comes next.
+     The lesson opening names the four parts; then First try at Walter's door, See it done with the moves ticking, Find and fix, Kevin's door with the
+     volunteer speaking out loud and Kevin talking back, the feedback and Lesson 1 done, with the ring at 1/5 and Saturday's 40 doors filling.
+     Beats are seconds from line 5's start: data-at shows, data-lit lights and data-off hides; cutRun() applies them from the audio clock. Nothing here is live,
+     and every score is what the graders return for these exact lines (openHits, Kevin's scripted reply, the try card's wording). */
+  const sk = SKILLS.open, f = FLOW.open, d = DOORS.kevin, C = CUT_T, it = sk.spot[0];
+  const tryLine = fill(CUT_TRY), doorLine = fill(CUT_DOOR);
+  const tryHits = openHits(norm(tryLine)), hits = openHits(norm(doorLine));
+  const kev = d.reply({ turns: 0, moves: new Set(), stage: "door" }, doorLine);
+  const got = hits.filter(Boolean).length, tried = tryHits.filter(Boolean).length, miss = hits.indexOf(false), level = got === 4 ? "strong" : got >= 2 ? "ok" : "weak";
+  const said = (from, dur, text) => `<span class="cut-said-txt" data-from="${from}" data-for="${dur}" data-full="${esc(text)}"></span>`;
+  const voice = (live, talk, dur, off, label) => `<div class="cut-voice" data-live="${live}" data-talk="${talk}" data-for="${dur}"${off ? ` data-off="${off}"` : ""}><span class="cut-mic"><span class="cut-pulse"></span><span class="cut-pulse p2"></span>${ICON.mic}</span><span><span class="cut-wave">${"<i></i>".repeat(12)}</span><p class="cut-vlabel">${label}</p></span></div>`;
+  /* the lesson opening, as vSessionG draws it: Lesson 1 of 5, the title and the four parts */
+  const open = `<div class="cut-screen cut-open">${barHtml(1, -1, 0)}<p class="kicker">Lesson 1 of 5 \u00b7 ${lessonMin(1)} min</p><h1 class="h1">${sk.title}</h1><dl class="parts brief">${partRows(1, sk, d).map(([b, x], j) => `<div class="cut-rev" data-at="${CUT_ROWS[j]}"><dt>${b}</dt><dd>${x}</dd></div>`).join("")}</dl></div>`;
+  /* First try: Walter opens the door, the volunteer answers out loud before any teaching, and the card says only what went right */
+  const tryCard = `You ${andList(f.did.filter((_, i) => tryHits[i]))}. ${tried ? `Watch for the other ${NUMW[4 - tried]}.` : "Watch for all four."}`;
+  const tryS = `<div class="cut-screen cut-try">${barHtml(1, 0, 0.5)}<h2 class="h2 tight">The door opens. How would you start?</h2><div class="rep-card"><div class="frame small mini">${scene("door", f.persona, { label: "Walter at the door" })}</div><p class="rep-quote"><b>${sk.lesson.name}:</b> \u201c${f.line}\u201d</p></div>${voice(C[1] + 0.2, C[1] + 0.4, 0.9, C[1] + 1.7, said(C[1] + 0.4, 0.9, tryLine))}<div class="fb try cut-rev" data-at="${C[1] + 1.7}"><h3>Nice start.</h3><p>${tryCard}</p></div></div>`;
+  /* See it done: Walter's door done right, the four moves ticking as they land */
+  const play = `<span class="cut-play" data-at="${C[2] + 0.15}" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 1.5 L12.5 7 L3.5 12.5 Z" fill="currentColor"/></svg></span>`;
+  const watch = `<div class="cut-screen cut-watch">${barHtml(1, 1, 0.6)}<div class="frame wframe">${scene("door", sk.lesson.persona, { crop: "tight", label: "Walter at his front door" })}<span class="who-tag"><b>${sk.lesson.name}</b> ${sk.lesson.tag}</span>${play}</div><div class="lesson-row"><h2 class="h2">Here\u2019s how it\u2019s done</h2></div><div class="caption you"><span class="cap-who">You</span><p>${esc(fill(sk.lesson.lines[0].text))} ${esc(sk.lesson.lines[1].text)}</p></div><ol class="moves chips">${sk.moves.map((m, i) => `<li data-lit="${CUT_LIT[i]}">${mark()}<span>${m}</span></li>`).join("")}</ol></div>`;
+  /* Find and fix: Walter's door on another day with the neighbor move missing (the door spotPick() gives a first try like this one); the volunteer taps it */
+  const spot = `<div class="cut-screen cut-spot">${barHtml(1, 2, 0.55)}<h2 class="h2 tight spot-h">Here\u2019s ${sk.lesson.name}\u2019s door on a different day. This time, one of the four moves is missing. Can you find it?</h2><div class="thread spot-thread">${it.lines.map(([who, t]) => `<div class="bub ${who}">${esc(fill(t))}</div>`).join("")}</div><div class="opts spot-opts">${sk.moves.map((m, i) => `<div class="opt"${i === it.miss ? ` data-lit="${C[3] + 0.75}"` : ` data-off="${C[3] + 0.75}"`}>${mark()}${m}</div>`).join("")}</div><div class="fb strong cut-rev" data-at="${C[3] + 0.85}"><div class="fb-sec right"><b>Right.</b><p>${it.missLine}</p></div></div></div>`;
+  /* Your door: Kevin answers, the volunteer speaks out loud and Kevin talks back with his real scripted reply */
+  const door = `<div class="cut-screen cut-door">${barHtml(1, 3, 0.5)}<div class="frame" data-at="${C[4] + 0.05}">${scene("door", "kevin", { crop: true, label: "Kevin at the door of apartment 3B" })}<span class="who-tag"><b>${d.name}</b> ${d.sub}</span></div><div class="thread"><div class="bub them cut-rev" data-at="${C[4] + 0.2}">${esc(d.first.say)}</div><div class="bub you cut-rev" data-at="${C[4] + 0.45}"><span class="cut-said" aria-hidden="true">${ICON.mic}</span>${said(C[4] + 0.45, 0.95, doorLine)}</div><div class="bub them cut-rev" data-at="${CUT_WARM}">${esc(kev.say)}</div></div>${voice(C[4] + 0.3, C[4] + 0.45, 0.95, CUT_WARM, "Listening. Say it your way.")}</div>`;
+  /* the feedback, the scorecard this line really earns */
+  const score = `<div class="cut-screen cut-score" data-at="${C[5] + 0.15}">${barHtml(1, 3, 0.9)}<div class="score-top compact"><div class="ring-wrap" style="width:64px;height:64px">${ring(got / 4, 64, 9)}<span class="ring-num num" style="font-size:18px">${got}/4</span></div><h2 class="h1 verdict-h" style="margin:0"><span class="emo" aria-hidden="true">${VERDICT[level][0]}</span>${VERDICT[level][1]}</h2></div><div class="card3">${fbSections({ rightList: sk.hitNames.filter((_, i) => hits[i]), fixList: sk.missNames.filter((_, i) => !hits[i]) })}${miss >= 0 ? `<div class="fb-sec tip cut-rev" data-at="${C[5] + 2.1}"><b>My tip</b><p>${esc(sk.tips[miss])}</p></div>` : ""}</div></div>`;
+  /* Lesson 1 done: the lesson's end as the app draws it, the ring growing to 1/5 and Saturday's 40 doors filling */
+  const done = `<div class="cut-screen cut-done"><div class="wrap-bar">${barHtml(1, 4, 0)}</div><div class="cut-hero" data-at="${C[6] + 0.2}">${doneHero(1, 1, gainLine(tryHits, hits), false)}</div><div class="cut-sat" data-at="${C[6] + 0.65}">${satCard("open", 1, 0, false)}</div></div>`;
   const handBack = `<svg class="cut-hand cut-hand-back" viewBox="0 0 372 760" aria-hidden="true"><defs><linearGradient id="chb-skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B07A57"/><stop offset="1" stop-color="#7E5236"/></linearGradient><linearGradient id="chb-sleeve" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2E3D60"/><stop offset="1" stop-color="#1A2340"/></linearGradient></defs><g transform="translate(14 0)"><path d="M228 606 C246 578 294 566 330 586 L380 606 L380 760 L250 760 C226 712 218 650 228 606 Z" fill="url(#chb-skin)"/><path d="M254 702 C298 678 350 684 380 698 L380 760 L258 760 Z" fill="#B9CDE8"/><path d="M262 718 C304 698 352 704 380 718 L380 760 L266 760 Z" fill="url(#chb-sleeve)"/></g></svg>`;
   const finger = (cx, cy, w, h, rot) => `<g transform="rotate(${rot} ${cx} ${cy})"><rect x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h}" rx="${h / 2}" fill="url(#chf-skin)"/><path d="M${cx - w / 2 + 8} ${cy - h / 2 + 10} Q${cx - w / 2 + 14} ${cy} ${cx - w / 2 + 8} ${cy + h / 2 - 10}" fill="none" stroke="#6E4530" stroke-width="2" stroke-opacity=".45"/><ellipse cx="${cx + w / 2 - 14}" cy="${cy}" rx="8.5" ry="${h / 2 - 9}" fill="url(#chf-nail)"/></g>`;
   const handFront = `<svg class="cut-hand cut-hand-front" viewBox="0 0 372 760" aria-hidden="true"><defs><linearGradient id="chf-skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BD8763"/><stop offset="1" stop-color="#885838"/></linearGradient><linearGradient id="chf-nail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DDB7A0"/><stop offset="1" stop-color="#C4957A"/></linearGradient><filter id="chf-sh" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7"/></filter></defs><g fill="#000" opacity=".3" filter="url(#chf-sh)"><ellipse cx="50" cy="339" rx="15" ry="22"/><ellipse cx="49" cy="396" rx="16" ry="22"/><ellipse cx="49" cy="453" rx="15" ry="21"/><ellipse cx="52" cy="507" rx="13" ry="19"/><ellipse cx="352" cy="632" rx="18" ry="62"/></g>${finger(20, 336, 76, 48, -7)}${finger(18, 393, 80, 48, -5)}${finger(18, 450, 78, 46, -4)}${finger(22, 505, 70, 42, -3)}<g transform="rotate(-18 357 633)"><rect x="334" y="548" width="46" height="172" rx="23" fill="url(#chf-skin)"/><ellipse cx="357" cy="574" rx="12" ry="15" fill="url(#chf-nail)"/><path d="M346 640 q11 6 22 0" fill="none" stroke="#6E4530" stroke-width="2" stroke-opacity=".4"/></g></svg>`;
   const keys = `<span class="cut-key l" style="top:104px;height:26px"></span><span class="cut-key l" style="top:152px;height:56px"></span><span class="cut-key l" style="top:222px;height:56px"></span><span class="cut-key r" style="top:170px;height:84px"></span>`;
-  const phone = `<div class="cut-phone">${keys}<div class="cut-screenwrap"><div class="cut-status"><span>6:43</span><span class="cut-island"></span>${SB_ICONS}</div><div class="cut-content">${path}${watch}${door}${score}</div><div class="cut-home"></div><div class="cut-glare"></div></div></div>`;
+  const phone = `<div class="cut-phone">${keys}<div class="cut-screenwrap"><div class="cut-status"><span>6:43</span><span class="cut-island"></span>${SB_ICONS}</div><div class="cut-content">${open}${tryS}${watch}${spot}${door}${score}${done}</div><div class="cut-home"></div><div class="cut-glare"></div></div></div>`;
   return `<div class="vid-cut" id="vid-cut" data-act="video-toggle"><div class="cut-bg" style="background-image:url(${CAND_PHOTO})"></div><div class="cut-vig"></div><div class="cut-rig">${handBack}${phone}${handFront}</div></div>`;
 }
 
@@ -4943,24 +5037,52 @@ function vScore() {
   `, { tag: drill ? (warm ? "Warmup" : "Practice") : "Feedback", noBack: true, footer });
 }
 
-/* (vi) done for the day, or keep practicing */
+/* (vi) the lesson's end (version 77, Robert): that the lesson is done, how far along the five the volunteer is, and what it multiplies into on Saturday.
+   The ring grows from the lessons before to N of 5 ("You're 1/5 warmed up"), a line counts the moves picked up since the first try, and Saturday's
+   40 doors fill by the lessons done, so one lesson visibly reaches every door on the list. Then the next lesson's time.
+   The growth plays once per finished lesson, not again on every tap of a time chip (each tap re-renders). */
+const DOOR_GETS = { open: "your name, that you live nearby and why you came", listen: "a real question and your full attention", noargue: "a calm thank-you, even when it\u2019s a no", plan: "your help making a plan to vote", friends: "your ask to remind three friends" };
+const LEFTW = ["no", "one", "two", "three", "four", "five"];
+/* the ring, growing from one value to another (a CSS animation from the old arc to the new one) */
+function ringGrow(f0, f1, size, stroke) {
+  const s = size || 88, w = stroke || 12, c = 2 * Math.PI * ((s - w) / 2);
+  return ring(f1, s, w).replace('class="ring-arc"', `class="ring-arc grow" style="--d0:${(Math.max(0, f0) * c).toFixed(1)}px;--c:${c.toFixed(1)}px"`);
+}
+/* the moves at the door that the first try didn't have; nothing when the door had none new (the first try is never graded, so no score shows) */
+function gainLine(a, b) {
+  if (!a || !b) return "";
+  const g = b.filter((h, i) => h && !a[i]).length;
+  return g ? `<p class="gain-line">You picked up ${LEFTW[g]} new move${g > 1 ? "s" : ""} since your first try.</p>` : "";
+}
+function doneHero(n, cnt, gain, anim) {
+  const all = cnt >= 5, left = Math.max(0, 5 - cnt);
+  const sub = all ? "In radio talk, 5 by 5 means loud and clear. That\u2019s you now. Next is your Warmup before Saturday\u2019s canvass." : `You\u2019re ${cnt}/5 warmed up, with ${LEFTW[left]} lesson${left === 1 ? "" : "s"} to go.`;
+  const r = anim && cnt > 0 ? ringGrow((cnt - 1) / 5, cnt / 5, 76, 10) : ring(cnt / 5, 76, 10);
+  return `<div class="done-hero"><div class="ring-wrap" style="width:76px;height:76px">${r}<span class="ring-num num" style="font-size:20px">${cnt}/5</span></div><h1 class="h1">${all ? "You\u2019re 5 by 5." : `Lesson ${n} done.`}</h1><p class="lede">${sub}</p>${gain || ""}</div>`;
+}
+/* Saturday's 40 doors (the list from How your list gets made), each filled by the lessons done so far */
+function satCard(k, cnt, prev, anim) {
+  const f = Math.max(0, Math.min(5, cnt)) / 5, f0 = Math.max(0, Math.min(5, prev)) / 5;
+  const doors = Array.from({ length: 40 }, (_, j) => `<i style="--d:${(j * 0.018).toFixed(3)}s"><b></b></i>`).join("");
+  const gets = cnt >= 5 ? "all five moves" : DOOR_GETS[k] || "what you just learned";
+  return `<div class="sat-card"><div class="sat-head"><b>Saturday \u00b7 40 doors</b><span>Elm Street side</span></div><div class="sat-doors${f > 0 ? " lit" : ""}${anim ? " grow" : ""}${anim && f0 === 0 ? " first" : ""}" style="--f:${f};--f0:${f0}" aria-hidden="true">${doors}</div><p>Every one of these doors now gets ${gets}. They\u2019re supporters who might not vote without a reminder.</p></div>`;
+}
+let closeSeen = "";
 function vClose5() {
-  const d5 = S.done5 || {}, cnt = Object.keys(d5).length, n = lessonNo(), all = cnt >= 5, nx = LESSONS5.find((x) => !d5[x.n]);
-  const pick = nx ? S.nextAt[nx.n] : null;
-  /* version 71: spacing becomes a plan. "When's lesson N?" with time chips schedules Mia's next text; the campaign note is an optional card */
-  const when = !nx ? "" : `<p class="lede" style="text-align:center;margin-bottom:6px">When\u2019s lesson ${nx.n}? Spacing them out is how they stick.</p>
-    <div class="time-chips" role="group" aria-label="When to send lesson ${nx.n}">${NEXT_TIMES.slice(0, 2).map(([label], j) => `<button data-act="next-at" data-arg="${j}" aria-pressed="${!!pick && pick.label === label}">${label}</button>`).join("")}<select id="next-pick" aria-label="Pick a time"><option value="">Pick a time</option>${NEXT_TIMES.slice(2).map(([label], j) => `<option value="${j + 2}"${pick && pick.label === label ? " selected" : ""}>${label}</option>`).join("")}</select></div>
-    ${pick ? `<p class="set-line">Set. Mia will text you ${pick.say}.</p>` : ""}`;
+  const d5 = S.done5 || {}, cnt = Math.min(5, Object.keys(d5).length), n = lessonNo(), nx = LESSONS5.find((x) => !d5[x.n]);
+  const pick = nx ? S.nextAt[nx.n] : null, key = `${n}:${(S.doneAt || {})[n] || 0}`, anim = closeSeen !== key;
+  closeSeen = key;
+  const R = tryNow(), gain = R && !R.pending && d5[n] ? gainLine(R.hits, d5[n]) : "";
+  /* version 71: spacing becomes a plan. "When's lesson N?" with time chips schedules Mia's next text; version 77 pins it above the button */
+  const when = !nx ? "" : `<p class="when-q"><b>When\u2019s lesson ${nx.n}?</b> Spacing them out is how they stick.</p><div class="time-chips" role="group" aria-label="When to send lesson ${nx.n}">${NEXT_TIMES.slice(0, 2).map(([label], j) => `<button data-act="next-at" data-arg="${j}" aria-pressed="${!!pick && pick.label === label}">${label}</button>`).join("")}<select id="next-pick" aria-label="Pick a time"><option value="">Pick a time</option>${NEXT_TIMES.slice(2).map(([label], j) => `<option value="${j + 2}"${pick && pick.label === label ? " selected" : ""}>${label}</option>`).join("")}</select></div>${pick ? `<p class="set-line">Set. Mia will text you ${pick.say}.</p>` : ""}`;
   const fits = n % 2 === 1;
-  const note = `<button class="tile" data-act="note-open" data-arg="${fits ? "fits" : "list"}"><span class="seal" aria-hidden="true">${T().org.seal}</span><span><b>${fits ? "Where Saturday fits" : "How your list gets made"}</b><small>From the campaign \u00b7 1 min</small></span><span class="go">Read</span></button>`;
+  const links = `<div class="wrap-links"><button class="link" data-act="go" data-arg="coach">Another door</button><button class="link" data-act="retake">Retake lesson ${n}</button><button class="link" data-act="note-open" data-arg="${fits ? "fits" : "list"}">${fits ? "Where Saturday fits" : "How your list gets made"}</button></div>`;
   return app(`
-    ${progressBar(99)}
-    <div class="badge-art"><div class="ring-wrap" style="width:88px;height:88px">${ring(cnt / 5, 88, 11)}<span class="ring-num num" style="font-size:22px">${cnt}/5</span></div></div>
-    <h1 class="h1" style="text-align:center">${all ? "You\u2019re 5 by 5." : `Lesson ${n} done.`}</h1>
-    ${all ? `<p class="lede" style="text-align:center">In radio talk, 5 by 5 means loud and clear. That\u2019s you now. Next is your Warmup before Saturday\u2019s canvass.</p>` : when}
-    <p class="deb-q">Optional</p>
-    <div class="opt-lessons">${note}<button class="tile" data-act="go" data-arg="coach">${ring(0, 30, 5)}<span><b>Another door?</b><small>Extra doors with the coach, in Practice</small></span><span class="go">Practice</span></button><button class="tile" data-act="retake">${ring(0, 30, 5)}<span><b>Retake this lesson</b><small>Same lesson, fresh start</small></span><span class="go">Retake</span></button></div>
-  `, { tag: "Wrap-up", noBack: true, primary: ["See your plan", "go", "welcome"] });
+    <div class="wrap-bar">${progressBar(99)}</div>
+    ${doneHero(n, cnt, gain, anim)}
+    ${satCard(skKey(), cnt, anim ? cnt - 1 : cnt, anim)}
+    ${links}
+  `, { noBack: true, footer: `${when}${button(["See your plan", "go", "welcome"])}` });
 }
 function vClose() {
   if (S.track === "gotv") return vClose5();
@@ -5262,17 +5384,20 @@ const skipNow = () => { const R = tryNow(); return !!(R && !R.pending && R.hits.
 /* minutes per part, from the doc's minute-by-minute: Try, Watch, Spot, Your turn (lesson 1's door is the opener only); plus the opening and the wrap */
 function partMins(n = lessonNo()) { const skip = skipNow(); return [0.75, skip ? 0 : 1, skip ? 0 : 0.75, n === 1 ? 1.5 : 2]; }
 const lessonMin = (n) => Math.max(1, Math.round(0.25 + [0.75, 1, 0.75, n === 1 ? 1.5 : 2].reduce((a, b) => a + b, 0) + 0.5));
-function lessonBar(part, fill = 0) {
-  const n = lessonNo(), m = partMins(n), done = part >= 4, f = Math.max(0, Math.min(1, fill || 0));
+function lessonBar(part, fill = 0) { const n = lessonNo(); return lessonBarHtml(n, partMins(n), part, fill, skipNow(), true); }
+/* version 77: the bar's markup on its own, so the video's phone draws lesson 1's bar without reading the volunteer's state (and without the live id) */
+function lessonBarHtml(n, m, part, fill, skipped, live) {
+  const done = part >= 4, f = Math.max(0, Math.min(1, fill || 0));
   const fills = m.map((_, i) => (i < part ? 100 : i === part ? Math.round(f * 100) : 0));
-  if (skipNow() && part >= 1) { fills[1] = 100; fills[2] = 100; }
+  if (skipped && part >= 1) { fills[1] = 100; fills[2] = 100; }
   const rest = m.reduce((a, x, i) => a + (i < part ? 0 : i === part ? x * (1 - f) : x), 0) + 0.5 + (part < 0 ? 0.25 : 0);
   const left = Math.max(1, Math.round(rest));
   const label = done ? `Lesson ${n} complete` : part < 0 ? `Lesson ${n}` : `Lesson ${n}: ${PARTS4[part]}`;
   const right = done ? "Done" : `About ${left} min left`;
-  const segs = m.map((_, i) => `<i${i === part ? ' id="sbar-now"' : ""}><span style="width:${fills[i]}%"></span></i>`).join("");
+  const segs = m.map((_, i) => `<i${live && i === part ? ' id="sbar-now"' : ""}><span style="width:${fills[i]}%"></span></i>`).join("");
   return `<div class="sbar" aria-label="${label}, ${right}"><div class="sbar-segs" style="grid-template-columns:repeat(4,1fr)">${segs}</div>${barNames(PARTS4, part)}<div class="sbar-row"><span>${label}</span><span>${right}</span></div></div>`;
 }
+const barHtml = (n, part, fill) => lessonBarHtml(n, [0.75, 1, 0.75, n === 1 ? 1.5 : 2], part, fill, false, false);
 function warmBar(part, fill = 0) {
   const m = [1.5, 1.5, 0.5], names = ["Door 1", "Door 2", "Tip"], done = part >= 3, f = Math.max(0, Math.min(1, fill || 0));
   const fills = m.map((_, i) => (i < part ? 100 : i === part ? Math.round(f * 100) : 0));
@@ -5292,14 +5417,18 @@ function gotvBar(fill) {
 }
 
 /* ---------- the lesson: opening, Try, Spot (Watch and Your turn are the shared screens, adjusted for get out the vote) ---------- */
-function vSessionG() {
-  const n = lessonNo(), sk = SK(), k = skKey(), d = DOORS[sk.door];
-  const rows = [
+/* version 77: the lesson opening's four rows, shared with the video's phone */
+function partRows(n, sk, d) {
+  return [
     [PARTS4[0], n === 1 ? "Open the door your way. There\u2019s no wrong answer." : "Say what you\u2019d say next. There\u2019s no wrong answer."],
     [PARTS4[1], `Watch ${sk.lesson.name}\u2019s door done right, move by move.`],
     [PARTS4[2], "Find the move that\u2019s missing, then say the fix out loud."],
     [PARTS4[3], n === 1 ? `Knock on ${d.name}\u2019s door and say your opener out loud.` : `Take a whole door with ${d.name}, from the knock, out loud.`],
   ];
+}
+function vSessionG() {
+  const n = lessonNo(), sk = SK(), k = skKey(), d = DOORS[sk.door];
+  const rows = partRows(n, sk, d);
   return app(`
     ${lessonBar(-1)}
     <p class="kicker">Lesson ${n} of 5 \u00b7 ${lessonMin(n)} min</p>
@@ -5910,36 +6039,43 @@ function playLine(buf, offset) {
     lipSync();
   });
 }
-/* the cutaway block's clock: shows the overlay and its screens from the line's audio clock, so pause, resume and seek all land on the right beat */
+/* the cutaway block's clock: shows the overlay and its screens from the line's audio clock, so pause, resume and seek all land on the right beat.
+   Version 77: beats are generic (data-at adds .in, data-lit adds .lit, data-off adds .off; every .cut-voice and .cut-said-txt runs on its own times).
+   Line 5 runs it as is; line 6 runs it with tail = line 5's length, so the phone stays up over line 6's first words while his clip plays under it,
+   and the cut back to Finnegan at CUT_END is a hard cut. */
 let cutRAF = 0, cutShown = false;
-function cutRun(dur, start, run, i) {
+function cutRun(dur, start, run, i, tail = 0) {
   cancelAnimationFrame(cutRAF);
   const root = $("#vid-cut");
   if (!root) return;
-  cutShown = false;
-  const screens = root.querySelectorAll(".cut-screen"), beats = root.querySelectorAll("[data-at]"), door = root.querySelector(".cut-door svg.voter"), voice = root.querySelector(".cut-voice"), said = root.querySelector(".cut-said-txt");
-  const apply = (t) => {
-    const on = t >= CUT_T[0];
+  cutShown = tail > 0;
+  const q = (s) => root.querySelectorAll(s);
+  const screens = q(".cut-screen"), beats = q("[data-at]"), lits = q("[data-lit]"), offs = q("[data-off]"), voices = q(".cut-voice"), saids = q(".cut-said-txt"), door = root.querySelector(".cut-door svg.voter");
+  const apply = (lt) => {
+    const t = tail + lt, on = t >= CUT_T[0] && (!tail || lt < CUT_END);
     root.classList.toggle("on", on);
     if (on && !cutShown) { cutShown = true; stopClip(true); }
     let k = 0;
     while (k + 1 < CUT_T.length && CUT_T[k + 1] <= t) k += 1;
     screens.forEach((el, j) => el.classList.toggle("show", on && j === k));
     beats.forEach((el) => el.classList.toggle("in", t >= +el.dataset.at));
+    lits.forEach((el) => el.classList.toggle("lit", t >= +el.dataset.lit));
+    offs.forEach((el) => el.classList.toggle("off", t >= +el.dataset.off));
     if (door) { door.classList.toggle("expr-warm", t >= CUT_WARM); door.classList.toggle("expr-neutral", t < CUT_WARM); }
-    const sayAt = CUT_T[2] + 1.25, sayFor = 1.15;
-    if (voice) { voice.classList.toggle("live", t >= CUT_T[2] + 0.5); voice.classList.toggle("talking", t >= sayAt && t < sayAt + sayFor + 0.15); }
-    if (said) {
-      const words = (said.dataset.full || "").split(" ");
-      const k = t < sayAt ? 0 : Math.min(words.length, Math.ceil(((t - sayAt) / sayFor) * words.length));
-      const txt = words.slice(0, k).join(" ");
-      if (said.textContent !== txt) said.textContent = txt;
-    }
+    voices.forEach((v) => { const a = +v.dataset.talk, dd = +v.dataset.for; v.classList.toggle("live", t >= +v.dataset.live); v.classList.toggle("talking", t >= a && t < a + dd + 0.15); });
+    saids.forEach((s) => {
+      const a = +s.dataset.from, dd = +s.dataset.for, words = (s.dataset.full || "").split(" ");
+      const k2 = t < a ? 0 : Math.min(words.length, Math.ceil(((t - a) / dd) * words.length));
+      const txt = words.slice(0, k2).join(" ");
+      if (s.textContent !== txt) s.textContent = txt;
+    });
   };
   const t0 = performance.now();
   const tick = () => {
     if (run !== videoRun || S.video.i !== i) return;
-    apply(start + (performance.now() - t0) / 1000);
+    const lt = start + (performance.now() - t0) / 1000;
+    apply(lt);
+    if (tail && lt >= CUT_END) return;
     cutRAF = requestAnimationFrame(tick);
   };
   apply(start);
@@ -6015,9 +6151,12 @@ async function playVideo(from, offset = 0) {
     const line = WELCOME.lines[i], start = i === from ? offset : 0;
     const dur = bufs ? bufs[i].duration : Math.max(2.5, line.text.split(/\s+/).length * 0.36);
     applyShot(line.shot);
-    if (line.shot !== "phone") cutOff();
-    startClip(i, start, i > 0 && WELCOME.lines[i - 1].shot === "phone" && start === 0);
+    /* version 77: the phone stays up into the line after it (until CUT_END), with that line's clip starting under it, so the cut back is hard */
+    const after = i > 0 && WELCOME.lines[i - 1].shot === "phone";
+    if (line.shot !== "phone" && !after) cutOff();
+    startClip(i, start, after && start === 0);
     if (line.shot === "phone") cutRun(dur, start, run, i);
+    else if (after) cutRun(dur, start, run, i, bufs ? bufs[i - 1].duration : LINE_DUR[i - 1]);
     capRun(line.text, dur, start, run, i);
     markSegment(i, Math.max(0.5, dur - start));
     if (bufs) await playLine(bufs[i], start);
@@ -6727,3 +6866,4 @@ render();
 </script>
 </body>
 </html>
+
