@@ -4901,7 +4901,6 @@ function vDoor() {
   return app(`
     <div class="sticky-scene">${progressBar(repMoves().length + 1, S.convo ? Math.min(0.9, S.convo.turns.filter((x) => x.who === "you").length / (shortDoor() ? 2 : 7)) : 0)}<div class="frame">${scene(d.scene, d.persona, { main: true, crop: true, sign: d.sign, shut: d.scene === "door", away: d.scene === "store", label: `${d.name}, ${d.sub}` })}
       <span class="who-tag"><b>${d.name}</b> ${d.sub}</span>
-      <button class="cam-btn" data-act="camera" aria-pressed="${S.cameraOn}">${ICON.cam}Camera</button>
       <video class="selfie" id="selfie" playsinline muted autoplay hidden></video>
     </div></div>
     <div class="thread" id="thread"><p class="note">${d.intro}</p></div>
