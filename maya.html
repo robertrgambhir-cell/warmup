@@ -61,6 +61,11 @@
   .lesson span { display: block; font-size: 13px; color: var(--p-muted); line-height: 1.3; margin-top: 3px; }
   .src { background: var(--p-src); color: var(--p-src-ink); border-radius: 14px; padding: 10px 12px; font-size: 13.5px; line-height: 1.4; }
   .src b { font-weight: 700; }
+  .reveal { background: var(--p-src); color: var(--p-src-ink); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .reveal .kick { color: var(--p-src-ink); }
+  .reveal p { margin: 0; font: 500 19px/1.35 var(--serif); color: var(--p-ink); }
+  .reveal p.muted { font: 400 14.5px/1.45 var(--sans); color: var(--p-muted); }
+  .reveal .srcbtn { align-self: flex-start; }
   .srcbtn { border: 0; background: none; color: var(--p-src-ink); font: 700 13.5px var(--sans); text-decoration: underline; padding: 0; cursor: pointer; }
   .srclist { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
   .srclist li { background: var(--p-card); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; line-height: 1.4; overflow-wrap: anywhere; }
@@ -155,7 +160,7 @@
 </style>
 
 <div class="wrap">
-  <p class="fine">Demo campaign. Maya Kaur is fictional. Each lesson inside is built from a real 2026 candidate’s public record, and that candidate is named on the lesson. Not affiliated with, endorsed by or approved by any campaign.</p>
+  <p class="fine">Demo campaign. Maya Kaur is fictional. Each lesson inside is built from a real 2026 candidate’s public record, and that candidate is named at the end of the lesson. Not affiliated with, endorsed by or approved by any campaign.</p>
   <div class="phone" id="phone">
     <div class="ph-head">
       <span class="camp-mark" role="img" aria-label="Maya Kaur for Woodbridge City Council"><b>Maya Kaur</b><small>For Woodbridge City Council</small></span>
@@ -418,7 +423,7 @@
   function go(n) { stopAll(); S.i = n; S.sources = false; render(); $("body").scrollTop = 0; }
   function home() { stopAll(); S.lesson = null; render(); $("body").scrollTop = 0; }
   var NEXT = function (n, label) { return '<button class="btn" type="button" data-go="' + n + '">' + (label || "Next") + '</button>'; };
-  function banner(x) { return '<div class="src">Built from <b>' + esc(x.from) + '’s</b> public record (' + esc(x.race) + ', 2026), shown in our demo campaign. <button class="srcbtn" type="button" id="srcs">Sources</button></div>'; }
+  function reveal(x) { return '<div class="reveal"><span class="kick">Where this lesson came from</span><p>Built from <b>' + esc(x.from) + '’s</b> public record, ' + esc(x.race) + ', 2026.</p><p class="muted">The candidates, quotes and facts are real. We showed them as Maya Kaur’s campaign so you can see how a campaign’s own lesson would look in Warmup.</p><button class="srcbtn" type="button" id="srcs">See the sources</button></div>'; }
 
   function setProg() {
     var on = S.lesson != null; $("prog").hidden = !on; $("back").hidden = !on;
@@ -446,7 +451,7 @@
       foot('<button class="btn" type="button" id="srcback">Back to the lesson</button>'); return;
     }
     if (i === 0) {
-      b.innerHTML = banner(x) + '<span class="kick">New lesson</span><h2 class="h">' + esc(x.title) + '</h2><p class="lead muted">' + esc(x.k) + ' against ' + esc(x.j) + ', in six short screens. Then you’ll say it back out loud.</p>';
+      b.innerHTML = '<span class="kick">New lesson</span><h2 class="h">' + esc(x.title) + '</h2><p class="lead muted">' + esc(x.k) + ' against ' + esc(x.j) + ', in six short screens. Then you’ll say it back out loud.</p>';
       foot(NEXT(1, "Start · about 2 minutes")); return;
     }
     if (i >= 1 && i <= LEARN_END) {
@@ -468,7 +473,7 @@
       foot('<button class="btn ghost" type="button" id="home">Back to lessons</button>'); return;
     }
     if (i === DOOR) { renderDoor(); return; }
-    b.innerHTML = '<div style="display:flex;flex-direction:column;gap:12px;flex:1;align-items:center;justify-content:center;text-align:center"><svg viewBox="0 0 48 48" width="140" height="140" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="#35b57c" stroke-width="6"/><path d="M16 24.5 L21.5 30 L32 19" fill="none" stroke="#1b7a4d" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><h2 class="h">Lesson done.</h2></div>';
+    b.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;padding-top:8px"><svg viewBox="0 0 48 48" width="96" height="96" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="#35b57c" stroke-width="6"/><path d="M16 24.5 L21.5 30 L32 19" fill="none" stroke="#1b7a4d" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><h2 class="h">Lesson done.</h2></div>' + reveal(x);
     foot('<button class="btn" type="button" id="home">Back to lessons</button><button class="btn ghost" type="button" data-go="' + PICK + '">Practice another door</button>');
   }
 
