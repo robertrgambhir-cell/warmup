@@ -1,0 +1,630 @@
+<title>Maya Kaur Lessons</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Layout: one phone in the Warmup app's look, skinned for the demo campaign (Maya Kaur). Home lists five lessons; each lesson teaches, then asks you to say it back, then puts you at a cartoon voter's door. The phone keeps the app's light look in every theme. */
+  :root {
+    --bg: #efe9df; --fg: #2b2723; --mute: #6f685f; --line: #ddd5c8; --panel: #f7f3ec; --accent: #1b7a4d;
+    --p-bg: #fcf8f2; --p-card: #f4eee5; --p-ink: #262320; --p-muted: #5b554d; --p-kick: #6f685f;
+    --p-green: #35b57c; --p-deep: #1b7a4d; --p-soft: #dff2e8; --p-track: #e6dfd3; --p-red: #b3261e; --p-red-soft: #f8e1de;
+    --p-k: #2f6f9f; --p-k-soft: #e3eef7; --p-j: #8d4b3c; --p-j-soft: #f6e6e1; --p-door: #e9dccb; --p-src: #fff4dc; --p-src-ink: #6b4a00;
+    --maya: #1F4C91;
+    --serif: "Newsreader", Georgia, serif; --sans: "Figtree", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #1c1a17; --fg: #efe9df; --mute: #a39b90; --line: #39342e; --panel: #26221e; --accent: #5cc995; color-scheme: dark; } }
+  :root[data-theme="dark"] { --bg: #1c1a17; --fg: #efe9df; --mute: #a39b90; --line: #39342e; --panel: #26221e; --accent: #5cc995; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.45; }
+  .wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-block: 14px 26px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .fine { width: min(560px, 100%); color: var(--mute); font-size: 12.5px; text-align: center; margin: 0; text-wrap: balance; }
+  button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .phone { position: relative; width: min(402px, 100%); height: clamp(640px, calc(100svh - 90px), 800px); background: var(--p-bg); color: var(--p-ink); border-radius: 30px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 18px 48px -24px rgba(40,30,10,.35); border: 1px solid rgba(0,0,0,.06); }
+  .ph-head { display: flex; align-items: center; gap: 10px; padding: 18px 18px 8px; min-height: 64px; }
+  .camp-mark { display: inline-grid; justify-items: stretch; color: var(--maya); font-family: var(--sans); text-transform: uppercase; line-height: 1; }
+  .camp-mark b { font-weight: 800; font-size: 24px; letter-spacing: -0.01em; line-height: .92; white-space: nowrap; }
+  .camp-mark small { font-weight: 700; font-size: 8.1px; letter-spacing: .04em; line-height: 1; margin-top: 4px; white-space: nowrap; }
+  .back { margin-left: auto; border: 0; background: var(--p-card); color: var(--p-ink); width: 34px; height: 34px; border-radius: 50%; font: 600 17px/1 var(--sans); cursor: pointer; }
+  .prog { padding: 4px 18px 0; }
+  .prog .lab { display: flex; justify-content: space-between; font: 600 11px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--p-kick); margin-bottom: 7px; }
+  .prog .lab span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 10px; }
+  .prog .lab span:last-child { flex: none; }
+  .bars { display: grid; grid-template-columns: 6fr 5fr 2fr; gap: 5px; }
+  .bar { height: 6px; border-radius: 99px; background: var(--p-track); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--p-green); border-radius: 99px; transition: width .4s cubic-bezier(.2,.8,.2,1); }
+  .ph-body { flex: 1; min-height: 0; overflow-y: auto; padding: 14px 20px 8px; display: flex; flex-direction: column; gap: 14px; }
+  .ph-foot { padding: 8px 18px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .btn { display: block; width: 100%; height: 54px; border: 0; border-radius: 18px; background: var(--p-ink); color: #fff; font: 600 17px/54px var(--sans); cursor: pointer; }
+  .btn.ghost { background: transparent; color: var(--p-ink); border: 1.5px solid var(--p-track); height: 46px; line-height: 43px; font-size: 15px; }
+  .btn:disabled { opacity: .4; cursor: default; }
+  .kick { font: 600 12px/1.2 var(--sans); letter-spacing: .13em; text-transform: uppercase; color: var(--p-kick); }
+  .h { font: 500 30px/1.12 var(--serif); letter-spacing: -.015em; margin: 0; text-wrap: balance; }
+  .h.sm { font-size: 24px; }
+  .lead { font-size: 16.5px; line-height: 1.5; margin: 0; }
+  .muted { color: var(--p-muted); }
+  q { font-family: var(--serif); font-style: italic; font-size: 1.06em; quotes: "“" "”"; }
+  .pw-line { display: flex; align-items: center; justify-content: center; gap: 5px; margin: 0; font: 600 11.5px var(--sans); color: var(--p-kick); }
+
+  .hello { display: flex; gap: 14px; align-items: center; }
+  .portrait { flex: none; width: 92px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .portrait .ph { width: 92px; height: 92px; border-radius: 50%; overflow: hidden; background: #dbe5f3; border: 3px solid var(--maya); }
+  .portrait .ph svg { width: 100%; height: 100%; }
+  .portrait small { font-size: 10px; line-height: 1.2; color: var(--p-kick); text-align: center; }
+  .hello p { margin: 0; font: 500 19px/1.3 var(--serif); }
+  .lessons { display: flex; flex-direction: column; gap: 8px; }
+  .lesson { text-align: left; border: 0; background: var(--p-card); border-radius: 18px; padding: 13px 14px; cursor: pointer; color: var(--p-ink); display: flex; gap: 12px; align-items: center; font: inherit; }
+  .lesson .n { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 600 15px/1 var(--sans); background: #fff; color: var(--p-ink); border: 1.5px solid var(--p-track); }
+  .lesson.done .n { background: var(--p-green); border-color: var(--p-green); color: #fff; }
+  .lesson div { min-width: 0; }
+  .lesson b { display: block; font: 600 16px/1.25 var(--sans); }
+  .lesson span { display: block; font-size: 13px; color: var(--p-muted); line-height: 1.3; margin-top: 3px; }
+  .src { background: var(--p-src); color: var(--p-src-ink); border-radius: 14px; padding: 10px 12px; font-size: 13.5px; line-height: 1.4; }
+  .src b { font-weight: 700; }
+  .srcbtn { border: 0; background: none; color: var(--p-src-ink); font: 700 13.5px var(--sans); text-decoration: underline; padding: 0; cursor: pointer; }
+  .srclist { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .srclist li { background: var(--p-card); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; line-height: 1.4; overflow-wrap: anywhere; }
+  .srclist a { color: var(--p-deep); font-weight: 600; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font: 600 13px/1.2 var(--sans); padding: 8px 11px; border-radius: 99px; background: var(--p-card); color: var(--p-muted); }
+  .chip.k { background: var(--p-k-soft); color: var(--p-k); }
+  .chip.j { background: var(--p-j-soft); color: var(--p-j); }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat { background: var(--p-card); border-radius: 16px; padding: 12px 14px; }
+  .stat b { display: block; font: 600 28px/1 var(--serif); font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 13px; color: var(--p-muted); line-height: 1.3; display: block; margin-top: 5px; }
+  .gapbar { display: grid; grid-template-columns: 1.1fr 1.5fr 1.4fr; border-radius: 14px; overflow: hidden; font: 600 12.5px/1.25 var(--sans); }
+  .gapbar div { padding: 14px 10px; min-height: 86px; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
+  .gapbar .a { background: var(--p-soft); color: var(--p-deep); }
+  .gapbar .g { background: repeating-linear-gradient(135deg, #f7e2c3 0 8px, #f2d6ae 8px 16px); color: #6b4300; }
+  .gapbar .c { background: var(--p-card); color: var(--p-muted); }
+  .gapbar b { font: 600 22px/1 var(--serif); color: #6b4300; }
+  .axis { display: flex; justify-content: space-between; font-size: 12px; color: var(--p-kick); margin-top: -8px; }
+  .ex { background: var(--p-card); border-radius: 16px; padding: 12px 14px; font-size: 15px; }
+  .ex b { display: block; font: 600 11.5px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--p-kick); margin-bottom: 6px; }
+  .scale { display: flex; flex-direction: column; gap: 10px; }
+  .scale .row { display: flex; flex-direction: column; gap: 5px; }
+  .scale .row span { font-size: 13.5px; color: var(--p-muted); }
+  .scale .row b { font: 600 20px/1 var(--serif); color: var(--p-ink); font-variant-numeric: tabular-nums; }
+  .track { height: 18px; border-radius: 6px; background: var(--p-track); overflow: hidden; }
+  .track i { display: block; height: 100%; border-radius: 6px; }
+  .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .cmp .hd { font: 600 14px/1.2 var(--sans); padding: 10px; border-radius: 12px 12px 4px 4px; color: #fff; }
+  .cmp .hd small { display: block; font: 500 11.5px/1.2 var(--sans); opacity: .85; margin-top: 2px; }
+  .cmp .hd.k { background: var(--p-k); } .cmp .hd.j { background: var(--p-j); }
+  .cmp .rl { grid-column: 1 / -1; font: 600 11.5px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--p-kick); padding: 8px 2px 0; }
+  .cmp .c { font-size: 14px; line-height: 1.4; padding: 9px 10px; border-radius: 10px; }
+  .cmp .c.k { background: var(--p-k-soft); } .cmp .c.j { background: var(--p-j-soft); }
+  .cmp .c.both { grid-column: 1 / -1; background: var(--p-card); text-align: center; }
+  .win { border-radius: 16px; padding: 13px 15px; display: flex; flex-direction: column; gap: 5px; }
+  .win.k { background: var(--p-k-soft); } .win.j { background: var(--p-j-soft); }
+  .win b { font: 600 13px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+  .win.k b { color: var(--p-k); } .win.j b { color: var(--p-j); }
+  .win span { font: 500 18px/1.3 var(--serif); }
+  .anchor { background: var(--p-ink); color: #fff; border-radius: 20px; padding: 18px; font: 500 21px/1.34 var(--serif); }
+  .anchor em { font-style: normal; border-bottom: 2px solid; }
+  .anchor .k { color: #9ecbef; } .anchor .j { color: #f0b9a8; }
+  .hear { align-self: flex-start; border: 1.5px solid var(--p-track); background: #fff; color: var(--p-ink); border-radius: 99px; padding: 8px 14px; font: 600 14px var(--sans); cursor: pointer; }
+
+  .qcard { background: var(--p-card); border-radius: 18px; padding: 16px; }
+  .mic { width: 112px; height: 112px; border-radius: 50%; border: 0; background: var(--p-ink); color: #fff; display: grid; place-items: center; cursor: pointer; align-self: center; margin-top: 6px; position: relative; }
+  .mic svg { width: 40px; height: 40px; }
+  .mic.on { background: var(--p-red); }
+  .mic.on::after { content: ""; position: absolute; inset: -10px; border-radius: 50%; border: 3px solid var(--p-red); opacity: .45; animation: pulse 1.4s ease-out infinite; }
+  @keyframes pulse { 0% { transform: scale(.92); opacity: .55; } 100% { transform: scale(1.18); opacity: 0; } }
+  .miclab { text-align: center; font: 600 14px var(--sans); color: var(--p-kick); margin-top: -4px; }
+  .heard { background: #fff; border: 1px solid var(--p-track); border-radius: 16px; padding: 12px 14px; font: 400 17px/1.4 var(--serif); min-height: 52px; }
+  .heard small { display: block; font: 600 11px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--p-kick); margin-bottom: 6px; }
+  .ideas { display: flex; flex-direction: column; gap: 6px; }
+  .idea { display: flex; gap: 10px; align-items: center; font-size: 15px; padding: 9px 12px; border-radius: 12px; background: var(--p-card); }
+  .idea i { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 700 13px/1 var(--sans); font-style: normal; background: var(--p-track); color: var(--p-muted); }
+  .idea.hit { background: var(--p-soft); }
+  .idea.hit i { background: var(--p-green); color: #fff; }
+  .model { border-radius: 15px; padding: 12px 14px; background: #fff; border: 1px solid var(--p-track); font-size: 15px; }
+  .model b { display: block; font: 600 11.5px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--p-kick); margin-bottom: 6px; }
+  .verdict { font: 500 22px/1.2 var(--serif); margin: 0; }
+  .card-alert { background: var(--p-red-soft); border-radius: 16px; padding: 14px; font-size: 15px; }
+  .tray textarea { width: 100%; border: 1.5px solid var(--p-track); background: #fff; color: var(--p-ink); border-radius: 14px; padding: 11px 13px; font: 400 16px/1.4 var(--sans); resize: none; }
+  .note { font-size: 13.5px; color: var(--p-muted); background: var(--p-card); border-radius: 14px; padding: 10px 12px; }
+  .score { display: flex; gap: 6px; }
+  .score i { flex: 1; height: 10px; border-radius: 99px; background: var(--p-track); }
+  .score i.on { background: var(--p-green); }
+
+  .voters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .voter { border: 0; background: var(--p-card); border-radius: 18px; padding: 10px 10px 12px; cursor: pointer; color: var(--p-ink); display: flex; flex-direction: column; align-items: center; gap: 4px; font: inherit; text-align: center; }
+  .voter svg { width: 84px; height: 84px; }
+  .voter b { font-size: 16px; }
+  .voter span { font-size: 12.5px; color: var(--p-muted); line-height: 1.25; }
+  .stage { position: relative; background: linear-gradient(var(--p-door), #e2d3bf); border-radius: 22px; padding: 18px 14px 0; display: flex; flex-direction: column; align-items: center; overflow: hidden; min-height: 280px; }
+  .stage::before { content: ""; position: absolute; left: 50%; top: 10px; transform: translateX(-50%); width: 62%; bottom: 0; background: #cdb89c; border-radius: 10px 10px 0 0; }
+  .stage svg { position: relative; width: 170px; height: 170px; margin-top: 96px; }
+  .say { position: absolute; left: 12px; right: 12px; top: 12px; background: #fff; border-radius: 16px; padding: 10px 12px; font: 400 16.5px/1.35 var(--serif); box-shadow: 0 6px 18px -10px rgba(0,0,0,.35); z-index: 1; }
+  .say small { display: block; font: 600 11px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--p-kick); margin-bottom: 4px; }
+  .grade { display: flex; flex-direction: column; gap: 8px; }
+  .gr { display: flex; gap: 10px; align-items: flex-start; background: var(--p-card); border-radius: 15px; padding: 11px 13px; }
+  .pill { flex: none; font: 700 12px/1 var(--sans); padding: 6px 9px; border-radius: 99px; }
+  .pill.Yes { background: var(--p-green); color: #fff; }
+  .pill.Partly { background: #e8c46b; color: #3b2b00; }
+  .pill.No { background: var(--p-red); color: #fff; }
+  .gr div b { display: block; font-size: 14.5px; }
+  .gr div span { font-size: 14px; color: var(--p-muted); }
+  .tip { border-radius: 15px; padding: 12px 14px; background: var(--p-soft); font-size: 15px; }
+  .think { color: var(--p-kick); font: 500 14px var(--sans); text-align: center; }
+  @media (prefers-reduced-motion: reduce) { .bar i { transition: none; } .mic.on::after { animation: none; } }
+</style>
+
+<div class="wrap">
+  <p class="fine">Demo campaign. Maya Kaur is fictional. Each lesson inside is built from a real 2026 candidate’s public record, and that candidate is named on the lesson. Not affiliated with, endorsed by or approved by any campaign.</p>
+  <div class="phone" id="phone">
+    <div class="ph-head">
+      <span class="camp-mark" role="img" aria-label="Maya Kaur for Woodbridge City Council"><b>Maya Kaur</b><small>For Woodbridge City Council</small></span>
+      <button class="back" id="back" type="button" aria-label="Back" hidden>‹</button>
+    </div>
+    <div class="prog" id="prog" hidden>
+      <div class="lab"><span id="plab"></span><span id="pnum"></span></div>
+      <div class="bars"><div class="bar"><i id="b1"></i></div><div class="bar"><i id="b2"></i></div><div class="bar"><i id="b3"></i></div></div>
+    </div>
+    <div class="ph-body" id="body"></div>
+    <div class="ph-foot" id="foot"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var IN_CLAUDE = !!window.claude, CAN_LISTEN = !!SR && !IN_CLAUDE, sample = null;
+
+  /* ---------- small builders for the teaching screens ---------- */
+  function cmp(k, j, rows) {
+    var h = '<div class="cmp"><div class="hd k">' + k[0] + '<small>' + k[1] + '</small></div><div class="hd j">' + j[0] + '<small>' + j[1] + '</small></div>';
+    rows.forEach(function (r) { h += '<div class="rl">' + r[0] + '</div>' + (r.length === 2 ? '<div class="c both">' + r[1] + '</div>' : '<div class="c k">' + r[1] + '</div><div class="c j">' + r[2] + '</div>'); });
+    return h + '</div>';
+  }
+  function wins(kn, kt, jn, jt, note) { return '<div class="win k"><b>If ' + kn + ' wins</b><span>' + kt + '</span></div><div class="win j"><b>If ' + jn + ' wins</b><span>' + jt + '</span></div>' + (note ? '<p class="lead muted">' + note + '</p>' : ""); }
+  function scale(rows) { return '<div class="scale">' + rows.map(function (r) { return '<div class="row"><span>' + r[0] + '</span><b>' + r[1] + '</b><div class="track"><i style="width:' + r[2] + '%;background:' + r[3] + '"></i></div></div>'; }).join("") + '</div>'; }
+  function stats(a) { return '<div class="stats">' + a.map(function (s) { return '<div class="stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></div>'; }).join("") + '</div>'; }
+  var GREY = "#cdbfa9", GREEN = "var(--p-green)";
+
+  /* ---------- the five lessons, from claude/campaign-demos/*.md (fact-checked Oct 30, 2026) ---------- */
+  var L = [
+  { id: "ga", title: "Medicaid and Georgia Pathways", from: "Keisha Lance Bottoms", race: "Georgia governor", k: "Keisha", j: "Jackson",
+    kfull: ["Keisha Lance Bottoms", "Democrat"], jfull: ["Rick Jackson", "Republican"],
+    screens: [
+      ["The question on the ballot", '<h2 class="h">Should Georgia expand Medicaid?</h2><p class="lead">Medicaid is public health coverage for people with low incomes. Georgia never expanded it, and this race decides what Georgia does next.</p><div class="chips"><span class="chip k">Bottoms (D): expand it</span><span class="chip j">Jackson (R): a program like Pathways</span></div>'],
+      ["The problem: the coverage gap", '<h2 class="h sm">About 200,000 Georgia adults have no affordable coverage</h2><div class="gapbar" role="img" aria-label="Income bar: Medicaid at the low end, the gap in the middle, affordable coverage above it"><div class="a">Low enough for Medicaid</div><div class="g"><b>~200,000</b>The gap: too much for Medicaid, too little to afford coverage</div><div class="c">Can afford coverage</div></div><div class="axis"><span>Lower income</span><span>Higher income</span></div><div class="ex"><b>An example</b>Someone working two part-time jobs with no insurance: too much for Medicaid, too little to buy her own coverage.</div><p class="lead">Forty states closed this gap by expanding Medicaid. Georgia didn’t.</p>'],
+      ["What Georgia did instead", '<h2 class="h sm">Georgia Pathways: coverage if you report work hours</h2><p class="lead">The state built its own program. It covers far fewer people than the state expected.</p>' + scale([["Expected to qualify (Kemp’s team)", "~100,000", 100, GREY], ["Covered today", "~18,500", 18.5, GREEN]]) + '<p class="lead muted">You’ll also hear about rural hospitals: small towns have watched hospitals and labor and delivery units close.</p>'],
+      ["Two plans, side by side", null],
+      ["What changes, depending on who wins", null],
+      ["The one line to keep", null]
+    ],
+    rows: [["The plan", "Full Medicaid expansion, like 40 other states: adults up to about $21,000 a year for one person", "<q>Intelligent Medicaid expansion</q>: a program for adults like Pathways"],
+      ["Georgia Pathways", "End it. She calls it <q>an epic failure</q>", "Build on its model"],
+      ["Work rules", "Under federal law, expansion will come with work rules either way. Jackson’s plan, like Pathways, requires work."],
+      ["How it happens", "Day one she readies state agencies, then pushes the legislature: she can’t do it alone", "Day one he brings lawmakers his plan; it needs federal approval, and details aren’t out yet"]],
+    winK: "Georgia’s governor pushes for full Medicaid expansion and to end Pathways.", winJ: "Georgia’s governor pushes for a program like Pathways, with work requirements.",
+    winNote: "Either way the legislature has a say, which is why every vote for governor matters.",
+    anchor: '<span class="k">Keisha</span> wants <em>full Medicaid expansion</em>, like 40 other states, and to <em>end Georgia Pathways</em>. <span class="j">Jackson</span> wants <em>a program like Pathways</em>, with work requirements.',
+    tests: [
+      { q: "In one sentence: what’s the health care question in Georgia’s race for governor?", model: "Whether Georgia expands Medicaid to cover the roughly 200,000 adults stuck in the coverage gap.", ideas: [["Medicaid", /medicaid/], ["The people with no coverage (the gap)", /(gap|uninsured|no (health )?(insurance|coverage)|without (health )?(insurance|coverage)|can'?t afford|200,?000|two hundred thousand)/], ["Whether to expand it", /expan/]], need: 2 },
+      { q: "Where does Keisha stand?", model: "Keisha wants full Medicaid expansion, like 40 other states, and to end Georgia Pathways.", ideas: [["Expand Medicaid", /expan/], ["End Georgia Pathways", "ENDPW"], ["Full expansion, like 40 other states", /(full|40|forty|other states|138)/]], need: 2, must: [0, 1] },
+      { q: "Where does Jackson stand?", model: "Jackson calls it “intelligent Medicaid expansion”: a program like Pathways, with work requirements.", ideas: [["A program like Pathways", /pathways/], ["With work requirements", /work/], ["He calls it expansion too", /(intelligent|expan|close the gap)/]], need: 2 },
+      { q: "If Keisha wins instead of Jackson, what changes?", model: "With Keisha, Georgia pushes for full expansion and to end Pathways. With Jackson, it gets a program like Pathways, with work requirements.", ideas: [["Keisha: full expansion", /(full|40|forty|other states|expan)/], ["Keisha: Pathways ends", "ENDPW"], ["Jackson: a program like Pathways, with work rules", /(pathways|work)[^.]{0,80}\b(jackson|he|his|republican)\b|\b(jackson|he|his|republican)\b[^.]{0,80}(pathways|work)/]], need: 2 },
+      { q: "A volunteer tells a voter, “Jackson is against Medicaid.” What’s wrong with that?", model: "Jackson says he’ll expand Medicaid too. His version is a program like Pathways, with work requirements.", ideas: [["He says he’ll expand it too", /(intelligent|says he|claims|promis|plans? to|wants to|not against|also|too)[^.]{0,40}(expan|close|cover)|(expan|close the gap)[^.]{0,20}too/], ["His version: like Pathways, with work rules", /(pathways|work)/]], need: 1, must: [0] }
+    ],
+    right: /(expan|pathways|rural|hospital|follow up|get back to you)/, wrong: /(no work requirement|without work requirement|everyone gets|free health|for free|jackson('s| is)? (against|lying|a liar)|liar)/,
+    voters: [
+      { name: "Tasha", meta: "Home health aide, Albany", skin: "#8d5a3b", hair: "#1f1612", style: "puff", shirt: "#c0703e", voice: ["Samantha", "Ava", "Google US English"], pitch: 1.05, open: "Oh, hey. If this is about Keisha, I’m for her. I just don’t know when I’m going to vote with my shifts.", follow: "And what would she actually do about health insurance? I don’t get any through work.", bye: "Okay. I can vote on my day off. Thanks for coming by." },
+      { name: "Ronnie", meta: "Hardware store, south Georgia", skin: "#e8c3a0", hair: "#8a8a8a", style: "cap", shirt: "#4f6f8f", voice: ["Fred", "Alex", "Daniel"], pitch: .9, rate: .95, open: "Afternoon. I’ve got to get back to the store, so make it quick. What’s your candidate going to do about our hospital?", follow: "And who’s paying for all that? Sounds expensive.", bye: "Alright. I’ll think on it, and I’ll be voting either way." },
+      { name: "Brenda", meta: "Kemp voter, Cherokee County", skin: "#f0cfb0", hair: "#c9a26b", style: "bob", shirt: "#8b5c7a", voice: ["Victoria", "Karen", "Allison"], open: "Let me guess, Bottoms? Jackson’s going to close the coverage gap on day one with intelligent expansion, and people should work for it. They have pride.", follow: "So what’s wrong with making people work for it?", bye: "Well, you were polite about it. I’ll read up before I vote." },
+      { name: "Marcus", meta: "Warehouse worker, Gwinnett", skin: "#6b4430", hair: "#120d0b", style: "short", shirt: "#3f7d5e", voice: ["Tom", "Aaron", "Alex"], pitch: .95, rate: 1.05, open: "Hey. Real quick, what’s she going to do about data centers? My light bill is crazy.", follow: "Okay. And on health care, what’s the difference between her and the other guy?", bye: "Cool. I’ll get my vote in. Appreciate you." }],
+    key: "Bottoms wants full Medicaid expansion to adults up to 138 percent of the poverty line (about $21,000 a year for one person), like 40 other states, and to end Georgia Pathways, which she calls an epic failure. She can't expand alone: day one she readies state agencies, then pushes the legislature. Her Rural Care First plan pays rural hospitals and clinics more. About 200,000 poor Georgia adults are in the coverage gap; Pathways covers about 18,500, where about 100,000 were expected. Under federal law, expansion will come with work rules. Jackson rejects full expansion and promises \"intelligent Medicaid expansion\": a program like Pathways with work requirements that needs a federal waiver; details not published. Anything else: offer the campaign follow-up.",
+    sources: [["Georgia Recorder via Cobb County Courier, Sep 14, 2026", "https://cobbcountycourier.com/2026/09/is-jacksons-intelligent-medicaid-expansion-weak-tea-or-a-revolutionary-fix/"], ["WRDW, Aug 19, 2026 (Pathways enrollment)", "https://www.wrdw.com/2026/08/19/georgia-seeks-higher-federal-match-pathways-health-coverage-program/"], ["Bottoms CARE Plan, April 2026", "https://www.keishaforgovernor.com/klb-policy-careplan-1.pdf"], ["WTOC, Oct 20, 2026 (Bottoms on Pathways)", "https://wtoc.com/2026/10/20/bottoms-focuses-campaign-affordability-calls-data-center-pause"], ["AJC, Jul 31, 2026 (can she do it alone)", "https://www.ajc.com/politics/2026/07/bottoms-wants-to-expand-medicaid-in-georgia-but-can-she/"], ["Atlanta News First, Sep 8, 2026 (Jackson’s plan)", "https://www.atlantanewsfirst.com/2026/09/08/work-requirements-or-full-coverage-georgia-governor-hopefuls-roll-out-healthcare-proposals/"], ["GPB News, Oct 1, 2026 (work requirements)", "https://www.gpb.org/news/2026/10/01/medicaid-work-requirements-are-here-stay-no-matter-who-wins-georgia-governors-race"]] },
+
+  { id: "tx", title: "Vouchers and public schools", from: "James Talarico", race: "Texas US Senate", k: "Talarico", j: "Paxton",
+    kfull: ["James Talarico", "Democrat"], jfull: ["Ken Paxton", "Republican"],
+    screens: [
+      ["The question on the ballot", '<h2 class="h">Should Texas tax dollars pay for private school?</h2><p class="lead">This year Texas started paying families to send kids to private school. The Senate race is a choice between a candidate who fought that program and one who backs it.</p><div class="chips"><span class="chip k">Talarico (D): fought vouchers</span><span class="chip j">Paxton (R): backs them</span></div>'],
+      ["How Texas got here", '<h2 class="h sm">A fight that ran three years</h2><div class="ex"><b>2023</b>The Texas House stripped vouchers out of a bill.</div><div class="ex"><b>2024</b>Gov. Abbott and his allies spent millions in the primaries to replace more than a dozen anti-voucher Republicans.</div><div class="ex"><b>2025</b>The voucher law passed. Now Texas Education Freedom Accounts pay most private school students $10,474 a year.</div>'],
+      ["Who’s getting the money", '<h2 class="h sm">Most of the money went to kids already in private school</h2>' + stats([["274,000+", "applied"], ["~118,000", "had awards as of August, with 121,000+ waitlisted"]]) + scale([["Awardees already in private school or homeschool", "70%", 70, GREY], ["Awardees from public school", "30%", 30, GREEN]]) + '<p class="lead muted">Any family can apply; kids with disabilities and lower-income families come first.</p>'],
+      ["Two candidates, side by side", null],
+      ["What changes, depending on who wins", null],
+      ["The one line to keep", null]
+    ],
+    rows: [["On vouchers", "Against them. His site says they’re <q>taking tax dollars out of our public schools to subsidize private education.</q>", "For them. He says the program gives parents more say in their kids’ education"],
+      ["His record", "A former public school teacher. In the Texas House he voted no and tried to send the law to a vote of the people", "As attorney general he vowed, <q>I promise to vigorously defend this law</q>"],
+      ["In the Senate", "The program is Texas law, so a senator can’t cancel it. The Senate fight is over taking vouchers nationwide, which Talarico would fight."]],
+    winK: "Texas sends a senator who fights vouchers going nationwide and wants public money in public schools.", winJ: "Texas sends a senator who backs vouchers and has vowed to defend the Texas program.",
+    winNote: "Either way, a family’s voucher this year doesn’t depend on the Senate race.",
+    anchor: '<span class="k">Talarico</span>, a former public school teacher, <em>fought vouchers</em> and wants <em>public money in public schools</em>. <span class="j">Paxton</span> <em>backs vouchers</em> and vowed to defend the law.',
+    tests: [
+      { q: "In one sentence: what’s the school fight in Texas’s Senate race?", model: "Whether Texas tax dollars should pay for private school through vouchers, or stay in public schools.", ideas: [["Vouchers, paying for private school", /(voucher|private school)/], ["Public tax dollars", /(tax|public money|taxpayer|state money|dollar)/], ["Public schools", /public school/]], need: 2 },
+      { q: "Where does Talarico stand?", model: "Talarico, a former public school teacher, fought vouchers in the Texas House and wants public money in public schools.", ideas: [["Against vouchers", /(against|oppos|fought|fight|stop|scam|voted no|vote against)[^.]{0,40}voucher|voucher[^.]{0,30}(scam|bad)/], ["Public money in public schools", /public (money|dollar|school)/], ["A former public school teacher", /(teacher|taught)/]], need: 2, must: [0] },
+      { q: "Where does Paxton stand?", model: "Paxton backs the voucher program, says it gives parents more say, and vowed to defend the law.", ideas: [["Backs the voucher program", /(back|support|for|defend|like|want|pro)[^.]{0,30}voucher|voucher[^.]{0,40}(support|defend|back)/], ["Says it gives parents choice", /(parent|choice|choose)/], ["Vowed to defend the law", /defend/]], need: 1, must: [0] },
+      { q: "If Talarico wins instead of Paxton, what changes?", model: "Texas gets a senator who fights vouchers going nationwide and wants public money in public schools, instead of one who backs vouchers.", ideas: [["Talarico fights vouchers going nationwide", /(nation|federal|washington|national|across the country|congress|senate)/], ["Talarico: public money in public schools", /public (money|dollar|school)/], ["Paxton: a senator who backs vouchers", /\b(paxton|he|his)\b[^.]{0,60}voucher|voucher[^.]{0,60}\bpaxton\b/]], need: 2 },
+      { q: "A volunteer says, “If Talarico wins, your family’s voucher goes away.” What’s wrong?", model: "Vouchers are a Texas state law, and a US senator can’t cancel them. Talarico would fight vouchers going nationwide.", ideas: [["Vouchers are a Texas state law", /(state|texas law|legislature|abbott|state program)/], ["A senator can’t cancel it", /(senat|federal|can'?t|cannot|not able|no power|won'?t)/]], need: 2 }
+    ],
+    right: /(voucher|public school|teacher|follow up|get back to you)/, wrong: /(take (away )?your voucher|cancel (your|the) voucher|voucher(s)? (will be|are) (gone|taken)|paxton('s| is)? (a )?(crook|liar|lying)|close public schools)/,
+    voters: [
+      { name: "Rosa", meta: "Cafeteria manager, San Antonio", skin: "#c68e64", hair: "#2a1b14", style: "bob", shirt: "#b5523b", voice: ["Samantha", "Ava", "Google US English"], open: "Oh, you’re with Talarico? I work in a school cafeteria, I’m for him. I just start at five in the morning, so I don’t know when I’ll vote.", follow: "What’s he actually going to do for schools like mine?", bye: "Okay, I’ll figure out a time before Tuesday. Thanks for coming by." },
+      { name: "Wade", meta: "Rancher and school board, west Texas", skin: "#e2b48e", hair: "#6b5440", style: "cap", shirt: "#6e7f3c", voice: ["Fred", "Alex", "Daniel"], pitch: .9, rate: .95, open: "Afternoon. I’m on the school board out here, and I’ll be honest, I like the idea of choice. But we’re a small district. What does your guy want to do?", follow: "So what happens to a district like ours if kids leave with vouchers?", bye: "Fair enough. I’ll be voting, I always do." },
+      { name: "Kim", meta: "Mom of three, Frisco", skin: "#f1d1b5", hair: "#3a2a20", style: "bob", shirt: "#7a5c99", voice: ["Victoria", "Karen", "Allison"], open: "Paxton is fighting for parents. Why should my tax dollars only go to schools the government picks?", follow: "My kids deserve options. What’s wrong with that?", bye: "We’ll just disagree. Have a good day." },
+      { name: "Darnell", meta: "Warehouse worker, Houston", skin: "#5a3a28", hair: "#0f0b09", style: "short", shirt: "#2f6b8f", voice: ["Tom", "Aaron", "Alex"], pitch: .95, rate: 1.05, open: "Hey, quick question. What’s he going to do about my electric bill?", follow: "Alright, and is he for the border wall or not?", bye: "Cool, I’ll vote. Thanks." }],
+    key: "Talarico, a former public school teacher, fought vouchers in the Texas House: voted no on the 2025 law and offered an amendment to put it to a statewide vote, which the House killed 86 to 62. His site says vouchers are taking tax dollars out of public schools to subsidize private education. As senator he'd fight efforts to take vouchers nationwide, oppose gutting the US Department of Education and keep public money in public schools. Texas Education Freedom Accounts pay most private school students $10,474; 274,000+ applied; about 118,000 awards as of August; 121,000+ waitlisted; 70 percent of awardees were already in private school or homeschool. It's a state law; a senator can't cancel it. Paxton backs the program, says it gives parents more say, and vowed to vigorously defend the law. Anything else: offer the campaign follow-up.",
+    sources: [["Talarico campaign, Public Education", "https://jamestalarico.com/issue/public-education/"], ["Texas Education Freedom Accounts, official site", "https://educationfreedom.texas.gov/"], ["KPRC, Aug 18, 2026 (who got awards)", "https://www.click2houston.com/news/local/2026/08/18/70-of-texas-voucher-awardees-previously-attended-private-school-or-were-homeschooled-state-data-shows/"], ["KWTX / Texas Tribune, Apr 16, 2025 (the vote)", "https://www.kwtx.com/2025/04/17/voucher-vote-updates-bid-send-voucher-plan-statewide-vote-is-defeated/"], ["Texas Tribune, May 3, 2025 (SB 2 signed)", "https://www.texastribune.org/2025/05/03/texas-school-vouchers-greg-abbott-signs"], ["Fox 7 Austin, Oct 21, 2026 (Talarico vs Paxton)", "https://fox7austin.com/news/talarico-vs-paxton-education"], ["Texas Attorney General release (defend the law)", "https://www.texasattorneygeneral.gov/news/releases/attorney-general-ken-paxton-celebrates-school-choice-texans-and-vows-defend-new-law"]] },
+
+  { id: "oh", title: "Data centers and your electric bill", from: "Sherrod Brown", race: "Ohio US Senate", k: "Sherrod", j: "Husted",
+    kfull: ["Sherrod Brown", "Democrat"], jfull: ["Sen. Jon Husted", "Republican, holds the seat"],
+    screens: [
+      ["The question on the ballot", '<h2 class="h">Who should pay for Ohio’s power: families or data centers?</h2><p class="lead">Ohio’s electric bills are climbing while data centers multiply. Both candidates say data centers should pay; they differ on how hard to push.</p><div class="chips"><span class="chip k">Brown (D): require it, cap rate hikes</span><span class="chip j">Husted (R): states decide</span></div>'],
+      ["The problem", '<h2 class="h sm">Bills up fast, data centers up faster</h2>' + stats([["13.5%", "rise in Ohio home electric bills in one year"], ["~50%", "more for electricity than six years ago"], ["9x", "growth in Ohio data centers since 2020"], ["#2", "Columbus’s rank among the fastest-growing data center markets"]])],
+      ["What Ohio remembers", '<h2 class="h sm">House Bill 6, the FirstEnergy bribery scandal</h2><p class="lead">A $1.3 billion power-company bailout passed with bribes, and a former Ohio House speaker is serving 20 years.</p><div class="ex"><b>Get this right</b>The bailout charge was repealed in 2021 before it was collected, and the coal charge ended in 2025, so experts say HB6 isn’t the main reason bills rose. Husted was never charged.</div>'],
+      ["Two candidates, side by side", null],
+      ["What changes, depending on who wins", null],
+      ["The one line to keep", null]
+    ],
+    rows: [["Data centers’ power costs", "Require them to pay the full cost so your bill doesn’t go up", "<q>If you create the cost, you should pay the cost.</q> His bill asks states to make them pay; adopting it is up to each state"],
+      ["Rate hikes", "Cap how much utilities can raise your rates", "No cap proposed"],
+      ["Tax breaks", "End them", "Says new data centers shouldn’t get them; as lieutenant governor he championed data center deals"],
+      ["Who decides where they go", "Both say local communities should decide."]],
+    winK: "Ohio sends a senator pushing to require data centers to pay their full power costs and to cap rate hikes.", winJ: "Ohio keeps a senator whose bill asks states to make data centers pay, with adoption left to each state.",
+    winNote: "Husted holds the seat now. Brown is running to win it back.",
+    anchor: '<span class="k">Sherrod</span> wants data centers to <em>pay their full power costs</em> and a <em>cap on rate hikes</em>. <span class="j">Husted’s</span> bill asks states to make them pay, but <em>leaves it up to each state</em>.',
+    tests: [
+      { q: "In one sentence: what’s the electric bill fight in Ohio’s Senate race?", model: "Who pays for Ohio’s rising power costs: families or the data centers driving demand.", ideas: [["Electric bills are rising", /(bill|rate|electric|power|utilit)/], ["Data centers", /data cent/], ["Who pays", /(pay|cost|who)/]], need: 2, must: [1] },
+      { q: "Where does Sherrod Brown stand?", model: "Sherrod wants to require data centers to pay their full power costs, cap rate hikes and end their tax breaks.", ideas: [["Make data centers pay their full power costs", /data cent[^.]{0,60}(pay|cost)|(pay|cost)[^.]{0,60}data cent/], ["Cap how much rates can rise", /(cap|limit|stop)[^.]{0,30}(rate|bill|increase|hike|rise)/], ["End the tax breaks", /(tax break|tax credit|subsid)/]], need: 2 },
+      { q: "Where does Husted stand?", model: "Husted says if you create the cost, you should pay it. His bill asks states to make data centers pay, but leaves adoption to each state.", ideas: [["If you create the cost, you pay it", /(create|pay)[^.]{0,30}cost|data cent[^.]{0,40}pay|should pay/], ["His bill leaves it up to each state", /(state|bill|act|optional|voluntar|up to)/], ["Local towns decide", /(local|town|communit)/]], need: 2 },
+      { q: "If Brown wins instead of Husted, what changes?", model: "Brown would push to require data centers to pay their full power costs and to cap rate hikes, instead of leaving it to each state.", ideas: [["Brown: require data centers to pay the full cost", /(require|full|make)[^.]{0,40}(data|pay|cost)|data cent[^.]{0,40}(pay|full)/], ["Brown: a cap on rate hikes", /(cap|limit)/], ["Husted: states decide whether to adopt it", /(state|up to|optional|voluntar)/]], need: 2 },
+      { q: "A volunteer says, “Husted was charged in the HB6 scandal, and HB6 is why your bill went up.” What’s wrong?", model: "Husted was never charged. And HB6’s bailout charge was repealed before it was collected, so experts say it isn’t the main reason bills rose.", ideas: [["Husted was never charged", /(never|not|wasn'?t|was not)[^.]{0,20}charg/], ["HB6 isn’t the main reason bills rose", /(repeal|not the main|isn'?t the (main|reason)|other reason|data cent|supply|ended|not why|no longer)/]], need: 2 }
+    ],
+    right: /(data cent|cap|rate|tax break|follow up|get back to you)/, wrong: /(husted (was )?(charged|indicted|arrested)|hb ?6 is why|(wants to|will|going to|gonna) (shut|ban)|ban data cent|liar|lying)/,
+    voters: [
+      { name: "Denise", meta: "Retired bus driver, Lima", skin: "#d9a982", hair: "#b8b2aa", style: "bob", shirt: "#9a5b7d", voice: ["Samantha", "Victoria", "Allison"], open: "Oh, Sherrod! I always liked him. I just haven’t figured out when I’m voting. My knees make that polling place a hassle.", follow: "And these electric bills, is he going to do anything about them?", bye: "Alright, I’ll get my daughter to drive me. Thank you, hon." },
+      { name: "Kyle", meta: "Union electrician, New Albany", skin: "#e8c3a0", hair: "#5a4334", style: "cap", shirt: "#d0802f", voice: ["Alex", "Tom", "Aaron"], open: "I’m an electrician. I’ve been working data center jobs out by New Albany. If Brown makes them pay, does the work dry up?", follow: "So he’s not trying to shut them down?", bye: "Okay. I’ll think about it. I’ll be voting either way." },
+      { name: "Pat", meta: "Homeowner, Lake County", skin: "#f0cfb0", hair: "#9a9a9a", style: "short", shirt: "#5a6f4f", voice: ["Fred", "Daniel", "Alex"], pitch: .9, rate: .95, open: "Husted’s already got a bill that makes data centers pay, and Brown’s a hypocrite who used to brag about bringing them here.", follow: "So what’s the difference, then?", bye: "We’ll see. Have a good one." },
+      { name: "Maria", meta: "Nurse, Toledo", skin: "#c99a74", hair: "#2a1b14", style: "puff", shirt: "#2f7f8f", voice: ["Ava", "Samantha", "Google US English"], open: "Hi! Quick one: what’s Brown going to do about the war?", follow: "Okay, and will he protect Medicaid? Half my patients are on it.", bye: "Got it. I’ll be voting, don’t worry." }],
+    key: "Brown wants to require data centers to pay the full cost of their utilities so household bills don't go up, cap how much utilities can raise rates, end data center tax breaks, and let communities decide where data centers go. He has not proposed banning them and hasn't published details of the cap. Ohio home electric bills rose 13.5 percent in a year; data centers grew ninefold since 2020. Husted says if you create the cost, you should pay the cost; his Ratepayer Protection Act passed the House and asks states to consider making data centers pay, with adoption up to each state (Husted says it would require states). HB6 was a real bribery scandal; Husted was never charged; its nuclear charge was repealed in 2021 before collection and its coal charge ended in 2025, so it isn't the main reason bills rose. Husted holds the seat now. Anything else: offer the campaign follow-up.",
+    sources: [["Brown campaign, Our Fight", "https://www.sherrodbrown.com/our-fight/"], ["Statehouse News Bureau, Oct 30, 2026 (13.5%)", "https://www.statenews.org/government-politics/2026-10-30/2026-race-for-u-s-senate-in-ohio-how-brown-husted-frame-affordability"], ["Boston Globe / NYT, Oct 23, 2026 (data center growth)", "https://www.bostonglobe.com/2026/10/23/business/midterm-voters-data-centers-energy-costs/"], ["PolitiFact, Jul 20, 2026 (HB6 and bills)", "https://politifact.com/factchecks/2026/jul/20/sherrod-brown/sherrod-brown-blames-hb-6-for-electric-bill-spike-experts-say-the-law-wasnt-the-main-cause/"], ["PolitiFact, Sep 23, 2026 (Husted and data centers)", "https://politifact.com/factchecks/2026/sep/23/sherrod-brown/jon-husted-pushed-for-data-centers-and-tax-incentives-in-ohio-as-sherrod-brown-ads-say/"], ["News 5 Cleveland, Sep 24, 2026 (both candidates)", "https://news5cleveland.com/news/local-news/data-centers-remain-a-flashpoint-in-ohios-u-s-senate-race"], ["Spectrum News, Sep 29, 2026 (Husted’s bill)", "https://spectrumnews1.com/ca/la/news/2026/09/29/husted-data-center-ratepayer-protection"], ["WOSU, Mar 31, 2026 (Householder sentence)", "https://www.wosu.org/2026-03-31/hung-jury-in-bribery-and-corruption-trial-of-former-firstenergy-executives-in-akron"]] },
+
+  { id: "me", title: "Heating oil this winter", from: "Troy Jackson", race: "Maine US Senate", k: "Troy", j: "Collins",
+    kfull: ["Troy Jackson", "Democrat"], jfull: ["Sen. Susan Collins", "Republican, holds the seat"],
+    screens: [
+      ["The question on the ballot", '<h2 class="h">How will Mainers afford to heat their homes this winter?</h2><p class="lead">Heating oil is at record prices, and in Maine that hits half of all homes. Both candidates are talking about it; they’d do different things.</p><div class="chips"><span class="chip k">Jackson (D): end the war, more heating aid</span><span class="chip j">Collins (R): more supply, aid sent early</span></div>'],
+      ["The problem", '<h2 class="h sm">Half of Maine heats with oil</h2>' + scale([["Maine homes that heat with oil", "~50%", 50, GREEN], ["US homes that heat with oil", "~3%", 3, GREY]]) + stats([["~$6", "a gallon this fall, near a record"], ["$1,650", "to fill a tank, up about 80% in a year"]]) + '<p class="lead muted">Reporting ties the spike to the war with Iran.</p>'],
+      ["Help that exists today", '<h2 class="h sm">Most worried voters can get help now</h2><div class="ex"><b>HEAP heating aid</b>Homeowners and renters can apply. A family of four can earn up to about $73,000. Applications run until funds run out or May 29, 2027.</div><div class="ex"><b>The oil reserve</b>Up to 315,000 barrels are being released. One analyst calls it a very small volume, and the state Chamber says it won’t land in home tanks right away.</div>'],
+      ["Two candidates, side by side", null],
+      ["What changes, depending on who wins", null],
+      ["The one line to keep", null]
+    ],
+    rows: [["His or her fix", "End the war driving prices and put more money into LIHEAP heating aid", "Pressed the administration <q>to use every tool to increase supply and lower energy prices</q>"],
+      ["Record", "As Maine Senate President he helped pass 2023 relief: $450 checks to 880,000+ Mainers and $40 million more for heating aid", "Pushed for the reserve release; about $36.7 million in Maine heating aid went out early"],
+      ["The war", "Would end it. His ad says Collins is <q>funding this reckless war</q>", "Voted five times against ending it, then has voted to end it since late April"]],
+    winK: "Maine sends a senator pushing to end the war and to fund more heating aid.", winJ: "Maine keeps a senator who has pressed the administration for more supply and earlier aid.",
+    winNote: "Collins holds the seat now. Jackson became the nominee in July after Graham Platner withdrew.",
+    anchor: '<span class="k">Troy</span> would <em>end the war</em> driving oil prices and put <em>more money into heating aid</em>. <span class="j">Collins</span> has pushed to <em>release the oil reserve</em> and send aid early.',
+    tests: [
+      { q: "In one sentence: what’s the heating fight in Maine’s Senate race?", model: "How Mainers, half of whom heat with oil, will afford record heating oil prices this winter.", ideas: [["Heating oil prices", /(heat|oil|fuel)/], ["Half of Maine homes heat with oil", /(half|50|fifty|most)/], ["Affording it this winter", /(winter|afford|cost|price|expensive|cold)/]], need: 2 },
+      { q: "Where does Troy Jackson stand?", model: "Troy would end the war driving oil prices and put more money into LIHEAP heating aid, and he helped pass heating relief in 2023.", ideas: [["End the war in Iran", /(war|iran)/], ["More money for heating aid (LIHEAP)", /(lie ?heap|liheap|heap|heating (aid|assistance|help)|assistance|aid|help)/], ["He helped pass relief in 2023", /(2023|relief|checks|450|before|senate president|did it|record)/]], need: 2 },
+      { q: "Where does Susan Collins stand?", model: "Collins pushed the administration for more supply, including releasing the oil reserve, and Maine’s heating aid went out early.", ideas: [["Pushed to release the oil reserve or more supply", /(reserve|release|barrel|supply)/], ["Got heating aid sent early", /(aid|liheap|heap|early|assistance|money)/], ["Has voted to end the war since April", /(voted|vote)[^.]{0,30}(end|war)|end the war|since april/]], need: 2 },
+      { q: "If Jackson wins instead of Collins, what changes?", model: "Maine gets a senator pushing to end the war and fund more heating aid, instead of one pressing the administration for supply and earlier aid.", ideas: [["Jackson: end the war", /(war|iran)/], ["Jackson: more heating aid", /(aid|liheap|heap|assistance|help|money)/], ["Collins: pressing for supply and earlier aid", /\b(collins|she|her)\b/]], need: 2 },
+      { q: "A volunteer says, “Collins never voted to end the war.” What’s wrong?", model: "She has voted to end it since late April. Before that, she voted five times against ending it.", ideas: [["She has voted to end it since late April", /(has|did|since|april|nine|9|voted)[^.]{0,40}(end|war)|(end|stop)[^.]{0,20}war/], ["Before that, she voted against ending it five times", /(five|5|before|first|earlier|against)/]], need: 1, must: [0] }
+    ],
+    right: /(war|liheap|heap|heating (aid|assistance|help)|relief|follow up|get back to you|211)/, wrong: /(never voted to end|collins('s| is)? (lying|a liar)|reserve will lower|price cap|cap (heating )?oil)/,
+    voters: [
+      { name: "Linda", meta: "Retired, Fort Kent", skin: "#f0cfb0", hair: "#d8d3cc", style: "bob", shirt: "#4f7a8a", voice: ["Victoria", "Samantha", "Allison"], pitch: 1.05, rate: .95, open: "Oh, you’re with Troy. Good man. I want to vote, but I haven’t asked for an absentee ballot, and I don’t drive after dark.", follow: "And with oil this high, I don’t know how I’ll keep the house warm. Is there any help?", bye: "Alright, I’ll call the town office tomorrow. Thank you, dear." },
+      { name: "Dale", meta: "Sawmill worker, Millinocket", skin: "#e2b48e", hair: "#6b5440", style: "cap", shirt: "#8a3f2f", voice: ["Fred", "Daniel", "Alex"], pitch: .9, rate: .95, open: "I work at the mill and I heat with oil. I’m scared about this winter, honestly. I voted Collins last time.", follow: "What’s Jackson going to do that she can’t?", bye: "Alright. I’ll think on it before Tuesday." },
+      { name: "Gary", meta: "Retired, Kennebunk", skin: "#f1d1b5", hair: "#a8a8a8", style: "short", shirt: "#3f5a7a", voice: ["Alex", "Tom", "Aaron"], open: "Collins got the heating oil reserve released, and she’s voted to end the war. Jackson just yells.", follow: "So why switch?", bye: "Well, I’ll hear him out. Have a good day." },
+      { name: "Jess", meta: "Nurse, Lewiston", skin: "#c99a74", hair: "#3a2a20", style: "puff", shirt: "#5f8f4f", voice: ["Ava", "Samantha", "Google US English"], open: "Hi! Where’s he on the Canada tariffs?", follow: "And does he really want Medicare for All?", bye: "Okay, thanks. I’ll vote." }],
+    key: "Jackson would end the war in Iran and put more money into LIHEAP heating aid. His ad says Collins is funding this reckless war that is driving costs up. As Maine Senate President in January 2023 he helped pass relief: $450 checks to more than 880,000 Mainers under the income limits and $40 million more for LIHEAP. About half of Maine homes heat with oil versus about 3 percent nationally; oil was about $6 a gallon this fall, a tank about $1,650, up about 80 percent. HEAP covers homeowners and renters; a family of four can earn up to $73,213. Collins urged the administration to increase supply; up to 315,000 barrels from the reserve are being released (a small volume; won't reach home tanks right away); about $36.7 million in Maine aid went out early. She voted five times against ending the war before April 30 and has voted to end it since. Anything else: offer the campaign follow-up.",
+    sources: [["Boston Globe / NYT, Oct 8, 2026 (Maine and heating oil)", "https://www.bostonglobe.com/2026/10/08/metro/susan-collinsn-maine-senate-race-heating-oil/"], ["Maine Public, Oct 21, 2026 (the reserve release)", "https://www.vermontpublic.org/2026-10-21/feds-to-release-315-000-barrels-from-heating-oil-reserve"], ["MaineHousing, HEAP", "https://www.mainehousing.org/programs-services/energy/energydetails/home-energy-assistance-program"], ["Jackson campaign, Oct 18, 2026 (end the war, LIHEAP)", "https://www.jacksonformaine.com/news/jackson-hits-the-airwaves-directing-mainers-to-heating-assistance-as-energy-costs-skyrocket"], ["Maine Public, Jan 4, 2023 (the 2023 relief)", "https://www.mainepublic.org/politics/2023-01-04/legislature-approves-emergency-bill-containing-450-relief-checks"], ["Bangor Daily News, Oct 8, 2026 (war votes fact check)", "https://www.bangordailynews.com/2026/10/08/news/maine-election-senate-2026-troy-jackson-susan-collins-debate-fact-check/"], ["Bangor Daily News, Oct 9, 2026 (aid released early)", "https://www.bangordailynews.com/2026/10/09/politics/maine-heating-assistance-liheap-release/"]] },
+
+  { id: "mi", title: "Tariffs, Canada and auto jobs", from: "Abdul El-Sayed", race: "Michigan US Senate", k: "Abdul", j: "Rogers",
+    kfull: ["Abdul El-Sayed", "Democrat"], jfull: ["Mike Rogers", "Republican"],
+    screens: [
+      ["The question on the ballot", '<h2 class="h">Are tariffs protecting Michigan jobs or hurting them?</h2><p class="lead">Michigan’s auto industry runs across the Canadian border, and this year’s tariff war hit it hard. Both candidates now want the Canada fight over; they differ on what tariffs should do.</p><div class="chips"><span class="chip k">El-Sayed (D): smart, targeted tariffs</span><span class="chip j">Rogers (R): keep the ones that work</span></div>'],
+      ["The problem", '<h2 class="h sm">A trade war with Michigan’s biggest neighbor</h2>' + stats([["~$80B", "a year in Michigan trade with Canada"], ["50%", "tariffs on $27.6 billion of Canadian goods, matched by Canada"], ["~$5,600", "a year in tariff costs per Michigan household, third-highest in the US"], ["64%", "of likely Michigan voters oppose the 50% tariffs"]]) + '<div class="ex"><b>Why it bites here</b>Car parts cross the border back and forth while a vehicle gets built.</div>'],
+      ["Where the workers are", '<h2 class="h sm">The UAW is for some tariffs, not these</h2><p class="lead">UAW President Shawn Fain: <q>We support strategic targeted tariffs.</q> On Canada: <q>the 50% on Canada, we don’t agree with that.</q></p><p class="lead muted">The UAW endorsed El-Sayed. So Democrats here aren’t simply anti-tariff, and neither is he.</p>'],
+      ["Two candidates, side by side", null],
+      ["What changes, depending on who wins", null],
+      ["The one line to keep", null]
+    ],
+    rows: [["On tariffs", "<q>I’m not against tariffs per se. I’m just against dumb tariffs.</q>", "Called tariffs <q>necessary</q> in September; says <q>there are tariffs that have helped</q>"],
+      ["On Canada", "Has opposed these tariffs", "Since Oct 7: <q>Canada is not our enemy</q> and <q>We need to end this tariff war now</q>"],
+      ["What he’d do", "Targeted tariffs on growth industries, tied to a plan for Michigan manufacturing, with unions at the table", "Work with the president on the tariffs he says are working"]],
+    winK: "Michigan sends a senator pushing tariffs tied to a plan for Michigan manufacturing, with unions at the table.", winJ: "Michigan sends a senator who’d work with the president on the tariffs he says are working.",
+    winNote: "Open seat: Sen. Gary Peters is retiring.",
+    anchor: '<span class="k">Abdul</span> wants <em>smart, targeted tariffs</em> that protect Michigan jobs, with <em>unions at the table</em>. <span class="j">Rogers</span> backed the tariffs until October and now wants <em>the Canada fight ended</em>.',
+    tests: [
+      { q: "In one sentence: what’s the trade fight in Michigan’s Senate race?", model: "Whether tariffs, especially the 50 percent tariffs on Canada, protect Michigan’s auto jobs or hurt them.", ideas: [["Tariffs", /tariff/], ["Canada", /canad/], ["Auto jobs and prices", /(auto|car|job|price|cost|manufactur|plant)/]], need: 2, must: [0] },
+      { q: "Where does Abdul El-Sayed stand?", model: "Abdul is against dumb tariffs, not all tariffs. He wants targeted tariffs that protect Michigan manufacturing, with unions at the table.", ideas: [["Against dumb tariffs, not all tariffs", /(dumb|smart|target|not against|some|right kind)/], ["Tariffs that protect Michigan manufacturing", /(protect|manufactur|job|michigan|make stuff|made here)/], ["Unions at the table", /union/]], need: 2 },
+      { q: "Where does Mike Rogers stand?", model: "Rogers called the tariffs necessary until October. Now he says Canada isn’t our enemy and wants the tariff war ended, while keeping the tariffs he says work.", ideas: [["Now wants the Canada tariff war ended", /(end|stop|over)[^.]{0,40}(canad|tariff|war)|canad[^.]{0,30}(not|enemy)/], ["Backed the tariffs until October", /(backed|supported|support|necessary|until|before|used to|october|september|flip)/], ["Says some tariffs are working", /(work|help|some tariff|keep)/]], need: 2 },
+      { q: "If El-Sayed wins instead of Rogers, what changes?", model: "Michigan gets a senator pushing tariffs tied to a plan for Michigan jobs, with unions at the table, instead of one working with the president on the tariffs he says work.", ideas: [["Abdul: tariffs tied to a plan for Michigan jobs", /(plan|target|smart|protect|manufactur|job)/], ["Abdul: unions at the table", /union/], ["Rogers: works with the president on tariffs", /\b(rogers|he|his|president|trump)\b/]], need: 2 },
+      { q: "A volunteer says, “Abdul is against all tariffs.” What’s wrong?", model: "He’s against dumb tariffs, not all of them. He backs targeted tariffs that protect Michigan manufacturing.", ideas: [["He’s against dumb tariffs, not all of them", /(dumb|not all|some|smart|target|not against)/], ["He backs tariffs that protect Michigan jobs", /(protect|target|smart|job|manufactur)/]], need: 1, must: [0] }
+    ],
+    right: /(tariff|union|manufactur|job|follow up|get back to you)/, wrong: /(against all tariffs|hates tariffs|no tariffs|rogers wants to keep the canada|liar|lying)/,
+    voters: [
+      { name: "Lisa", meta: "UAW, stamping plant in Warren", skin: "#c68e64", hair: "#2a1b14", style: "bob", shirt: "#2f5f8f", voice: ["Samantha", "Ava", "Allison"], open: "The UAW said vote El-Sayed, so I’m with him. I just work second shift and don’t know when I’ll get to vote.", follow: "And these tariffs on Canada, what’s he going to do?", bye: "Okay, I’ll go before my shift. Thanks." },
+      { name: "Tony", meta: "Tool and die shop, Macomb County", skin: "#e8c3a0", hair: "#3a2a20", style: "cap", shirt: "#5a5a5a", voice: ["Fred", "Alex", "Daniel"], pitch: .92, open: "The Canada thing is killing my orders. But I don’t want some guy who hates tariffs either.", follow: "So where’s the line for him?", bye: "Huh. Okay. I’ll think about it." },
+      { name: "Rick", meta: "Retired, Livonia", skin: "#f1d1b5", hair: "#a8a8a8", style: "short", shirt: "#7a3f3f", voice: ["Tom", "Aaron", "Alex"], pitch: .95, open: "Rogers says Canada’s not our enemy and he’ll end the tariff war. He can actually get Trump on the phone.", follow: "So why should I vote for El-Sayed?", bye: "Maybe. Have a good one." },
+      { name: "Aisha", meta: "Grad student, Ann Arbor", skin: "#8d5a3b", hair: "#1f1612", style: "puff", shirt: "#7a5c99", voice: ["Ava", "Samantha", "Google US English"], open: "Hey! Where’s he on data centers?", follow: "And is he really for Medicare for All?", bye: "Cool, I already have my plan. Thanks!" }],
+    key: "El-Sayed: \"I'm not against tariffs per se. I'm just against dumb tariffs.\" He backs targeted, smart tariffs that protect Michigan manufacturing, on growth industries, with benchmarks, ending once US makers are established; NAFTA was a disaster for manufacturing; unions must be at the table. The UAW endorsed him; Fain supports strategic targeted tariffs but not the 50 percent on Canada. Facts: 50 percent tariffs on $27.6 billion of Canadian goods, matched by Canada; about $80 billion a year in Michigan-Canada trade; about $5,600 a year per household, third-highest. Rogers called tariffs necessary in September, says some have helped, and since Oct 7 says Canada is not our enemy and wants the tariff war ended; he'd work with the president on tariffs that are working. Saying El-Sayed opposes all tariffs, or Rogers wants to keep the Canada tariffs, is inaccurate. Anything else: offer the campaign follow-up.",
+    sources: [["El-Sayed campaign, Money in Your Pocket", "https://abdulforsenate.com/priority/money-in-your-pocket/"], ["ClickOnDetroit, Oct 21, 2026 (both on tariffs)", "https://www.clickondetroit.com/news/local/2026/10/21/heres-where-michigan-us-senate-candidates-el-sayed-rogers-stand-on-tariffs/"], ["Michigan Public, Sep 25, 2026 (the trade war, the UAW)", "https://www.michiganpublic.org/politics-government/2026-09-25/u-s-senate-candidates-in-michigan-campaign-amidst-a-trade-war-with-canada"], ["GV Wire / Reuters, Oct 7, 2026 (Rogers’s ad)", "https://gvwire.com/2026/10/07/michigan-republican-rogers-calls-for-end-to-canada-tariff-fight-breaking-with-trump-again/"], ["Newsweek, Oct 7, 2026 (Rogers before; $80B)", "https://www.newsweek.com/mike-rogers-turns-on-trumps-tariffs-what-michigan-republican-said-before-12538135"], ["ClickOnDetroit, Sep 9, 2026 (the poll)", "https://www.clickondetroit.com/news/local/2026/09/09/how-michigan-voters-feel-about-trumps-imposed-tariffs-on-canadian-goods-according-to-poll/"]] }
+  ];
+  L.forEach(function (x) {
+    x.screens[3][1] = cmp(x.kfull, x.jfull, x.rows);
+    x.screens[4][1] = wins(x.k, x.winK, x.j, x.winJ, x.winNote);
+    x.screens[5][1] = '<div class="anchor">' + x.anchor + '</div><button class="hear" type="button" id="hearanchor">▶ Hear it</button><p class="lead muted">Next, five questions out loud. Nothing to pick from: say it in your own words.</p>';
+  });
+
+  /* ---------- voices ---------- */
+  var VOICES = [];
+  function loadVoices() { try { VOICES = speechSynthesis.getVoices() || []; } catch (e) { VOICES = []; } }
+  try { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
+  function speak(text, who) {
+    try {
+      if (!("speechSynthesis" in window)) return;
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(String(text).replace(/<[^>]+>/g, "").replace(/\[[^\]]*\]/g, ""));
+      var en = VOICES.filter(function (v) { return /^en(-|_)US/i.test(v.lang); }), pick = null, want = (who && who.voice) || [];
+      for (var i = 0; i < want.length && !pick; i++) pick = en.filter(function (v) { return v.name.indexOf(want[i]) >= 0; })[0] || null;
+      if (pick) u.voice = pick;
+      u.rate = (who && who.rate) || 1; u.pitch = (who && who.pitch) || 1;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  var COACH = { voice: ["Samantha", "Google US English", "Ava", "Allison"] };
+
+  /* ---------- grading spoken answers by idea ---------- */
+  function norm(t) {
+    return " " + String(t || "").toLowerCase()
+      .replace(/path\s*ways?/g, "pathways").replace(/medic(aid|ade|ate|aide|ad|ed)\b/g, "medicaid").replace(/medical aid/g, "medicaid")
+      .replace(/data\s*sent(er|re)s?/g, "data centers").replace(/lie\s*heap|li\s*heap/g, "liheap").replace(/tear\s*iffs?/g, "tariffs")
+      .replace(/[“”"’]/g, "'") + " ";
+  }
+  var ENDPW = /(end|ending|ends|get rid|getting rid|scrap|stop|kill|replace|cancel|eliminat|abolish|repeal|do away|throw out|shut)[^.]{0,40}pathways|pathways[^.]{0,40}(ends?|gone|go away|failure|failed|over)/;
+  function hitsFor(T, text) { var t = norm(text); return T.ideas.map(function (id) { return id[1] === "ENDPW" ? ENDPW.test(t) : id[1].test(t); }); }
+  function passed(T, hits) { if (T.must && T.must.some(function (m) { return !hits[m]; })) return false; return hits.filter(Boolean).length >= T.need; }
+  async function aiHits(T, text) {
+    var p = "A canvasser in training answered a question out loud (speech-to-text, so ignore spelling and missing punctuation). Decide which listed ideas the answer clearly expresses, in any wording. Count an idea only if the answer states it; not if it gets it wrong.\n\nQUESTION: " + T.q + "\nIDEAS:\n" + T.ideas.map(function (id, i) { return i + ": " + id[0]; }).join("\n") + "\nREFERENCE ANSWER: " + T.model + "\n\nTHE ANSWER: " + text + "\n\nReply with only JSON: {\"hits\":[true,false,...]}, one boolean per idea, in order.";
+    var r = await sample.json(p, { modelTier: "quick", cache: false });
+    if (!r || !Array.isArray(r.hits) || r.hits.length !== T.ideas.length) throw { code: "invalid_json" };
+    return r.hits.map(Boolean);
+  }
+
+  /* ---------- cartoon faces ---------- */
+  function face(v, mood) {
+    var s = v.skin, h = v.hair;
+    var hair = v.style === "puff" ? '<circle cx="50" cy="26" r="30" fill="' + h + '"/><circle cx="24" cy="40" r="14" fill="' + h + '"/><circle cx="76" cy="40" r="14" fill="' + h + '"/>'
+      : v.style === "bob" ? '<path d="M10 58 Q8 12 50 10 Q92 12 90 58 L82 58 Q80 30 50 28 Q20 30 18 58Z" fill="' + h + '"/>'
+      : v.style === "long" ? '<path d="M8 96 Q4 14 50 10 Q96 14 92 96 L80 96 Q80 32 50 28 Q20 32 20 96Z" fill="' + h + '"/>'
+      : v.style === "cap" ? '<path d="M14 40 Q16 12 50 12 Q84 12 86 40Z" fill="#3b5a7a"/><path d="M50 36 L94 40 Q92 46 80 45 L50 42Z" fill="#2c4560"/>'
+      : '<path d="M14 40 Q14 12 50 12 Q86 12 86 40 Q76 26 50 26 Q24 26 14 40Z" fill="' + h + '"/>';
+    var mouth = mood === "meh" ? '<path d="M39 70 Q50 67 61 70" stroke="#3a2f28" stroke-width="3.5" fill="none" stroke-linecap="round"/>' : '<path d="M35 65 Q50 81 65 65" stroke="#3a2f28" stroke-width="3.5" fill="#fff" stroke-linecap="round"/>';
+    var brows = mood === "meh" ? '<path d="M31 42 L43 44 M57 44 L69 42" stroke="#3a2f28" stroke-width="3" stroke-linecap="round"/>' : '<path d="M31 41 Q37 37 43 41 M57 41 Q63 37 69 41" stroke="#3a2f28" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    return '<svg viewBox="0 0 100 110" aria-hidden="true"><path d="M14 110 Q16 86 50 84 Q84 86 86 110Z" fill="' + v.shirt + '"/><rect x="42" y="74" width="16" height="14" fill="' + s + '"/><circle cx="50" cy="52" r="34" fill="' + s + '"/>' + hair + brows + '<circle cx="38" cy="52" r="4.2" fill="#2a211c"/><circle cx="62" cy="52" r="4.2" fill="#2a211c"/>' + mouth + '</svg>';
+  }
+  var MAYA = { skin: "#b9835f", hair: "#1c1410", style: "long", shirt: "#1F4C91" };
+
+  /* ---------- state ---------- */
+  var S = { lesson: null, i: 0, t: {}, voter: null, door: null, sources: false, done: {} };
+  var LEARN_END = 6, TEST_START = 7, TEST_END = 11, SUMMARY = 12, PICK = 13, DOOR = 14, DONE = 15;
+  var rec = null, recTimers = [];
+  function X() { return L[S.lesson]; }
+  function foot(h) { $("foot").innerHTML = h; }
+  function stopAll() { try { if (rec) rec.abort(); } catch (e) {} rec = null; recTimers.forEach(clearTimeout); recTimers = []; try { speechSynthesis.cancel(); } catch (e) {} }
+  function go(n) { stopAll(); S.i = n; S.sources = false; render(); $("body").scrollTop = 0; }
+  function home() { stopAll(); S.lesson = null; render(); $("body").scrollTop = 0; }
+  var NEXT = function (n, label) { return '<button class="btn" type="button" data-go="' + n + '">' + (label || "Next") + '</button>'; };
+  function banner(x) { return '<div class="src">Built from <b>' + esc(x.from) + '’s</b> public record (' + esc(x.race) + ', 2026), shown in our demo campaign. <button class="srcbtn" type="button" id="srcs">Sources</button></div>'; }
+
+  function setProg() {
+    var on = S.lesson != null; $("prog").hidden = !on; $("back").hidden = !on;
+    if (!on) return;
+    var i = S.i, lab = X().title, num = "";
+    var l = Math.min(Math.max(i, 0), LEARN_END), t = Math.min(Math.max(i - LEARN_END, 0), 5), p = i >= DONE ? 1 : (i === DOOR ? .5 : (i >= PICK ? .15 : 0));
+    if (i >= 1 && i <= LEARN_END) num = "Learn " + i + " of 6"; else if (i >= TEST_START && i <= TEST_END) num = "Say it " + (i - LEARN_END) + " of 5"; else if (i >= PICK && i <= DOOR) num = "Practice";
+    $("plab").textContent = lab; $("pnum").textContent = num;
+    $("b1").style.width = (l / 6 * 100) + "%"; $("b2").style.width = (t / 5 * 100) + "%"; $("b3").style.width = (p * 100) + "%";
+  }
+
+  function render() {
+    setProg();
+    var b = $("body");
+    if (S.lesson == null) {
+      b.innerHTML = '<div class="hello"><div class="portrait"><div class="ph">' + face(MAYA, "happy") + '</div><small>Illustration until the campaign sends a photo</small></div><p>Thank you for knocking doors with us. Here’s what to know before your next shift.</p></div>' +
+        '<span class="kick">This week’s lessons · about 5 minutes each</span><div class="lessons">' +
+        L.map(function (x, k) { return '<button type="button" class="lesson' + (S.done[k] ? " done" : "") + '" data-lesson="' + k + '"><span class="n">' + (S.done[k] ? "✓" : (k + 1)) + '</span><div><b>' + esc(x.title) + '</b><span>From ' + esc(x.from) + ' · ' + esc(x.race) + '</span></div></button>'; }).join("") + '</div>';
+      foot('<p class="pw-line"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="#e6dfd3" stroke-width="10"/><path d="M24 5 A19 19 0 1 1 5 24" fill="none" stroke="#35b57c" stroke-width="10"/></svg>Powered by Warmup</p>');
+      return;
+    }
+    var x = X(), i = S.i;
+    if (S.sources) {
+      b.innerHTML = '<span class="kick">Sources for this lesson</span><ul class="srclist">' + x.sources.map(function (s) { return '<li><a href="' + esc(s[1]) + '" target="_blank" rel="noopener">' + esc(s[0]) + '</a></li>'; }).join("") + '</ul><p class="note">Every claim in the lesson ties to one of these. The full review sheet is in the campaign demos folder.</p>';
+      foot('<button class="btn" type="button" id="srcback">Back to the lesson</button>'); return;
+    }
+    if (i === 0) {
+      b.innerHTML = banner(x) + '<span class="kick">New lesson</span><h2 class="h">' + esc(x.title) + '</h2><p class="lead muted">' + esc(x.k) + ' against ' + esc(x.j) + ', in six short screens. Then you’ll say it back out loud.</p>';
+      foot(NEXT(1, "Start · about 2 minutes")); return;
+    }
+    if (i >= 1 && i <= LEARN_END) {
+      var sc = x.screens[i - 1];
+      b.innerHTML = '<span class="kick">' + i + ' · ' + esc(sc[0]) + '</span>' + sc[1];
+      foot(NEXT(i + 1, i === LEARN_END ? "Say it back" : "Next")); return;
+    }
+    if (i >= TEST_START && i <= TEST_END) { renderTest(i - TEST_START); return; }
+    if (i === SUMMARY) {
+      var got = x.tests.map(function (t, k) { var r = S.t[k]; return !!(r && r.pass); }), n = got.filter(Boolean).length;
+      b.innerHTML = '<span class="kick">What you learned</span><h2 class="h">' + (n >= 4 ? "You can explain the issue." : n >= 2 ? "Most of it is there." : "Let’s run it again.") + '</h2>' +
+        '<div class="score">' + got.map(function (g) { return '<i class="' + (g ? "on" : "") + '"></i>'; }).join("") + '</div>' +
+        '<p class="lead muted">' + n + ' of 5 answered with the key ideas. Tomorrow’s Warmup asks two of these again, because recalling it a day later is what makes it stick.</p><div class="anchor" style="font-size:19px">' + x.anchor + '</div>';
+      S.done[S.lesson] = n >= 4 || S.done[S.lesson];
+      foot(NEXT(PICK, "Practice a door") + (n < 4 ? '<button class="btn ghost" type="button" data-go="1">Review the lesson</button>' : '<button class="btn ghost" type="button" id="home">Back to lessons</button>')); return;
+    }
+    if (i === PICK) {
+      b.innerHTML = '<span class="kick">Practice a door</span><h2 class="h sm">Pick a voter. They talk, you talk back.</h2><div class="voters">' + x.voters.map(function (v, k) { return '<button type="button" class="voter" data-voter="' + k + '">' + face(v, "happy") + '<b>' + v.name + '</b><span>' + esc(v.meta) + '</span></button>'; }).join("") + '</div>';
+      foot('<button class="btn ghost" type="button" id="home">Back to lessons</button>'); return;
+    }
+    if (i === DOOR) { renderDoor(); return; }
+    b.innerHTML = '<div style="display:flex;flex-direction:column;gap:12px;flex:1;align-items:center;justify-content:center;text-align:center"><svg viewBox="0 0 48 48" width="140" height="140" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="#35b57c" stroke-width="6"/><path d="M16 24.5 L21.5 30 L32 19" fill="none" stroke="#1b7a4d" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><h2 class="h">Lesson done.</h2></div>';
+    foot('<button class="btn" type="button" id="home">Back to lessons</button><button class="btn ghost" type="button" data-go="' + PICK + '">Practice another door</button>');
+  }
+
+  /* ---------- spoken test ---------- */
+  function micSvg() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>'; }
+  function renderTest(k) {
+    var T = X().tests[k], r = S.t[k] || {}, b = $("body");
+    var h = '<span class="kick">Say it · question ' + (k + 1) + ' of 5</span><div class="qcard"><h2 class="h sm" style="margin:0">' + esc(T.q) + '</h2></div>';
+    if (r.state === "graded") {
+      h += '<div class="heard"><small>You said</small>' + esc(r.text || "") + '</div><p class="verdict">' + (r.pass ? "Got it." : "Not yet. Here’s what was missing.") + '</p>' +
+        '<div class="ideas">' + T.ideas.map(function (id, j) { return '<div class="idea' + (r.hits[j] ? " hit" : "") + '"><i>' + (r.hits[j] ? "✓" : "·") + '</i>' + esc(id[0]) + '</div>'; }).join("") + '</div>' +
+        '<div class="model"><b>A strong answer</b>' + esc(T.model) + '</div>';
+      b.innerHTML = h; foot(NEXT(S.i + 1, k === 4 ? "See what you learned" : "Next question") + '<button class="btn ghost" type="button" id="retry">Say it again</button>');
+    } else if (r.state === "grading") {
+      b.innerHTML = h + '<div class="heard"><small>You said</small>' + esc(r.text) + '</div><p class="think">Checking your answer…</p>'; foot('<button class="btn" type="button" disabled>Checking…</button>');
+    } else { b.innerHTML = h + voiceBlock(r); foot(voiceFoot(r)); }
+  }
+  function voiceBlock(r) {
+    if (CAN_LISTEN) {
+      if (r.error) return '<div class="card-alert">' + esc(r.error) + '</div>';
+      return '<button class="mic' + (r.listening ? " on" : "") + '" type="button" id="mic" aria-label="' + (r.listening ? "I’m done" : "Tap to talk") + '">' + micSvg() + '</button><div class="miclab">' + (r.listening ? "Listening… tap when you’re done" : "Tap to talk") + '</div>' +
+        (r.listening || r.text ? '<div class="heard"><small>' + (r.listening ? "Hearing" : "You said") + '</small><span id="livetext">' + esc(r.text || "") + '</span></div>' : "");
+    }
+    return '<div class="note">' + (IN_CLAUDE ? "Inside claude.ai a page can’t open the microphone, so this is spoken only at the Warmup link. Here, tap your keyboard’s mic and say it." : "This browser can’t listen. Open the link in Safari or Chrome to talk; for now, use your keyboard’s mic.") + '</div><div class="tray"><label class="kick" for="said">Your answer</label><textarea id="said" rows="3" placeholder="Tap the keyboard’s mic and talk">' + esc(r.text || "") + '</textarea></div>';
+  }
+  function voiceFoot(r) {
+    if (CAN_LISTEN) { if (r.error) return '<button class="btn" type="button" id="micretry">Try again</button>'; return r.listening ? '<button class="btn" type="button" id="mic2">I’m done</button>' : '<p class="think" style="margin:6px 0 14px">Answer out loud. Your own words are fine.</p>'; }
+    return '<button class="btn" type="button" id="typed">Done</button>';
+  }
+  function fold(parts) {
+    if (!parts.length) return "";
+    var builds = parts.length > 1 && parts.every(function (p, i) { return i === 0 || p.toLowerCase().indexOf(parts[i - 1].toLowerCase().slice(0, 12)) === 0; });
+    var t = (builds ? parts[parts.length - 1] : parts.join(" ")).replace(/\s+/g, " ").trim(), w = t.split(" "), half = w.length / 2;
+    if (w.length > 3 && w.length % 2 === 0 && w.slice(0, half).join(" ").toLowerCase() === w.slice(half).join(" ").toLowerCase()) t = w.slice(0, half).join(" ");
+    return t;
+  }
+  function listen(r, onDone) {
+    stopAll();
+    var R = new SR(); rec = R; R.lang = "en-US"; R.interimResults = true; R.continuous = true;
+    var started = false, ended = false, err = "";
+    r.listening = true; r.text = ""; r.error = ""; render();
+    R.onstart = function () { started = true; };
+    R.onresult = function (e) { var parts = []; for (var j = 0; j < e.results.length; j++) parts.push(String(e.results[j][0].transcript || "").trim()); r.text = fold(parts.filter(Boolean)); var live = $("livetext"); if (live) live.textContent = r.text; else render(); };
+    R.onerror = function (e) { err = e && e.error; };
+    R.onend = function () {
+      if (ended) return; ended = true; recTimers.forEach(clearTimeout); recTimers = []; rec = null; r.listening = false;
+      if (err === "not-allowed" || err === "service-not-allowed") { r.error = "Warmup needs your microphone. This lesson is spoken, not typed. Allow the microphone for this site in your browser settings, then tap Try again."; render(); return; }
+      if (err === "audio-capture") { r.error = "We can’t reach your microphone. Another app is probably using it, like FaceTime or a call. Close or mute that app, then tap Try again."; render(); return; }
+      if (!r.text) { r.error = "Nothing came through. Tap Try again and talk a little louder."; render(); return; }
+      onDone(r.text);
+    };
+    try { R.start(); } catch (e) { r.listening = false; r.error = "The microphone didn’t start. Tap Try again."; render(); return; }
+    recTimers.push(setTimeout(function () { if (!started && !ended) { try { R.abort(); } catch (e) {} if (!ended) { ended = true; rec = null; r.listening = false; r.error = "Nothing came through. Tap Try again."; render(); } } }, 4000));
+    recTimers.push(setTimeout(function () { try { R.stop(); } catch (e) {} }, 30000));
+  }
+  function finishListening() { if (!rec) return; var R = rec; try { R.stop(); } catch (e) {} recTimers.push(setTimeout(function () { if (rec === R && R.onend) R.onend(); }, 1500)); }
+  async function gradeTest(k, text) {
+    var T = X().tests[k], r = S.t[k], at = S.lesson;
+    r.text = text; r.state = "grading"; render();
+    var hits = hitsFor(T, text);
+    if (sample) { try { hits = await aiHits(T, text); } catch (e) {} }
+    if (S.lesson !== at || S.i !== TEST_START + k) return;
+    r.hits = hits; r.pass = passed(T, hits); r.state = "graded"; render();
+  }
+
+  /* ---------- the door ---------- */
+  function renderDoor() {
+    var x = X(), v = x.voters[S.voter], d = S.door, b = $("body");
+    var last = d.turns.filter(function (t) { return !t.me; }).slice(-1)[0];
+    var h = '<span class="kick">Practice · ' + v.name + ', ' + esc(v.meta) + '</span><div class="stage"><div class="say"><small>' + v.name + '</small>' + esc(last ? last.text : "") + '</div>' + face(v, "happy") + '</div><button class="hear" type="button" id="hearvoter">▶ Hear ' + v.name + ' again</button>';
+    if (d.ended) {
+      if (d.grade) {
+        var G = d.grade;
+        h += '<div class="grade"><span class="kick">The coach</span>' + [["accurate", "Accurate"], ["short", "Short"], ["vote", "Back to voting"]].map(function (rw) { var g = G[rw[0]] || {}; var m = ["Yes", "Partly", "No"].indexOf(g.mark) >= 0 ? g.mark : "Partly"; return '<div class="gr"><span class="pill ' + m + '">' + m + '</span><div><b>' + rw[1] + '</b><span>' + esc(g.why || "") + '</span></div></div>'; }).join("") + (G.tip ? '<div class="tip"><b>One tip.</b> ' + esc(G.tip) + '</div>' : "") + '</div>';
+        b.innerHTML = h; foot(NEXT(DONE, "Finish") + '<button class="btn ghost" type="button" data-go="' + PICK + '">Try another voter</button>');
+      } else { b.innerHTML = h + '<p class="think">The coach is grading your door…</p>'; foot('<button class="btn" type="button" disabled>Grading…</button>'); }
+      return;
+    }
+    if (d.busy) { b.innerHTML = h + '<p class="think">' + v.name + ' is answering…</p>'; foot('<button class="btn" type="button" disabled>…</button>'); return; }
+    b.innerHTML = h + voiceBlock(d.r); foot(voiceFoot(d.r));
+  }
+  function startDoor(k) { var v = X().voters[k]; S.voter = k; S.door = { turns: [{ me: false, text: v.open }], step: 0, r: {}, ended: false, grade: null, busy: false }; go(DOOR); speak(v.open, v); }
+  function transcript() { var v = X().voters[S.voter]; return S.door.turns.map(function (t) { return (t.me ? "CANVASSER: " : v.name.toUpperCase() + ": ") + t.text; }).join("\n"); }
+  function said(text) {
+    var d = S.door, v = X().voters[S.voter];
+    d.turns.push({ me: true, text: text }); d.r = {};
+    if (sample) { liveVoter(); return; }
+    var mine = d.turns.filter(function (t) { return t.me; }).length;
+    if (mine >= 2) { d.turns.push({ me: false, text: v.bye }); speak(v.bye, v); endDoor(); return; }
+    d.step = 1; d.turns.push({ me: false, text: v.follow }); render(); speak(v.follow, v);
+  }
+  async function liveVoter() {
+    var x = X(), d = S.door, v = x.voters[S.voter]; d.busy = true; render();
+    var mine = d.turns.filter(function (t) { return t.me; }).length;
+    var p = "You are role-playing a voter at a front door so a canvasser for " + x.from + " (" + x.race + ", election Tuesday, November 3, 2026) can practice. Topic: " + x.title + ".\n\nYOUR CHARACTER: " + v.name + ", " + v.meta + ". Your opening line was: " + v.open + "\n\nRULES: Stay in character. One or two short spoken sentences, plain words, no stage directions. React honestly to what the canvasser actually said. " + (mine >= 2 ? "Wrap up now in character and end with [door closes]." : "If they ask you to make a plan to vote, wrap up and end with [door closes].") + "\n\nWhat the canvasser is supposed to know (for your reactions only): " + x.key + "\n\nTHE DOOR SO FAR\n" + transcript() + "\n\nWrite only " + v.name + "'s next line.";
+    try {
+      var res = await sample(p, { modelTier: "quick", cache: false });
+      var line = res.text.replace(/^\s*[A-Za-z]+:\s*/, "").trim(), close = /\[door closes\]/i.test(line);
+      line = line.replace(/\s*\[door closes\]\s*/i, " ").trim();
+      d.busy = false; d.turns.push({ me: false, text: line }); speak(line, v);
+      if (close || mine >= 3) endDoor(); else { d.step++; render(); }
+    } catch (e) { sample = null; d.busy = false; var lastMine = d.turns.pop(); said(lastMine.text); }
+  }
+  async function endDoor() {
+    var x = X(), d = S.door; d.ended = true; render();
+    var g = scriptGrade();
+    if (sample) {
+      try {
+        var p = "Grade a canvasser's practice door for " + x.from + "'s campaign (" + x.race + "). Grade only the CANVASSER's lines (speech-to-text, so ignore punctuation).\n\nANSWER KEY: " + x.key + "\n\nTHE DOOR\n" + transcript() + "\n\nGrade \"Yes\", \"Partly\" or \"No\" with one short sentence of why (under 20 words): accurate (everything matched the key; inventing a position, number or date, or guessing instead of offering a follow-up, is No), short (one or two sentences each time), vote (turned back to the plan to vote). Then one tip quoting their own words (under 30 words). Reply with only JSON: {\"accurate\":{\"mark\":\"Yes\",\"why\":\"\"},\"short\":{\"mark\":\"Yes\",\"why\":\"\"},\"vote\":{\"mark\":\"Yes\",\"why\":\"\"},\"tip\":\"\"}";
+        var a = await sample.json(p, { cache: false }); if (a && a.accurate) g = a;
+      } catch (e) {}
+    }
+    d.grade = g; if (S.i === DOOR) render();
+  }
+  function scriptGrade() {
+    var x = X(), mine = S.door.turns.filter(function (t) { return t.me; }).map(function (t) { return t.text; }), all = norm(mine.join(" . "));
+    var wrong = x.wrong.test(all), right = x.right.test(all), long = mine.filter(function (t) { return t.split(/\s+/).length > 40; }).length, vote = /(vote|voting|ballot|polls|early|tuesday|plan)/.test(all);
+    var G = {
+      accurate: wrong ? { mark: "No", why: "Something you said doesn’t match the candidate’s record." } : right ? { mark: "Yes", why: "What you said matches the candidate’s positions." } : { mark: "Partly", why: "Nothing wrong, but you didn’t say where the candidate stands." },
+      short: long === 0 ? { mark: "Yes", why: "Each answer stayed short." } : long === 1 ? { mark: "Partly", why: "One answer ran long." } : { mark: "No", why: "Your answers ran long." },
+      vote: vote ? { mark: "Yes", why: "You came back to the plan to vote." } : { mark: "No", why: "You didn’t ask about their plan to vote." }
+    };
+    G.tip = wrong ? "Stick to the line you learned in the lesson." : !right ? "Give the candidate’s position in one sentence before you ask." : !vote ? "End every answer with a question like “When are you planning to vote?”" : long ? "Two sentences is plenty at a door." : "That’s a door a field director would be happy with.";
+    return G;
+  }
+
+  /* ---------- events ---------- */
+  function currentR() {
+    if (S.lesson == null) return null;
+    if (S.i >= TEST_START && S.i <= TEST_END) { var k = S.i - TEST_START; S.t[k] = S.t[k] || {}; return S.t[k]; }
+    if (S.i === DOOR && S.door) return S.door.r;
+    return null;
+  }
+  function onSaid(text) { if (S.i >= TEST_START && S.i <= TEST_END) gradeTest(S.i - TEST_START, text); else if (S.i === DOOR) said(text); }
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.lesson != null) { S.lesson = +t.dataset.lesson; S.t = {}; S.door = null; go(0); return; }
+    if (t.dataset.go != null) { go(+t.dataset.go); return; }
+    if (t.dataset.voter != null) { startDoor(+t.dataset.voter); return; }
+    var r;
+    switch (t.id) {
+      case "back": if (S.sources) { S.sources = false; render(); } else if (S.i === 0) home(); else go(S.i === DOOR ? PICK : S.i - 1); break;
+      case "home": home(); break;
+      case "srcs": S.sources = true; render(); $("body").scrollTop = 0; break;
+      case "srcback": S.sources = false; render(); break;
+      case "hearanchor": speak(X().anchor, COACH); break;
+      case "hearvoter": var lv = S.door.turns.filter(function (q) { return !q.me; }).slice(-1)[0]; if (lv) speak(lv.text, X().voters[S.voter]); break;
+      case "mic": r = currentR(); if (!r) break; if (r.listening) finishListening(); else listen(r, onSaid); break;
+      case "mic2": finishListening(); break;
+      case "micretry": r = currentR(); if (r) { r.error = ""; listen(r, onSaid); } break;
+      case "typed": r = currentR(); var ta = $("said"), txt = ta ? ta.value.trim() : ""; if (r && txt) { r.text = txt; onSaid(txt); } break;
+      case "retry": S.t[S.i - TEST_START] = {}; render(); break;
+    }
+  });
+
+  render();
+  if (IN_CLAUDE && claude.use) claude.use("sample").then(function (s) { sample = s; }).catch(function () { sample = null; });
+})();
+</script>
