@@ -300,14 +300,14 @@
   .nd.locked .nd-t { opacity: .55; }
   .hm-pw { margin: auto 0 16px; padding-top: 18px; }
   /* new story cards */
-  .st-icard { align-self: center; width: 240px; background: #fff; border-radius: 18px; padding: 16px 16px 14px; box-shadow: 0 18px 40px -16px rgba(150,40,70,.45); transform: rotate(-4deg); display: flex; flex-direction: column; gap: 9px; animation: tilt 3.5s ease-in-out infinite; }
+  .st-icard { align-self: center; width: 240px; background: #fff; border-radius: 18px; padding: 16px 16px 14px; box-shadow: 0 18px 40px -16px var(--ish, rgba(150,40,70,.45)); transform: rotate(-4deg); display: flex; flex-direction: column; gap: 9px; animation: tilt 3.5s ease-in-out infinite; }
   @keyframes tilt { 50% { transform: rotate(-1deg) translateY(-4px); } }
   .ic-top { display: flex; align-items: center; gap: 9px; }
-  .ic-top b { font: 800 17px/1 var(--sans); letter-spacing: .12em; color: #b23a5a; }
-  .st-icard > i { display: block; height: 9px; border-radius: 9px; background: #f3dbe1; width: 80%; }
+  .ic-top b { font: 800 17px/1 var(--sans); letter-spacing: .12em; color: var(--ic, #b23a5a); }
+  .st-icard > i { display: block; height: 9px; border-radius: 9px; background: var(--icl, #f3dbe1); width: 80%; }
   .st-icard > i.s { width: 55%; }
   .ic-row { display: flex; gap: 6px; margin-top: 2px; }
-  .ic-row span { font: 700 11.5px/1 var(--sans); color: #b23a5a; background: #fde9ec; padding: 6px 8px; border-radius: 99px; }
+  .ic-row span { font: 700 11.5px/1 var(--sans); color: var(--ic, #b23a5a); background: var(--ics, #fde9ec); padding: 6px 8px; border-radius: 99px; }
   .st-meter { display: flex; flex-direction: column; gap: 10px; }
   .mt-track { position: relative; height: 26px; border-radius: 99px; background: #d6e1ef; }
   .mt-track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; }
@@ -359,6 +359,74 @@
   .sy-dots i { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.16); display: grid; place-items: center; font: 800 16px/1 var(--sans); font-style: normal; transform: scale(.3); opacity: 0; animation: pop .4s cubic-bezier(.3,1.5,.5,1) forwards; }
   .sy-dots i.on { background: #fff; color: #1b7a4d; }
   @media (prefers-reduced-motion: reduce) { .nd.cur .nd-b, .nd-go, .st-icard, .sy-mic.on { animation: none; } .sy-ideas span, .sy-dots i { animation: none; opacity: 1; transform: none; } .mt-exp { transition: none; } }
+
+  /* story cards, lessons 2 to 5 */
+  .st-or { color: #c96a12; } .st-gr { color: #1b7a4d; }
+  .st-big.am { color: #b86f0a; } .st-big.lt { color: #ffc861; } .st-big.sm { font-size: 54px; color: #2a3a55; }
+  .sk-kids { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px 14px; padding: 4px 6px; }
+  .sk-kids i { display: block; opacity: 0; transform: translateY(10px) scale(.7); animation: pop .4s cubic-bezier(.3,1.5,.5,1) forwards; }
+  .sk-kids i.a { color: #e08a2c; } .sk-kids i.b { color: #3b80b6; }
+  .sk-kids svg { width: 100%; height: auto; display: block; }
+  .sk-tl { position: relative; padding-left: 30px; display: flex; flex-direction: column; gap: 16px; }
+  .sk-tl::before { content: ""; position: absolute; left: 9px; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: #c7d3e6; }
+  .sk-t { position: relative; display: flex; flex-direction: column; gap: 3px; opacity: 0; transform: translateX(-8px); animation: rise .45s forwards; }
+  .sk-t:nth-child(2) { animation-delay: .25s; } .sk-t:nth-child(3) { animation-delay: .5s; }
+  .sk-t::before { content: ""; position: absolute; left: -28px; top: 5px; width: 17px; height: 17px; border-radius: 50%; background: #fff; border: 3px solid #8aa6c9; box-sizing: border-box; }
+  .sk-t.on::before { background: #1F4C91; border-color: #1F4C91; }
+  .sk-t b { font: 600 24px/1 var(--serif); color: #1F4C91; }
+  .sk-t span { font-size: 15.5px; line-height: 1.4; }
+  .sk-dc { width: 100%; height: auto; }
+  .sk-dc .blink { animation: blink 1.3s steps(2, start) infinite; }
+  @keyframes blink { to { opacity: .15; } }
+  .sk-dc .bolt { animation: bob 2s ease-in-out infinite; }
+  .sk-line { width: 100%; height: auto; }
+  .sk-line .sv-l { font: 700 11.5px var(--sans); fill: #8a6a2a; }
+  .sk-line .draw { stroke-dasharray: 400; stroke-dashoffset: 400; transition: stroke-dashoffset 1.4s ease-out .2s; }
+  .story.go .sk-line .draw { stroke-dashoffset: 0; }
+  .sk-nine { display: flex; align-items: center; justify-content: center; gap: 16px; }
+  .sk-nine .g { display: flex; flex-direction: column; align-items: center; gap: 8px; font: 700 12.5px var(--sans); color: var(--p-muted); text-transform: uppercase; letter-spacing: .1em; }
+  .sk-nine .ic { display: grid; gap: 6px; color: #2a9d6a; }
+  .sk-nine .ic.three { grid-template-columns: repeat(3, 34px); }
+  .sk-nine .ic i { display: block; width: 34px; height: 34px; opacity: 0; transform: scale(.4); animation: pop .35s cubic-bezier(.3,1.5,.5,1) forwards; }
+  .sk-nine .one .ic i { color: #8aa69a; animation-delay: .1s; }
+  .sk-nine svg { width: 100%; height: 100%; display: block; }
+  .sk-nine .arrow { font: 700 26px var(--sans); color: #9ab3a6; }
+  .sk-note { background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,200,97,.55); border-radius: 18px; padding: 14px 15px; display: flex; flex-direction: column; gap: 6px; }
+  .sk-note b { font: 700 12px/1.2 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: #ffc861; }
+  .sk-note span { font-size: 15.5px; line-height: 1.45; }
+  .sk-duo { display: flex; justify-content: center; align-items: flex-end; gap: 40px; height: 190px; }
+  .sk-duo .c { width: 96px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; }
+  .sk-duo .c > * { flex: none; }
+  .sk-duo b { font: 600 30px/1 var(--serif); color: #8a8a8a; } .sk-duo b.o { color: #d2641f; }
+  .sk-duo .bar { width: 100%; height: 0; border-radius: 14px 14px 6px 6px; background: linear-gradient(#f5a058,#d2641f); transition: height 1.1s cubic-bezier(.2,.8,.2,1); }
+  .sk-duo .bar.us { background: #c9bdb0; transition-delay: .3s; }
+  .story.go .sk-duo .bar { height: var(--h); }
+  .sk-duo span { font: 600 13px var(--sans); color: var(--p-muted); }
+  .sk-tank { position: relative; align-self: center; width: 230px; padding-bottom: 14px; }
+  .sk-tank .tk { position: relative; height: 110px; border-radius: 55px; border: 6px solid #c9a36d; overflow: hidden; background: rgba(255,255,255,.05); }
+  .sk-tank .tk i { position: absolute; left: 0; right: 0; bottom: 0; height: 0; background: linear-gradient(#ffc861,#e07a1e); box-shadow: 0 0 30px rgba(255,170,60,.5); transition: height 1.3s cubic-bezier(.2,.8,.2,1) .2s; }
+  .story.go .sk-tank .tk i { height: 78%; }
+  .sk-tank::before, .sk-tank::after { content: ""; position: absolute; bottom: 0; width: 10px; height: 18px; background: #c9a36d; border-radius: 3px; }
+  .sk-tank::before { left: 48px; } .sk-tank::after { right: 48px; }
+  .sk-tank .tag { position: absolute; right: -10px; top: -14px; background: #fff; color: #1d1c22; font: 700 13px/1 var(--sans); padding: 7px 10px; border-radius: 10px; transform: rotate(6deg); box-shadow: 0 6px 18px rgba(0,0,0,.3); }
+  .st-ss.info { gap: 14px; }
+  .st-ss.info .ss i { background: #3b80b6; font-size: 22px; }
+  .st-ss.info .ss b { color: #1f5f99; }
+  .sk-crate, .sk-border { width: 100%; height: auto; }
+  .sk-crate .sv-l, .sk-border .sv-l { font: 700 12px var(--sans); fill: #4b5a6e; }
+  .sk-crate .tag { font: 800 13px var(--sans); fill: #fff; }
+  .sk-crate .mv { animation: cross 3.4s ease-in-out infinite; }
+  @keyframes cross { 0%, 15% { transform: translateX(0); } 55%, 80% { transform: translateX(150px); } 100% { transform: translateX(0); } }
+  .sk-border .gear { animation: shuttle 3s ease-in-out infinite; }
+  @keyframes shuttle { 0% { transform: translate(60px, 52px) rotate(0); } 50% { transform: translate(240px, 52px) rotate(360deg); } 100% { transform: translate(60px, 52px) rotate(720deg); } }
+  .sk-chips { display: flex; flex-direction: column; gap: 8px; }
+  .sk-chips span { background: rgba(255,255,255,.1); border-radius: 16px; padding: 12px 14px; font-size: 15px; line-height: 1.4; }
+  .sk-chips b { font: 600 22px/1 var(--serif); color: #ffc861; margin-right: 6px; }
+  .sk-q { position: relative; margin-top: 14px; background: #fff; border-radius: 22px; padding: 22px 18px 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 14px 30px -18px rgba(60,40,10,.4); }
+  .sk-q::before { content: "“"; position: absolute; left: 12px; top: -26px; font: 600 80px/1 var(--serif); color: #2a9d8f; }
+  .sk-q p { margin: 0; font: 500 21px/1.3 var(--serif); }
+  .sk-q small { font: 700 12px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--p-kick); }
+  @media (prefers-reduced-motion: reduce) { .sk-kids i, .sk-t, .sk-nine .ic i { animation: none; opacity: 1; transform: none; } .sk-dc .blink, .sk-dc .bolt, .sk-crate .mv, .sk-border .gear { animation: none; } .sk-border .gear { transform: translate(150px, 52px); } .sk-line .draw, .sk-duo .bar, .sk-tank .tk i { transition: none; } }
   @media (prefers-reduced-motion: reduce) { .bar i { transition: none; } .mic.on::after { animation: none; } }
 </style>
 
@@ -655,6 +723,124 @@
     { bg: "radial-gradient(110% 70% at 50% 0%,#2b3d5e 0%,#1d1c22 62%)", dark: true, next: "Say it back out loud", html: function () {
       return '<span class="st-kick">Say this at the door</span><div class="st-anchor"><span class="k">Maya</span> wants <em>full Medicaid expansion</em>, like 40 other states, and to <em>end Georgia Pathways</em>. <span class="j">Her Republican opponent</span> wants <em>a program like Pathways</em>, with work requirements.</div><button class="st-hear" type="button" id="hearanchor">▶ Hear it</button><p class="st-p dim">Next: five quick questions. Answer out loud, in your own words.</p>'; } }
   ];
+
+  /* ---------- story cards for lessons 2 to 5, built from the same fact-checked samples ---------- */
+  var BLUE_BG = "linear-gradient(165deg,#24569f 0%,#1F4C91 55%,#163a72 100%)", ANCHOR_BG = "radial-gradient(110% 70% at 50% 0%,#2b3d5e 0%,#1d1c22 62%)", DARK_BG = "radial-gradient(120% 80% at 50% 100%,#3a2c18 0%,#1b1a1f 60%)";
+  function coverCard(n, title) { return { bg: BLUE_BG, dark: true, next: "Start with the basics", html: function () {
+    return '<div class="st-cover"><div class="st-photo"><img src="' + MAYA_PHOTO + '" alt="Maya Kaur"></div><span class="st-kick">Lesson ' + n + ' · 5 minutes</span><h2 class="st-h xl">' + title + '</h2><p class="st-quote">“My Republican opponent and I see this very differently. Here’s what you need to know.”<small>Maya</small></p></div>' +
+      '<div class="st-steps"><span><i>1</i>Learn</span><span><i>2</i>Say it back</span><span><i>3</i>Practice a door</span></div>'; } }; }
+  function anchorCard() { return { bg: ANCHOR_BG, dark: true, next: "Say it back out loud", html: function () {
+    return '<span class="st-kick">Say this at the door</span><div class="st-anchor">' + X().anchor + '</div><button class="st-hear" type="button" id="hearanchor">▶ Hear it</button><p class="st-p dim">Next: five quick questions. Answer out loud, in your own words.</p>'; } }; }
+  function ssCard(bg, h, stop, start, small, next) { return { bg: bg, next: next, html: function () {
+    return '<span class="st-kick">Where Maya stands</span><h2 class="st-h lg">' + h + '</h2>' +
+      '<div class="st-ss"><div class="ss stop"><i>✕</i><div><b>' + stop[0] + '</b><span>' + stop[1] + '</span></div></div>' +
+      '<svg class="ss-arrow" viewBox="0 0 40 34" aria-hidden="true"><path d="M20 2 C 20 14, 20 18, 20 28" stroke="#9aa9c2" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="1 7"/><path d="M12 22 L20 31 L28 22" stroke="#9aa9c2" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '<div class="ss start"><i>✓</i><div><b>' + start[0] + '</b><span>' + start[1] + '</span></div></div></div>' +
+      (small ? '<p class="st-p small">' + small + '</p>' : ""); } }; }
+  function vsCard(h, k, j, note, next) { return { bg: "#FBF6EE", next: next, html: function () {
+    return '<span class="st-kick">Same problem, two fixes</span><h2 class="st-h">' + h + '</h2>' +
+      '<div class="st-vs"><div class="half k"><small>Maya Kaur · Democrat</small><b>' + k[0] + '</b><span>' + k[1] + '</span></div><div class="vsb">vs</div><div class="half j"><small>Her Republican opponent</small><b>' + j[0] + '</b><span>' + j[1] + '</span></div></div>' +
+      (note ? '<p class="st-p small">' + note + '</p>' : ""); } }; }
+  function forkCard(h, kt, jt, note) { return { bg: "#F3EFE8", next: "The one line to remember", html: function () {
+    return '<span class="st-kick">What your vote decides</span><h2 class="st-h">' + h + '</h2>' +
+      '<div class="st-fork"><svg viewBox="0 0 300 130" aria-hidden="true"><path d="M150 0 L150 44 C150 80 70 78 62 124 M150 44 C150 80 230 78 238 124" stroke="#d6c9b4" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M150 0 L150 44 C150 80 70 78 62 124 M150 44 C150 80 230 78 238 124" stroke="#fff" stroke-width="3" fill="none" stroke-dasharray="8 9"/><circle cx="150" cy="14" r="11" fill="#262320"/><circle cx="150" cy="14" r="4" fill="#fff"/><circle cx="62" cy="122" r="9" fill="#2f6f9f"/><circle cx="238" cy="122" r="9" fill="#8d4b3c"/></svg>' +
+      '<div class="ends"><div class="end k"><small>If Maya wins</small><b>' + kt + '</b></div><div class="end j"><small>If her opponent wins</small><b>' + jt + '</b></div></div></div>' +
+      (note ? '<p class="st-p small">' + note + '</p>' : ""); } }; }
+  function icard(c, title, icon, chips) {
+    return '<div class="st-icard" aria-hidden="true" style="--ic:' + c[0] + ';--ics:' + c[1] + ';--icl:' + c[2] + ';--ish:' + c[3] + '"><div class="ic-top">' + icon + '<b>' + title + '</b></div><i></i><i class="s"></i><div class="ic-row">' + chips.map(function (x) { return '<span>' + x + '</span>'; }).join("") + '</div></div>';
+  }
+  var KID = '<svg viewBox="0 0 24 30" aria-hidden="true"><circle cx="12" cy="7" r="5.5" fill="currentColor"/><path d="M3 29v-6c0-5 4-9 9-9s9 4 9 9v6z" fill="currentColor"/></svg>';
+  var DC = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3" fill="currentColor"/><rect x="6" y="6.5" width="12" height="2.4" rx="1" fill="#fff" opacity=".85"/><rect x="6" y="10.8" width="12" height="2.4" rx="1" fill="#fff" opacity=".85"/><rect x="6" y="15.1" width="12" height="2.4" rx="1" fill="#fff" opacity=".85"/></svg>';
+
+  var TX_STORY = [
+    coverCard(2, "School vouchers"),
+    { bg: "#E6EFFA", next: "Where the money went", html: function () {
+      return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">What’s a voucher?</h2>' +
+        icard(["#1f5f99", "#e3eef8", "#d4e3f2", "rgba(31,95,153,.4)"], "VOUCHER", '<svg viewBox="0 0 24 24" width="30" height="30"><path d="M2 9.5 12 4.5l10 5-10 5z" fill="#1f5f99"/><path d="M6.5 11.8v4.2c0 1.4 2.5 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-4.2" fill="none" stroke="#1f5f99" stroke-width="2"/></svg>', ["$10,474 a year", "Private school"]) +
+        '<p class="st-p">State money a family can spend on private school. Texas started them this year and calls them Education Freedom Accounts. Most students can get <b>$10,474</b> a year.</p>'; } },
+    { bg: "#FCEBD8", next: "How Texas got here", html: function () {
+      var kids = ""; for (var k = 0; k < 10; k++) kids += '<i class="' + (k < 7 ? "a" : "b") + '" style="animation-delay:' + (200 + k * 90) + 'ms">' + KID + '</i>';
+      return '<span class="st-kick">Where the money went</span><h2 class="st-h">7 in 10 vouchers went to kids who were <span class="st-or">already in private school</span> or homeschool.</h2><div class="sk-kids" role="img" aria-label="Ten children, seven orange for already in private school or homeschool, three blue for from public school">' + kids + '</div>' +
+        '<div class="st-legend"><span><i style="background:#e08a2c"></i>Already private or homeschool</span><span><i style="background:#3b80b6"></i>From public school</span></div>' +
+        '<p class="st-p small">274,000+ families applied. About 118,000 had awards by August, and 121,000+ were waitlisted.</p>'; } },
+    { bg: "#EEF3FB", next: "Where Maya stands", html: function () {
+      return '<span class="st-kick">How Texas got here</span><h2 class="st-h">A three-year fight, then a new law</h2>' +
+        '<div class="sk-tl"><div class="sk-t"><b>2023</b><span>The Texas House stripped vouchers out of a bill.</span></div><div class="sk-t"><b>2024</b><span>Gov. Abbott and his allies spent millions to replace more than a dozen anti-voucher Republicans in their primaries.</span></div><div class="sk-t on"><b>2025</b><span>The voucher law passed.</span></div></div>' +
+        '<p class="st-p small">It’s Texas law now, so a US senator can’t cancel it. The Senate fight is whether vouchers go nationwide.</p>'; } },
+    ssCard("#EEF3FB", "Public money belongs in public schools.", ["Stop: vouchers going nationwide", "She says they’re “taking tax dollars out of our public schools to subsidize private education.”"], ["Protect: public schools", "A former public school teacher, she voted no on the Texas law and tried to send it to a statewide vote."], "She’d also oppose gutting the US Department of Education.", "How her opponent differs"),
+    vsCard("Should tax dollars pay for private school?", ["No: keep public money in public schools", "And fight vouchers going nationwide."], ["Yes: vouchers give parents more say", "As attorney general he vowed, “I promise to vigorously defend this law.”"], "Either way, a family’s voucher this year doesn’t depend on the Senate race.", "What changes if she wins"),
+    forkCard("Which senator Texas sends to Washington", "A senator who fights vouchers going nationwide.", "A senator who backs vouchers and vowed to defend them.", "A senator can’t cancel the Texas program either way."),
+    anchorCard()
+  ];
+
+  var OH_STORY = [
+    coverCard(3, "Your electric bill"),
+    { bg: "#E9EEF6", next: "What’s happening to bills", html: function () {
+      var racks = ""; for (var c = 0; c < 3; c++) for (var r = 0; r < 5; r++) racks += '<rect x="' + (44 + c * 74) + '" y="' + (40 + r * 18) + '" width="62" height="12" rx="3" fill="#33435f"/><circle class="blink" style="animation-delay:' + ((c * 5 + r) * 170 % 1300) + 'ms" cx="' + (96 + c * 74) + '" cy="' + (46 + r * 18) + '" r="2.6" fill="#7ee0a8"/>';
+      return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">What’s a data center?</h2>' +
+        '<svg class="sk-dc" viewBox="0 0 300 150" aria-hidden="true"><rect x="30" y="26" width="240" height="114" rx="14" fill="#1f2a3d"/><path d="M30 40 Q150 6 270 40" fill="none" stroke="#1f2a3d" stroke-width="10" stroke-linecap="round"/>' + racks + '<path d="M150 140 L150 150" stroke="#1f2a3d" stroke-width="4"/><path class="bolt" d="M262 10 L250 32 H260 L252 52 L274 24 H263 L270 10z" fill="#f2b134"/></svg>' +
+        '<p class="st-p">A building packed with computers that run the internet and AI, humming day and night. They use a lot of electricity.</p>'; } },
+    { bg: "#FDF1D6", next: "Why data centers matter", html: function () {
+      return '<span class="st-kick">The problem</span><div class="st-big am"><span data-count="13">13</span>.5%</div><h2 class="st-h">Ohio home electric bills jumped in one year</h2>' +
+        '<svg class="sk-line" viewBox="0 0 300 120" aria-hidden="true"><path d="M10 104 C 80 100, 120 86, 170 64 S 250 30, 288 14 L288 120 L10 120z" fill="#f2b134" opacity=".18"/><path class="draw" d="M10 104 C 80 100, 120 86, 170 64 S 250 30, 288 14" fill="none" stroke="#e08a1a" stroke-width="5" stroke-linecap="round"/><circle cx="288" cy="14" r="7" fill="#e08a1a"/><text x="12" y="96" class="sv-l">six years ago</text><text x="284" y="38" text-anchor="end" class="sv-l">now</text></svg>' +
+        '<p class="st-p">Families pay about <b>50% more</b> for electricity than six years ago.</p>'; } },
+    { bg: "#E6F2EC", next: "What Ohio remembers", html: function () {
+      var nine = ""; for (var k = 0; k < 9; k++) nine += '<i style="animation-delay:' + (300 + k * 110) + 'ms">' + DC + '</i>';
+      return '<span class="st-kick">Why data centers matter</span><h2 class="st-h">Ohio’s data centers grew <span class="st-gr">ninefold</span> since 2020.</h2>' +
+        '<div class="sk-nine"><div class="g one"><div class="ic"><i>' + DC + '</i></div><span>2020</span></div><div class="arrow">→</div><div class="g"><div class="ic three">' + nine + '</div><span>Now</span></div></div>' +
+        '<p class="st-p">Columbus is the second-fastest-growing data center market. The fight: who pays for all that new power, families or data centers?</p>'; } },
+    { bg: DARK_BG, dark: true, next: "Where Maya stands", html: function () {
+      return '<span class="st-kick">What Ohio remembers</span><h2 class="st-h">House Bill 6: a $1.3 billion power-company bailout passed with bribes.</h2><p class="st-p dim">A former Ohio House speaker is serving 20 years.</p>' +
+        '<div class="sk-note"><b>Get this right at the door</b><span>HB6 isn’t the main reason bills rose: its bailout charge was repealed before it was collected. And Maya’s opponent was never charged.</span></div>'; } },
+    ssCard("#EEF3FB", "Make data centers pay their own way.", ["Stop: families covering their power", "Require data centers to pay the full cost of their electricity, and end their tax breaks."], ["Start: a cap on rate hikes", "Limit how much utilities can raise your rates."], "Towns decide where data centers go. She hasn’t proposed banning them.", "How her opponent differs"),
+    vsCard("Who should pay for data centers’ power?", ["Require them to pay the full cost", "And cap how much your rates can rise."], ["Ask states to make them pay", "“If you create the cost, you should pay the cost.” His bill leaves it up to each state, with no cap on rates."], "Both say towns should decide where data centers go.", "What changes if she wins"),
+    forkCard("Which senator Ohio sends to Washington", "A senator pushing to make data centers pay their full power costs, and to cap rate hikes.", "Ohio keeps a senator whose bill leaves it up to each state.", "Her opponent holds the seat now."),
+    anchorCard()
+  ];
+
+  var ME_STORY = [
+    coverCard(4, "Heating oil"),
+    { bg: "#FCEBDD", next: "What it costs this year", html: function () {
+      return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">Half of Maine heats with oil.</h2>' +
+        '<div class="sk-duo"><div class="c"><b class="o">~50%</b><div class="bar" style="--h:120px"></div><span>Maine homes</span></div><div class="c"><b>~3%</b><div class="bar us" style="--h:8px"></div><span>US homes</span></div></div>' +
+        '<p class="st-p">Many Maine homes have an oil tank that gets filled by truck and burned to keep the house warm all winter.</p>'; } },
+    { bg: DARK_BG, dark: true, next: "Help that exists today", html: function () {
+      return '<span class="st-kick">The problem</span><div class="st-big lt">~$6</div><h2 class="st-h">a gallon this fall, near a record</h2>' +
+        '<div class="sk-tank" aria-hidden="true"><div class="tk"><i></i></div><span class="tag">$1,650 to fill</span></div>' +
+        '<p class="st-p dim">A full tank costs about 80% more than a year ago. Reporting ties the spike to the war with Iran.</p>'; } },
+    { bg: "#E8F1FB", next: "Where Maya stands", html: function () {
+      return '<span class="st-kick">Help that exists today</span><h2 class="st-h">Most worried voters can get help right now</h2>' +
+        '<div class="st-ss info"><div class="ss"><i>$</i><div><b>HEAP heating aid</b><span>Homeowners and renters can apply. A family of four can earn up to about $73,000. Open until funds run out or May 29, 2027.</span></div></div>' +
+        '<div class="ss"><i>⛁</i><div><b>The oil reserve</b><span>Up to 315,000 barrels are being released. One analyst calls it a very small volume, and it won’t reach home tanks right away.</span></div></div></div>'; } },
+    ssCard("#EEF3FB", "Fix the cause. Help families now.", ["Stop: the war driving prices", "End the war in Iran, which reporting ties to the price spike."], ["Start: more heating aid", "More money for LIHEAP, the federal program behind HEAP."], "She’s done it before: in 2023 she helped pass $450 checks to 880,000+ Mainers and $40 million more for heating aid.", "How her opponent differs"),
+    vsCard("How should Maine get through this winter?", ["End the war and fund more heating aid", "Her ad says her opponent is “funding this reckless war.”"], ["More oil supply and earlier aid", "Pressed the administration “to use every tool to increase supply”; pushed the reserve release; Maine’s aid went out early."], "On the war: her opponent voted five times against ending it, then has voted to end it since late April.", "What changes if she wins"),
+    forkCard("Which senator Maine sends to Washington", "A senator pushing to end the war and fund more heating aid.", "Maine keeps a senator pressing for more supply and earlier aid.", "Her opponent holds the seat now."),
+    anchorCard()
+  ];
+
+  var MI_STORY = [
+    coverCard(5, "Tariffs and auto jobs"),
+    { bg: "#E3F3F0", next: "Why Michigan feels it", html: function () {
+      return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">What’s a tariff?</h2>' +
+        '<svg class="sk-crate" viewBox="0 0 300 140" aria-hidden="true"><path d="M150 6 V134" stroke="#9cc7bf" stroke-width="3" stroke-dasharray="6 7"/><g class="mv"><rect x="40" y="52" width="70" height="62" rx="6" fill="#c58a4a"/><path d="M40 72 H110 M40 94 H110 M62 52 V114 M88 52 V114" stroke="#a46f35" stroke-width="3"/><g transform="translate(96 30) rotate(12)"><rect width="56" height="28" rx="6" fill="#d9483b"/><text x="28" y="19" text-anchor="middle" class="tag">+ tax</text></g></g><text x="70" y="134" text-anchor="middle" class="sv-l">Canada</text><text x="232" y="134" text-anchor="middle" class="sv-l">US</text></svg>' +
+        '<p class="st-p">A tax on goods brought in from another country. This year the US and Canada hit each other with big ones.</p>'; } },
+    { bg: "#E9EEF6", next: "What it’s costing", html: function () {
+      return '<span class="st-kick">Why Michigan feels it</span><h2 class="st-h">Michigan’s auto industry runs across the Canadian border.</h2>' +
+        '<svg class="sk-border" viewBox="0 0 300 120" aria-hidden="true"><rect x="0" y="0" width="150" height="120" rx="14" fill="#dbe6f4"/><rect x="150" y="0" width="150" height="120" rx="14" fill="#f6e1dc"/><path d="M150 0 V120" stroke="#fff" stroke-width="4" stroke-dasharray="8 8"/><g class="gear"><circle cx="0" cy="0" r="16" fill="none" stroke="#2a3a55" stroke-width="7" stroke-dasharray="6 4.5"/><circle cx="0" cy="0" r="6" fill="#2a3a55"/></g><text x="75" y="108" text-anchor="middle" class="sv-l">Michigan</text><text x="225" y="108" text-anchor="middle" class="sv-l">Canada</text></svg>' +
+        '<div class="st-big sm">~$80B</div><p class="st-p">a year in Michigan trade with Canada. Car parts cross the border back and forth while a vehicle gets built.</p>'; } },
+    { bg: DARK_BG, dark: true, next: "Where the workers are", html: function () {
+      return '<span class="st-kick">What it’s costing</span><div class="st-big lt">~$<span data-count="5600">5,600</span></div><h2 class="st-h">a year in tariff costs per Michigan household, third-highest in the US</h2>' +
+        '<div class="sk-chips"><span><b>50%</b> tariffs on $27.6 billion of Canadian goods, matched by Canada</span><span><b>64%</b> of likely Michigan voters oppose the 50% tariffs</span></div>'; } },
+    { bg: "#F4EEE6", next: "Where Maya stands", html: function () {
+      return '<span class="st-kick">Where the workers are</span><h2 class="st-h">The autoworkers’ union is for some tariffs, not these.</h2>' +
+        '<div class="sk-q"><p>“We support strategic targeted tariffs.”</p><p>“The 50% on Canada, we don’t agree with that.”</p><small>UAW President Shawn Fain</small></div>' +
+        '<p class="st-p">The UAW endorsed Maya. So Democrats here aren’t simply anti-tariff, and neither is she.</p>'; } },
+    ssCard("#EEF3FB", "Smart tariffs, not dumb ones.", ["Stop: the 50% tariffs on Canada", "She opposes these, like the UAW."], ["Start: targeted tariffs for Michigan jobs", "On growth industries, with benchmarks, ending once US makers are established, and unions at the table."], "In her words: “I’m not against tariffs per se. I’m just against dumb tariffs.”", "How her opponent differs"),
+    vsCard("What should tariffs do for Michigan?", ["Targeted tariffs tied to a plan for Michigan jobs", "With unions at the table."], ["Keep the tariffs he says are working", "Called tariffs “necessary” in September. Since October: “Canada is not our enemy,” end the tariff war."], "", "What changes if she wins"),
+    forkCard("Which senator Michigan sends to Washington", "A senator pushing tariffs tied to a plan for Michigan jobs, with unions at the table.", "A senator who’d work with the president on the tariffs he says are working.", "Open seat: the current senator is retiring."),
+    anchorCard()
+  ];
+  L[1].story = TX_STORY; L[2].story = OH_STORY; L[3].story = ME_STORY; L[4].story = MI_STORY;
 
   function renderStory() {
     var x = X(), cards = x.story, c = cards[S.card];
