@@ -222,7 +222,7 @@
   .st-legend span { display: inline-flex; align-items: center; gap: 6px; }
   .st-legend i { width: 12px; height: 12px; border-radius: 4px; background: #c9d3cc; }
   .st-legend i.on { background: var(--p-green); }
-  .st-bars2 { display: flex; justify-content: center; gap: 34px; height: 230px; margin-top: 4px; }
+  .st-bars2 { display: flex; justify-content: center; gap: 34px; height: 200px; margin-top: 2px; }
   .st-bars2 .col > * { flex: none; }
   .st-bars2 .col { width: 104px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; }
   .st-bars2 .v { font: 600 22px/1 var(--serif); font-variant-numeric: tabular-nums; }
@@ -279,19 +279,21 @@
   .hm-blob.a { width: 220px; height: 220px; right: -70px; top: -80px; background: radial-gradient(circle, rgba(255,210,122,.35), transparent 65%); }
   .hm-blob.b { width: 180px; height: 180px; left: -60px; bottom: -90px; background: radial-gradient(circle, rgba(126,224,168,.28), transparent 65%); }
   .hm-sec { padding: 20px 20px 0; }
-  .hm-path { position: relative; margin: 0 16px; }
+  .hm-path { position: relative; margin: 0 16px; flex: none; }
   .hm-line { position: absolute; inset: 0; width: 100%; height: 100%; }
   .nd { position: absolute; width: 0; height: 0; }
   .nd-b { position: absolute; left: -38px; top: -38px; width: 76px; height: 76px; border-radius: 50%; border: 0; background: var(--c); display: grid; place-items: center; cursor: pointer; box-shadow: 0 6px 0 rgba(0,0,0,.16), inset 0 -4px 0 rgba(0,0,0,.12); transition: transform .15s; }
   .nd-b:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(0,0,0,.16); }
-  .nd.cur .nd-b { animation: bob 2.2s ease-in-out infinite; box-shadow: 0 6px 0 rgba(0,0,0,.16), 0 0 0 8px color-mix(in srgb, var(--c) 22%, transparent); }
+  .nd.cur .nd-b {  box-shadow: 0 6px 0 rgba(0,0,0,.16), 0 0 0 8px color-mix(in srgb, var(--c) 22%, transparent); }
   @keyframes bob { 50% { transform: translateY(-5px); } }
   .nd.locked .nd-b { background: #e4ddd2; cursor: default; box-shadow: 0 5px 0 #d2c9bb; }
   .nd.locked .nd-b svg { opacity: .55; }
   .nd.locked .nd-b svg path, .nd.locked .nd-b svg circle { fill: #fff; }
   .nd-badge { position: absolute; right: -4px; bottom: -4px; width: 28px; height: 28px; border-radius: 50%; background: #fff; color: var(--p-kick); display: grid; place-items: center; font: 800 14px/1 var(--sans); font-style: normal; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
   .nd-badge.ok { background: var(--p-green); color: #fff; }
-  .nd-go { position: absolute; left: 50%; top: -74px; transform: translateX(-50%); white-space: nowrap; background: var(--p-ink); color: #fff; font: 700 12.5px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase; padding: 8px 11px; border-radius: 10px; animation: bob 2.2s ease-in-out infinite; }
+  .nd-go { position: absolute; left: 50%; top: -74px; transform: translateX(-50%); white-space: nowrap; background: var(--p-ink); color: #fff; font: 700 12.5px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase; padding: 8px 11px; border-radius: 10px; }
+  .nd.bob .nd-b { animation: bob 2.2s ease-in-out infinite; } .nd.bob .nd-go { animation: bobx 2.2s ease-in-out infinite; }
+  @keyframes bobx { 50% { transform: translate(-50%, -5px); } }
   .nd-go::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; background: var(--p-ink); transform: translateX(-50%) rotate(45deg); border-radius: 2px; }
   .nd-t { position: absolute; top: -22px; width: 150px; display: flex; flex-direction: column; gap: 3px; }
   .nd.l .nd-t { left: 50px; } .nd.r .nd-t { right: 50px; text-align: right; }
@@ -323,41 +325,85 @@
   .st-fork .ends { margin-top: 4px; }
   .st-fork .end b { font-size: 18px; line-height: 1.25; }
   .st-anchor.sm { font-size: 19px; line-height: 1.38; background: rgba(0,0,0,.18); border-radius: 18px; padding: 14px 16px; }
-  /* say it back */
-  .story.sayc { cursor: default; background: radial-gradient(120% 70% at 50% 0%, #2d63b0 0%, #1F4C91 45%, #142f5c 100%); }
-  .story.sayc.pass { background: radial-gradient(120% 70% at 50% 0%, #34b77a 0%, #1b7a4d 50%, #0f4f31 100%); }
-  .story.sayc.miss { background: radial-gradient(120% 70% at 50% 0%, #cf9134 0%, #8a5414 55%, #4f2f0a 100%); }
-  .story.sayc .st-body { overflow-y: auto; justify-content: flex-start; }
-  .st-in { margin: auto 0; display: flex; flex-direction: column; gap: 14px; }
-  .st-h.q { font-size: 30px; }
-  .sy-micwrap { display: flex; flex-direction: column; align-items: center; gap: 18px; margin: 18px 0 6px; }
-  .sy-mic { width: 128px; height: 128px; border-radius: 50%; border: 0; background: #fff; color: #1F4C91; display: grid; place-items: center; cursor: pointer; box-shadow: 0 0 0 12px rgba(255,255,255,.12), 0 0 0 26px rgba(255,255,255,.06); }
-  .sy-mic svg { width: 46px; height: 46px; }
-  .sy-mic.on { background: #ff5a4f; color: #fff; animation: breathe 1.6s ease-in-out infinite; }
-  @keyframes breathe { 50% { box-shadow: 0 0 0 18px rgba(255,90,79,.28), 0 0 0 38px rgba(255,90,79,.1); } }
-  .sy-miclab { font: 600 15px var(--sans); opacity: .85; }
-  .sy-bubble { background: rgba(255,255,255,.13); border-radius: 20px 20px 20px 6px; padding: 12px 15px; font: 400 18px/1.4 var(--serif); }
-  .sy-bubble small, .sy-model small { display: block; font: 700 11px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; opacity: .7; margin-bottom: 6px; }
-  .sy-verdict { display: flex; align-items: center; gap: 10px; font: 500 25px/1.15 var(--serif); }
-  .sy-verdict i { width: 38px; height: 38px; border-radius: 50%; background: #fff; color: #1b7a4d; display: grid; place-items: center; font: 800 18px var(--sans); font-style: normal; flex: none; }
-  .story.sayc.miss .sy-verdict i { color: #8a5414; }
-  .sy-ideas { display: flex; flex-direction: column; gap: 6px; }
-  .sy-ideas span { display: flex; gap: 9px; align-items: center; font: 600 14.5px/1.3 var(--sans); padding: 9px 12px; border-radius: 14px; background: rgba(0,0,0,.14); opacity: 0; transform: translateY(8px); animation: rise .4s forwards; }
-  .sy-ideas span.hit { background: rgba(255,255,255,.2); }
-  .sy-ideas span:not(.hit) { opacity: .75; }
-  .sy-ideas b { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.22); font-size: 12px; }
-  .sy-ideas span.hit b { background: #fff; color: #1b7a4d; }
+  /* lesson shell: phase strip */
+  .st-top { margin: 2px 0 8px; }
+  .ph-strip { display: flex; gap: 8px; margin-bottom: 4px; }
+  .ph { min-width: 0; display: flex; flex-direction: column; gap: 5px; opacity: .45; }
+  .ph.on { opacity: 1; } .ph.past { opacity: .7; }
+  .ph-l { all: unset; cursor: pointer; display: flex; align-items: center; gap: 5px; font: 700 11px/1.1 var(--sans); letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ph-l i { flex: none; width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center; font: 800 9.5px/1 var(--sans); font-style: normal; }
+  .story:not(.dark) .ph-l i { background: var(--p-ink); color: #fff; } .story.dark .ph-l i { background: #fff; color: #1d1c22; }
+  .ph-sg { display: flex; gap: 3px; }
+  .sg { all: unset; cursor: pointer; flex: 1; height: 14px; position: relative; }
+  .sg::before { content: ""; position: absolute; left: 0; right: 0; top: 5px; height: 4px; border-radius: 4px; background: currentColor; opacity: .2; }
+  .sg.full::before, .sg.cur::before { opacity: .9; }
+  .sg:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; border-radius: 3px; }
+  .st-src { margin: 0; font: 500 11.5px/1.4 var(--sans); opacity: .55; }
+  .st-src a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .story.tap { cursor: pointer; }
+  .story .st-body { overflow-y: auto; justify-content: safe center; }
+  .story:not(.tap) { cursor: default; }
+  /* say it back (light, in the cards' look) */
+  .story.sayc .st-body, .story.doorc .st-body, .story.donec .st-body { overflow-y: auto; justify-content: flex-start; }
+  .st-h.q { font-size: 28px; }
+  .st-h.q.sm { font-size: 21px; }
+  .qlist { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+  .qlist li { display: flex; align-items: center; gap: 8px; font: 600 13.5px/1.25 var(--sans); color: var(--p-muted); opacity: .6; }
+  .qlist li i { flex: none; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font: 800 11px/1 var(--sans); font-style: normal; background: #e6dfd3; color: var(--p-muted); }
+  .qlist li.on { opacity: 1; color: var(--p-ink); font-weight: 700; }
+  .qlist li.on i { background: #1F4C91; color: #fff; }
+  .qlist li.ok i { background: var(--p-green); color: #fff; }
+  .qlist li.ok { opacity: .8; }
+  .sy-micwrap { display: flex; flex-direction: column; align-items: center; gap: 14px; margin: 14px 0 4px; }
+  .sy-mic { width: 120px; height: 120px; border-radius: 50%; border: 0; background: #1F4C91; color: #fff; display: grid; place-items: center; cursor: pointer; box-shadow: 0 0 0 12px rgba(31,76,145,.1), 0 0 0 26px rgba(31,76,145,.05), 0 12px 24px -10px rgba(31,76,145,.5); transition: width .25s, height .25s; }
+  .sy-micwrap.small .sy-mic { width: 84px; height: 84px; }
+  .sy-mic svg { width: 42px; height: 42px; }
+  .sy-mic.on { background: #e2554a; animation: breathe 1.6s ease-in-out infinite; }
+  @keyframes breathe { 50% { box-shadow: 0 0 0 16px rgba(226,85,74,.2), 0 0 0 34px rgba(226,85,74,.08); } }
+  .sy-miclab { font: 600 14.5px var(--sans); color: var(--p-muted); text-align: center; }
+  .sy-bubble { background: #fff; border-radius: 20px 20px 20px 6px; padding: 11px 14px; box-shadow: 0 6px 18px -12px rgba(60,40,10,.35); }
+  .sy-bubble small, .sy-model small { display: block; font: 700 10.5px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--p-kick); margin-bottom: 5px; }
+  .sy-txt { font: 400 16.5px/1.4 var(--serif); max-height: 7em; overflow-y: auto; }
+  .sy-bubble.said .sy-txt { max-height: 4.2em; font-size: 15px; color: var(--p-muted); }
+  .sy-verdict { display: flex; align-items: center; gap: 10px; font: 500 22px/1.15 var(--serif); }
+  .sy-verdict i { width: 34px; height: 34px; border-radius: 50%; background: var(--p-green); color: #fff; display: grid; place-items: center; font: 800 16px var(--sans); font-style: normal; flex: none; }
+  .story.sayc.miss .sy-verdict i { background: #d58a1c; }
+  .sy-ideas { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sy-ideas span { display: inline-flex; gap: 6px; align-items: center; font: 600 13px/1.25 var(--sans); padding: 6px 10px 6px 6px; border-radius: 99px; background: rgba(0,0,0,.06); color: var(--p-muted); opacity: 0; transform: translateY(6px); animation: rise .35s forwards; }
+  .sy-ideas span.hit { background: #fff; color: var(--p-ink); }
+  .sy-ideas b { flex: none; width: 19px; height: 19px; border-radius: 50%; display: grid; place-items: center; background: rgba(0,0,0,.1); font-size: 11px; }
+  .sy-ideas span.hit b { background: var(--p-green); color: #fff; }
   @keyframes rise { to { opacity: 1; transform: none; } }
-  .sy-model { background: #fff; color: var(--p-ink); border-radius: 18px; padding: 12px 14px; font-size: 15px; line-height: 1.45; }
-  .sy-model small { color: var(--p-kick); opacity: 1; }
-  .sy-retry { border: 0; background: none; color: inherit; font: 600 14px var(--sans); opacity: .85; margin-top: 10px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; flex: none; }
-  .sy-think { text-align: center; opacity: .8; margin: 0; }
-  .sy-alert { background: rgba(255,255,255,.14); border-radius: 16px; padding: 14px; font-size: 15px; line-height: 1.45; }
-  .story.sayc .tray textarea { background: rgba(255,255,255,.95); border: 0; }
-  .st-hint.big { font-size: 14px; opacity: .7; margin: 0 0 8px; }
+  .sy-model { background: #fff; border-radius: 16px; padding: 11px 13px; font-size: 14.5px; line-height: 1.42; border: 1.5px solid rgba(0,0,0,.06); }
+  .sy-retry { border: 0; background: none; color: inherit; font: 600 14px var(--sans); opacity: .8; margin-top: 8px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; flex: none; }
+  .sy-think { text-align: center; color: var(--p-muted); margin: 0; }
+  .sy-alert { background: #fff; border-radius: 16px; padding: 13px 14px; font-size: 15px; line-height: 1.45; }
+  .story .tray textarea { background: #fff; border: 1.5px solid #e6dfd3; }
+  .st-hint.big { font-size: 14px; color: var(--p-muted); opacity: 1; margin: 0 0 10px; text-align: center; }
   .sy-dots { display: flex; gap: 10px; }
-  .sy-dots i { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.16); display: grid; place-items: center; font: 800 16px/1 var(--sans); font-style: normal; transform: scale(.3); opacity: 0; animation: pop .4s cubic-bezier(.3,1.5,.5,1) forwards; }
-  .sy-dots i.on { background: #fff; color: #1b7a4d; }
+  .sy-dots i { width: 46px; height: 46px; border-radius: 50%; background: #e6dfd3; color: var(--p-muted); display: grid; place-items: center; font: 800 16px/1 var(--sans); font-style: normal; transform: scale(.3); opacity: 0; animation: pop .4s cubic-bezier(.3,1.5,.5,1) forwards; }
+  .sy-dots i.on { background: var(--p-green); color: #fff; }
+  .st-anchor.light { color: var(--p-ink); background: #fff; border-radius: 18px; padding: 14px 16px; font-size: 18.5px; }
+  .st-anchor.light .k { color: #1F4C91; } .st-anchor.light .j { color: #8d4b3c; }
+  /* door */
+  .story.doorc .stage { min-height: 250px; border-radius: 22px; }
+  .story.doorc .stage svg { width: 150px; height: 150px; margin-top: 92px; }
+  .story.doorc .hear { position: absolute; right: 10px; bottom: 10px; width: 40px; height: 40px; padding: 0; border-radius: 50%; display: grid; place-items: center; border: 0; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.15); font-size: 14px; z-index: 2; }
+  .story.doorc .grade { gap: 6px; }
+  .story.doorc .gr { background: #fff; }
+  /* done */
+  .dn-top { display: flex; flex-direction: column; gap: 10px; }
+  .story.donec .reveal { background: rgba(255,255,255,.95); }
+  /* cover roadmap */
+  .rm { display: flex; flex-direction: column; gap: 0; background: rgba(255,255,255,.1); border-radius: 20px; padding: 6px 14px; }
+  .rm-s { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .rm-s:last-child { border-bottom: 0; }
+  .rm-s i { flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font: 800 14px/1 var(--sans); font-style: normal; background: rgba(255,255,255,.18); color: #fff; }
+  .rm-s.on i { background: #fff; color: #1F4C91; }
+  .rm-s b { display: block; font: 700 16px/1.2 var(--sans); }
+  .rm-s span { display: block; font-size: 13.5px; opacity: .8; margin-top: 1px; }
+  .rm-s em { margin-left: auto; flex: none; font: 700 11px/1 var(--sans); font-style: normal; letter-spacing: .06em; text-transform: uppercase; background: #ffd27a; color: #3b2b00; padding: 5px 8px; border-radius: 99px; }
+  .st-voters { margin: 0; font: 600 15px/1.35 var(--sans); background: rgba(255,255,255,.14); border-radius: 14px; padding: 10px 12px; }
   @media (prefers-reduced-motion: reduce) { .nd.cur .nd-b, .nd-go, .st-icard, .sy-mic.on { animation: none; } .sy-ideas span, .sy-dots i { animation: none; opacity: 1; transform: none; } .mt-exp { transition: none; } }
 
   /* story cards, lessons 2 to 5 */
@@ -432,6 +478,71 @@
   .st-vs.rec b { font-size: 30px; }
   .st-vs .rr { font-size: 14px; line-height: 1.38; margin-top: 4px; }
   .st-vs .rr em { display: block; font: 700 10.5px/1.2 var(--sans); font-style: normal; letter-spacing: .1em; text-transform: uppercase; opacity: .75; margin-bottom: 1px; }
+  /* new card parts */
+  .st-quote.sm { font-size: 18px; }
+  .st-q { margin: 0; font: italic 400 18px/1.38 var(--serif); padding-left: 12px; border-left: 3px solid currentColor; }
+  .st-q small { display: block; font: 700 11px/1.2 var(--sans); font-style: normal; letter-spacing: .08em; text-transform: uppercase; opacity: .65; margin-top: 6px; }
+  .story.dark .st-q { border-color: #ffc861; }
+  .st-q.dk { border-color: #8d4b3c; }
+  .mst { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .mst li { display: flex; gap: 12px; align-items: flex-start; background: #fff; border-radius: 16px; padding: 11px 12px; box-shadow: 0 6px 16px -12px rgba(30,50,90,.35); }
+  .mst li > i { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 800 16px/1 var(--sans); font-style: normal; color: #fff; }
+  .mst li.end > i { background: #c8402f; } .mst li.start > i { background: #1b9a5f; } .mst li.fund > i { background: #1F4C91; }
+  .mst small { display: block; font: 700 10.5px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--p-kick); margin-bottom: 3px; }
+  .mst b { display: block; font: 700 15.5px/1.25 var(--sans); }
+  .mst span { display: block; font-size: 13.5px; line-height: 1.38; color: var(--p-muted); margin-top: 2px; }
+  .st-vs.rec b { font-size: 24px; }
+  .st-vs .rr em { display: block; font: 700 10.5px/1.2 var(--sans); font-style: normal; letter-spacing: .1em; text-transform: uppercase; opacity: .75; margin-bottom: 1px; }
+  .p100 { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; padding: 2px; width: 100%; max-width: 230px; align-self: center; }
+  .p100 i { aspect-ratio: 1; border-radius: 50%; opacity: 0; transform: scale(.4); animation: pop .3s cubic-bezier(.3,1.5,.5,1) forwards; }
+  .st-legend.wrap { flex-wrap: wrap; justify-content: center; gap: 4px 12px; font-size: 12.5px; }
+  .vb { display: flex; justify-content: center; align-items: flex-end; gap: 22px; height: 200px; }
+  .vb .col { width: 82px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px; }
+  .vb .col > * { flex: none; }
+  .vb b { font: 600 22px/1 var(--serif); }
+  .vb .bar { width: 100%; height: 0; border-radius: 12px 12px 5px 5px; transition: height 1s cubic-bezier(.2,.8,.2,1); }
+  .story.go .vb .bar { height: var(--h); }
+  .vb span { font: 600 12.5px/1.2 var(--sans); color: var(--p-muted); text-align: center; }
+  .hr { display: flex; flex-direction: column; gap: 10px; }
+  .hr .row span { display: block; font: 600 13px/1.25 var(--sans); color: var(--p-muted); margin-bottom: 4px; }
+  .hr .trk { display: flex; align-items: center; gap: 8px; }
+  .hr .trk i { display: block; height: 22px; width: 0; border-radius: 6px; transition: width 1s cubic-bezier(.2,.8,.2,1); }
+  .story.go .hr .trk i { width: var(--w); }
+  .hr .trk b { font: 600 18px/1 var(--serif); flex: none; }
+  .sibs { display: flex; flex-direction: column; gap: 8px; }
+  .sib { display: flex; gap: 11px; align-items: flex-start; background: #fff; border-radius: 16px; padding: 10px 12px; border-left: 5px solid; }
+  .sib.bad { border-color: #c8402f; } .sib.mid { border-color: #e0a12c; } .sib.ok { border-color: #1b9a5f; }
+  .sib .ic { flex: none; width: 30px; color: #5f7ea6; } .sib.bad .ic { color: #c8402f; } .sib.ok .ic { color: #1b9a5f; } .sib.mid .ic { color: #c48416; }
+  .sib .ic svg { width: 100%; height: auto; display: block; }
+  .sib b { display: block; font: 700 15px/1.2 var(--sans); }
+  .sib small { display: block; font-size: 12px; color: var(--p-kick); margin: 1px 0 3px; }
+  .sib span { display: block; font-size: 13.5px; line-height: 1.35; color: var(--p-muted); }
+  .st-p.hl { background: #fff; border-radius: 14px; padding: 10px 12px; font-size: 15px; }
+  .south { display: flex; flex-direction: column; gap: 10px; }
+  .south small { display: block; font: 700 11px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--p-kick); margin-bottom: 6px; }
+  .tiles { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tiles i { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; font: 800 13px/1 var(--sans); font-style: normal; opacity: 0; transform: scale(.4); animation: pop .35s cubic-bezier(.3,1.5,.5,1) forwards; }
+  .tiles i.y { background: var(--p-green); color: #fff; } .tiles i.n { background: #c9d3cc; color: #5b6a60; } .tiles i.ga { background: #fff; color: #b3261e; box-shadow: 0 0 0 2.5px #b3261e; }
+  .so { background: #fff; border-radius: 14px; padding: 11px 13px; font-size: 15px; line-height: 1.42; }
+  .so b { color: #1b7a4d; }
+  .pie { display: flex; gap: 16px; align-items: center; }
+  .pc { flex: none; width: 112px; height: 112px; border-radius: 50%; background: conic-gradient(#1b9a5f calc(var(--p) * 1%), #cfe3d8 0); position: relative; }
+  .pc::after { content: ""; position: absolute; inset: 22px; border-radius: 50%; background: #E6F2EC; }
+  .pie b { display: block; font: 600 40px/1 var(--serif); color: #1b7a4d; }
+  .pie span { display: block; font-size: 14px; line-height: 1.38; margin-top: 4px; }
+  .facts { display: flex; flex-direction: column; gap: 8px; }
+  .facts > div { background: #fff; border-radius: 14px; padding: 10px 12px; }
+  .facts b { display: block; font: 700 11px/1.2 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--p-kick); margin-bottom: 3px; }
+  .facts span { display: block; font-size: 14px; line-height: 1.4; }
+  .tanks { display: flex; justify-content: center; align-items: flex-end; gap: 26px; }
+  .tanks > div { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .tanks .tk { width: 140px; height: 80px; border-radius: 40px; border: 5px solid #c9a36d; overflow: hidden; position: relative; }
+  .tanks .tk.sm { width: 140px; }
+  .tanks .tk i { position: absolute; left: 0; bottom: 0; height: 100%; width: 0; background: linear-gradient(90deg,#ffc861,#e07a1e); transition: width 1.2s cubic-bezier(.2,.8,.2,1) .2s; }
+  .story.go .tanks .tk i { width: 100%; } .story.go .tanks .tk.sm i { width: 55%; }
+  .tanks b { font: 600 24px/1 var(--serif); } .tanks b.glow { color: #ffc861; }
+  .tanks span { font-size: 12.5px; opacity: .75; text-align: center; max-width: 130px; }
+  .st-anchor { font-size: 24px; }
   @media (prefers-reduced-motion: reduce) { .bar i { transition: none; } .mic.on::after { animation: none; } }
 </style>
 
@@ -678,203 +789,277 @@
   var MAYA_PHOTO = "data:image/jpeg;base64,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"; /* her closing smile from the welcome video (demo version 55) */
 
   /* ---------- story cards: the learn phase as tap-through cards (Georgia first) ---------- */
-  function persons(n) {
-    var h = "";
-    for (var k = 0; k < n; k++) { var cx = 112 + (k % 6) * 15.5, cy = 96 - Math.floor(k / 6) * 19; h += '<g class="pp" style="animation-delay:' + (300 + k * 45) + 'ms"><circle cx="' + cx + '" cy="' + (cy - 7) + '" r="4.2"/><rect x="' + (cx - 5) + '" y="' + (cy - 2) + '" width="10" height="11" rx="5"/></g>'; }
-    return h;
-  }
-  var GA_STORY = [
-    { bg: "linear-gradient(165deg,#24569f 0%,#1F4C91 55%,#163a72 100%)", dark: true, next: "Start with the basics", html: function () {
-      return '<div class="st-cover"><div class="st-photo"><img src="' + MAYA_PHOTO + '" alt="Maya Kaur"></div><span class="st-kick">Lesson 1 · 5 minutes</span><h2 class="st-h xl">Health coverage</h2><p class="st-quote">“My Republican opponent and I see this very differently. Here’s what you need to know.”<small>Maya</small></p></div>' +
-        '<div class="st-steps"><span><i>1</i>Learn</span><span><i>2</i>Say it back</span><span><i>3</i>Practice a door</span></div>'; } },
-    { bg: "#FDE9EC", next: "So what does expanding it mean?", html: function () {
-      return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">What’s Medicaid?</h2>' +
-        '<div class="st-icard" aria-hidden="true"><div class="ic-top"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.2 0 3.6 1.3 5.3 3.3 1.7-2 3.1-3.3 5.3-3.3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="#e2557a"/><path d="M12 9.5v6M9 12.5h6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><b>MEDICAID</b></div><i></i><i class="s"></i><div class="ic-row"><span>Doctor</span><span>Hospital</span><span>Medicine</span></div></div>' +
-        '<p class="st-p">It’s health insurance run by the state, for people with low incomes. It pays for doctor visits, hospital stays and medicine.</p>'; } },
-    { bg: "#E8F1FB", next: "Who gets left out in Georgia", html: function () {
-      return '<span class="st-kick">And expanding it?</span><h2 class="st-h">Expanding Medicaid lets more working adults qualify.</h2>' +
-        '<div class="st-meter"><div class="mt-lab now"><b>Georgia today</b>only some adults with very low incomes</div><div class="mt-track"><i class="mt-now"></i><i class="mt-exp"></i><span class="mt-pin">$21,000</span></div><div class="mt-lab exp"><b>If Georgia expands</b>any adult earning up to about $21,000 a year (for one person)</div></div>' +
-        '<p class="st-p">That’s about what someone earns working full time at $10 an hour.</p>'; } },
-    { bg: "#F7E4BF", next: "How other states fixed it", html: function () {
-      return '<span class="st-kick">The problem</span><div class="st-big">~<span data-count="200000">200,000</span></div><h2 class="st-h">Georgia adults with no affordable health coverage</h2>' +
-        '<svg class="st-gap" viewBox="0 0 300 150" role="img" aria-label="A gap between Medicaid and affordable insurance, with people stuck in it">' +
-        '<rect x="0" y="62" width="96" height="88" rx="10" fill="#6cbf92"/><rect x="204" y="40" width="96" height="110" rx="10" fill="#d8c29a"/>' +
-        '<path d="M96 70 L96 150 L204 150 L204 48" fill="#ecc27a" opacity=".55"/><g fill="#7a4b12">' + persons(12) + '</g>' +
-        '<text x="48" y="54" text-anchor="middle" class="sv-l">Medicaid</text><text x="252" y="18" text-anchor="middle" class="sv-l">Can afford</text><text x="252" y="32" text-anchor="middle" class="sv-l">insurance</text><text x="150" y="40" text-anchor="middle" class="sv-l gapl">the gap</text></svg>' +
-        '<p class="st-p">They earn too much for Medicaid today, and too little to buy their own insurance.</p>'; } },
-    { bg: "#DDF1E5", next: "What Georgia tried instead", html: function () {
-      var sq = ""; for (var k = 0; k < 50; k++) { var on = k < 40, ga = k === 44; sq += '<i class="' + (on ? "on" : "") + (ga ? " ga" : "") + '" style="animation-delay:' + (k * 22) + 'ms">' + (ga ? "GA" : "") + '</i>'; }
-      return '<span class="st-kick">How other states fixed it</span><h2 class="st-h">40 states closed the gap by expanding Medicaid.<br><span class="st-red">Georgia didn’t.</span></h2><div class="st-grid" role="img" aria-label="50 squares, 40 green for states that expanded Medicaid, 10 grey including Georgia">' + sq + '</div><div class="st-legend"><span><i class="on"></i>Expanded</span><span><i></i>Didn’t</span></div>' +
-        '<p class="st-p">In those 40 states, people in the gap can get covered. In Georgia, they’re still stuck.</p>'; } },
-    { bg: "radial-gradient(120% 80% at 50% 100%,#3a2c18 0%,#1b1a1f 60%)", dark: true, next: "Where Maya stands", html: function () {
-      return '<span class="st-kick">Georgia’s own fix</span><h2 class="st-h">Georgia built its own program, <em>Pathways</em>. It fell far short.</h2><p class="st-p dim">Pathways covers you only if you report your work hours.</p>' +
-        '<div class="st-bars2"><div class="col"><b class="v">~100,000</b><div class="bar goal" style="--h:170px"></div><span>Expected to sign up</span></div><div class="col"><b class="v glow">~<span data-count="18500">18,500</span></b><div class="bar got" style="--h:31px"></div><span>Actually covered</span></div></div>' +
-        '<p class="st-punch">Fewer than <b>1 in 5</b> of the people Gov. Kemp’s team expected.</p>'; } },
-    { bg: "#EEF3FB", next: "How her opponent differs", html: function () {
-      return '<span class="st-kick">Where Maya stands</span><h2 class="st-h lg"><span class="mk">Maya:</span> Stop what’s failing. Start what works.</h2>' +
-        '<div class="st-ss"><div class="ss stop"><i>✕</i><div><b>Stop: end Georgia Pathways</b><span>She calls it “an epic failure.”</span></div></div>' +
-        '<svg class="ss-arrow" viewBox="0 0 40 34" aria-hidden="true"><path d="M20 2 C 20 14, 20 18, 20 28" stroke="#9aa9c2" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="1 7"/><path d="M12 22 L20 31 L28 22" stroke="#9aa9c2" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-        '<div class="ss start"><i>✓</i><div><b>Start: expand Medicaid</b><span>Like 40 other states, so any adult earning up to about $21,000 a year can get covered.</span></div></div></div>' +
-        '<p class="st-p small">Plus more money for rural hospitals. She’ll need the legislature to pass it.</p>'; } },
-    { bg: "#FBF6EE", next: "What changes if she wins", html: function () {
-      return '<span class="st-kick">Same problem, two fixes</span><h2 class="st-h">How should Georgia cover the 200,000?</h2>' +
-        '<div class="st-vs"><div class="half k"><small>Maya Kaur · Democrat</small><b>Open Medicaid to more working adults</b><span>Anyone earning up to about $21,000 a year could sign up. And end Pathways.</span></div><div class="vsb">vs</div><div class="half j"><small>Her Republican opponent</small><b>Keep a program like Pathways</b><span>You get covered only if you report your work hours. He calls it “intelligent Medicaid expansion.”</span></div></div>' +
-        '<p class="st-p small">Good to know: under federal law, expansion now comes with work rules too.</p>'; } },
-    { bg: "#F3EFE8", next: "The one line to remember", html: function () {
-      return '<span class="st-kick">What your vote decides</span><h2 class="st-h">Which plan Georgia’s next governor pushes</h2>' +
-        '<div class="st-fork"><svg viewBox="0 0 300 130" aria-hidden="true"><path d="M150 0 L150 44 C150 80 70 78 62 124 M150 44 C150 80 230 78 238 124" stroke="#d6c9b4" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M150 0 L150 44 C150 80 70 78 62 124 M150 44 C150 80 230 78 238 124" stroke="#fff" stroke-width="3" fill="none" stroke-dasharray="8 9"/><circle cx="150" cy="14" r="11" fill="#262320"/><circle cx="150" cy="14" r="4" fill="#fff"/><circle cx="62" cy="122" r="9" fill="#2f6f9f"/><circle cx="238" cy="122" r="9" fill="#8d4b3c"/></svg>' +
-        '<div class="ends"><div class="end k"><small>If Maya wins</small><b>Georgia opens Medicaid to more working adults, and Pathways ends.</b></div><div class="end j"><small>If her opponent wins</small><b>Georgia keeps a program like Pathways, where you report work hours.</b></div></div></div>' +
-        '<p class="st-p small">Either way the legislature has a say, so every vote for governor counts.</p>'; } },
-    { bg: "radial-gradient(110% 70% at 50% 0%,#2b3d5e 0%,#1d1c22 62%)", dark: true, next: "Say it back out loud", html: function () {
-      return '<span class="st-kick">Say this at the door</span><div class="st-anchor"><span class="k">Maya</span> wants <em>full Medicaid expansion</em>, like 40 other states, and to <em>end Georgia Pathways</em>. <span class="j">Her Republican opponent</span> wants <em>a program like Pathways</em>, with work requirements.</div><p class="st-p dim">Next: five quick questions. Answer out loud, in your own words.</p>'; } }
-  ];
-
-  /* ---------- story cards for lessons 2 to 5, built from the same fact-checked samples ---------- */
+  /* ---------- lesson card builders (rules in claude/campaign-demos/lesson-playbook.md) ---------- */
   var BLUE_BG = "linear-gradient(165deg,#24569f 0%,#1F4C91 55%,#163a72 100%)", ANCHOR_BG = "radial-gradient(110% 70% at 50% 0%,#2b3d5e 0%,#1d1c22 62%)", DARK_BG = "radial-gradient(120% 80% at 50% 100%,#3a2c18 0%,#1b1a1f 60%)";
-  function coverCard(n, title) { return { bg: BLUE_BG, dark: true, next: "Start with the basics", html: function () {
-    return '<div class="st-cover"><div class="st-photo"><img src="' + MAYA_PHOTO + '" alt="Maya Kaur"></div><span class="st-kick">Lesson ' + n + ' · 5 minutes</span><h2 class="st-h xl">' + title + '</h2><p class="st-quote">“My Republican opponent and I see this very differently. Here’s what you need to know.”<small>Maya</small></p></div>' +
-      '<div class="st-steps"><span><i>1</i>Learn</span><span><i>2</i>Say it back</span><span><i>3</i>Practice a door</span></div>'; } }; }
-  function anchorCard() { return { bg: ANCHOR_BG, dark: true, next: "Say it back out loud", html: function () {
-    return '<span class="st-kick">Say this at the door</span><div class="st-anchor">' + X().anchor + '</div><p class="st-p dim">Next: five quick questions. Answer out loud, in your own words.</p>'; } }; }
-  function ssCard(bg, h, stop, start, small, next) { return { bg: bg, next: next, html: function () {
-    return '<span class="st-kick">Where Maya stands</span><h2 class="st-h lg"><span class="mk">Maya:</span> ' + h + '</h2>' +
-      '<div class="st-ss"><div class="ss stop"><i>✕</i><div><b>' + stop[0] + '</b><span>' + stop[1] + '</span></div></div>' +
-      '<svg class="ss-arrow" viewBox="0 0 40 34" aria-hidden="true"><path d="M20 2 C 20 14, 20 18, 20 28" stroke="#9aa9c2" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="1 7"/><path d="M12 22 L20 31 L28 22" stroke="#9aa9c2" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-      '<div class="ss start"><i>✓</i><div><b>' + start[0] + '</b><span>' + start[1] + '</span></div></div></div>' +
-      (small ? '<p class="st-p small">' + small + '</p>' : ""); } }; }
-  function vsCard(h, k, j, note, next) { return { bg: "#FBF6EE", next: next, html: function () {
-    return '<span class="st-kick">Same problem, two fixes</span><h2 class="st-h">' + h + '</h2>' +
-      '<div class="st-vs"><div class="half k"><small>Maya Kaur · Democrat</small><b>' + k[0] + '</b><span>' + k[1] + '</span></div><div class="vsb">vs</div><div class="half j"><small>Her Republican opponent</small><b>' + j[0] + '</b><span>' + j[1] + '</span></div></div>' +
+  function cover(n, title, quote) { return { bg: BLUE_BG, dark: true, next: "Start step 1: Learn", html: function () {
+    return '<span class="st-kick">Lesson ' + n + ' of 5 · about 5 minutes</span><h2 class="st-h xl">' + title + '</h2>' +
+      '<p class="st-voters">One of the top 5 issues voters raise at the door.</p>' +
+      '<p class="st-quote sm">“' + quote + '”<small>Maya</small></p>' +
+      '<div class="rm"><div class="rm-s on"><i>1</i><div><b>Learn</b><span>Quick cards on the issue · 2 min</span></div><em>You’re here</em></div><div class="rm-s"><i>2</i><div><b>Say it back</b><span>3 questions, out loud · 2 min</span></div></div><div class="rm-s"><i>3</i><div><b>Practice a door</b><span>A voter talks back · 1 min</span></div></div></div>'; } }; }
+  function stance(bg, h, items, note, src) { return { bg: bg, next: "How her opponent differs", src: src, html: function () {
+    return '<span class="st-kick">Where Maya stands</span><h2 class="st-h lg"><span class="mk">Maya:</span> ' + h + '</h2><ol class="mst">' +
+      items.map(function (it, k) { return '<li class="' + it[0] + '"><i>' + (it[0] === "end" ? "✕" : it[0] === "fund" ? "+" : "✓") + '</i><div><small>' + (k + 1) + ' · ' + (it[0] === "end" ? "End" : it[0] === "fund" ? "Fund" : "Start") + '</small><b>' + it[1] + '</b><span>' + it[2] + '</span></div></li>'; }).join("") + '</ol>' +
       (note ? '<p class="st-p small">' + note + '</p>' : ""); } }; }
-  function forkCard(h, kt, jt, note) { return { bg: "#F3EFE8", next: "The one line to remember", html: function () {
+  function vs(kick, h, k, j, note, src) { return { bg: "#FBF6EE", next: "What changes if Maya wins", src: src, html: function () {
+    return '<span class="st-kick">' + kick + '</span><h2 class="st-h">' + h + '</h2>' +
+      '<div class="st-vs rec"><div class="half k"><small>Maya Kaur · Democrat</small><b>' + k[0] + '</b>' + k.slice(1).map(function (r) { return '<div class="rr">' + r + '</div>'; }).join("") + '</div><div class="vsb">vs</div>' +
+      '<div class="half j"><small>Her Republican opponent</small><b>' + j[0] + '</b>' + j.slice(1).map(function (r) { return '<div class="rr">' + r + '</div>'; }).join("") + '</div></div>' +
+      (note ? '<p class="st-p small">' + note + '</p>' : ""); } }; }
+  function fork(h, kt, jt, note, src) { return { bg: "#F3EFE8", next: "The one line to remember", src: src, html: function () {
+    var chev = function (y) { return '<path d="M142 ' + y + ' L150 ' + (y + 8) + ' L158 ' + y + '" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'; };
     return '<span class="st-kick">What your vote decides</span><h2 class="st-h">' + h + '</h2>' +
-      '<div class="st-fork"><svg viewBox="0 0 300 130" aria-hidden="true"><path d="M150 0 L150 44 C150 80 70 78 62 124 M150 44 C150 80 230 78 238 124" stroke="#d6c9b4" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M150 0 L150 44 C150 80 70 78 62 124 M150 44 C150 80 230 78 238 124" stroke="#fff" stroke-width="3" fill="none" stroke-dasharray="8 9"/><circle cx="150" cy="14" r="11" fill="#262320"/><circle cx="150" cy="14" r="4" fill="#fff"/><circle cx="62" cy="122" r="9" fill="#2f6f9f"/><circle cx="238" cy="122" r="9" fill="#8d4b3c"/></svg>' +
+      '<div class="st-fork"><svg viewBox="0 0 300 170" aria-hidden="true"><path d="M150 0 L150 84 C150 118 70 116 62 160 M150 84 C150 118 230 116 238 160" stroke="#d6c9b4" stroke-width="30" fill="none" stroke-linecap="round"/>' + chev(14) + chev(40) + chev(66) +
+      '<path d="M112 112 L104 124 L118 122 M188 112 L196 124 L182 122" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="62" cy="158" r="10" fill="#2f6f9f"/><circle cx="238" cy="158" r="10" fill="#8d4b3c"/></svg>' +
       '<div class="ends"><div class="end k"><small>If Maya wins</small><b>' + kt + '</b></div><div class="end j"><small>If her opponent wins</small><b>' + jt + '</b></div></div></div>' +
       (note ? '<p class="st-p small">' + note + '</p>' : ""); } }; }
-  function icard(c, title, icon, chips) {
-    return '<div class="st-icard" aria-hidden="true" style="--ic:' + c[0] + ';--ics:' + c[1] + ';--icl:' + c[2] + ';--ish:' + c[3] + '"><div class="ic-top">' + icon + '<b>' + title + '</b></div><i></i><i class="s"></i><div class="ic-row">' + chips.map(function (x) { return '<span>' + x + '</span>'; }).join("") + '</div></div>';
-  }
-  var KID = '<svg viewBox="0 0 24 30" aria-hidden="true"><circle cx="12" cy="7" r="5.5" fill="currentColor"/><path d="M3 29v-6c0-5 4-9 9-9s9 4 9 9v6z" fill="currentColor"/></svg>';
-  var DC = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3" fill="currentColor"/><rect x="6" y="6.5" width="12" height="2.4" rx="1" fill="#fff" opacity=".85"/><rect x="6" y="10.8" width="12" height="2.4" rx="1" fill="#fff" opacity=".85"/><rect x="6" y="15.1" width="12" height="2.4" rx="1" fill="#fff" opacity=".85"/></svg>';
+  function anchorCard() { return { bg: ANCHOR_BG, dark: true, next: "Start step 2: Say it back", html: function () {
+    return '<span class="st-kick">Step 1 done · the one line to say at the door</span><div class="st-anchor">' + X().anchor + '</div><p class="st-p dim">Next: three quick questions, answered out loud.</p>'; } }; }
+  function promise(o) { return { bg: DARK_BG, dark: true, next: o.next, src: o.src, html: function () {
+    return '<span class="st-kick">' + o.kick + '</span><h2 class="st-h">' + o.h + '</h2>' + (o.quote ? '<p class="st-q">“' + o.quote + '”<small>' + o.who + '</small></p>' : "") +
+      '<div class="st-bars2"><div class="col"><b class="v">' + o.pv + '</b><div class="bar goal" style="--h:' + o.ph + 'px"></div><span>' + o.pl + '</span></div><div class="col"><b class="v glow">' + o.rv + '</b><div class="bar got" style="--h:' + o.rh + 'px"></div><span>' + o.rl + '</span></div></div>' +
+      '<p class="st-punch">' + o.punch + '</p>'; } }; }
+  function p100(groups) { var h = '<div class="p100" role="img" aria-label="' + groups.map(function (g) { return g[1] + " " + g[0]; }).join(", ") + ' out of 100">', n = 0; groups.forEach(function (g) { for (var k = 0; k < g[1]; k++) { h += '<i style="background:' + g[2] + ';animation-delay:' + (n * 9) + 'ms"></i>'; n++; } }); return h + '</div><div class="st-legend wrap">' + groups.map(function (g) { return '<span><i style="background:' + g[2] + '"></i>' + g[1] + ' ' + g[0] + '</span>'; }).join("") + '</div>'; }
+  function vbars(rows, max, unit) { return '<div class="vb">' + rows.map(function (r, k) { return '<div class="col"><b>' + r[1] + '</b><div class="bar" style="--h:' + Math.max(6, Math.round(r[2] / max * 150)) + 'px;background:' + r[3] + ';transition-delay:' + (k * 180) + 'ms"></div><span>' + r[0] + '</span></div>'; }).join("") + '</div>'; }
+  function hrows(rows, max) { return '<div class="hr">' + rows.map(function (r, k) { return '<div class="row"><span>' + r[0] + '</span><div class="trk"><i style="--w:' + (r[2] / max * 100).toFixed(1) + '%;background:' + r[3] + ';transition-delay:' + (k * 200) + 'ms"></i><b>' + r[1] + '</b></div></div>'; }).join("") + '</div>'; }
+  var PERSON = '<svg viewBox="0 0 24 30" aria-hidden="true"><circle cx="12" cy="7" r="5.5" fill="currentColor"/><path d="M3 29v-6c0-5 4-9 9-9s9 4 9 9v6z" fill="currentColor"/></svg>';
+  function icard(c, title, icon, chips) { return '<div class="st-icard" aria-hidden="true" style="--ic:' + c[0] + ';--ics:' + c[1] + ';--icl:' + c[2] + ';--ish:' + c[3] + '"><div class="ic-top">' + icon + '<b>' + title + '</b></div><i></i><i class="s"></i><div class="ic-row">' + chips.map(function (x) { return '<span>' + x + '</span>'; }).join("") + '</div></div>'; }
+  var S_ = {
+    kffGA: ["KFF, Georgia Medicaid enrollment", "https://www.kff.org/medicaid/state-indicator/medicaid-and-chip-monthly-enrollment/"],
+    kffAdults: ["KFF, coverage of Georgia adults 19 to 64", "https://www.kff.org/state-health-policy-data/state-indicator/adults-19-64/?state=GA"],
+    hhs: ["HHS 2026 poverty guidelines", "https://aspe.hhs.gov/Poverty-Guidelines"],
+    paFlier: ["2026 Pathways limits", "https://healthyfuturega.org/wp-content/uploads/2023/08/2026-Pathways-Eligibility-Flier-.pdf"],
+    ccf: ["Georgetown CCF, Georgia’s uninsured workers", "https://ccf.georgetown.edu/2021/04/28/a-profile-of-georgias-low-wage-uninsured-workers/"],
+    kffStatus: ["KFF, expansion status", "https://www.kff.org/status-of-state-medicaid-expansion-decisions/"],
+    kemp: ["Gov. Kemp’s office, Aug 2024", "https://gov.georgia.gov/press-releases/2024-08-19/governor-kemp-joined-commissioners-john-king-and-russel-carlson-provides"],
+    cbeat23: ["Capitol Beat, the state’s first-year estimate", "https://capitol-beat.org/2023/06/limited-georgia-medicaid-expansion-launches-this-weekend/"],
+    dch: ["Georgia DCH filing, Aug 2026", "https://www.medicaid.gov/medicaid/section-1115-demonstrations/downloads/ga-pathways-fmap-amendment-app-10012026.pdf"],
+    gao: ["GAO via Atlanta News First", "https://www.atlantanewsfirst.com/2025/09/18/report-reveals-georgia-medicaid-program-has-spent-more-admin-than-care"],
+    care: ["Bottoms CARE Plan", "https://www.keishaforgovernor.com/klb-policy-careplan-1.pdf"],
+    jackson: ["His Sept 8 rollout, Capitol Beat", "https://capitol-beat.org/?p=18845"],
+    ajcJ: ["AJC on his plan", "https://www.ajc.com/politics/2026/09/rick-jackson-proposes-intelligent-medicaid-expansion-in-georgia/"],
+    cms: ["CMS, federal work rule", "https://www.cms.gov/newsroom/fact-sheets/medicaid-community-engagement-requirement-certain-individuals-interim-final-rule-comment-period-cms"]
+  };
 
-  var TX_STORY = [
-    coverCard(2, "School vouchers"),
-    { bg: "#E6EFFA", next: "Where the money went", html: function () {
-      return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">What’s a voucher?</h2>' +
-        icard(["#1f5f99", "#e3eef8", "#d4e3f2", "rgba(31,95,153,.4)"], "VOUCHER", '<svg viewBox="0 0 24 24" width="30" height="30"><path d="M2 9.5 12 4.5l10 5-10 5z" fill="#1f5f99"/><path d="M6.5 11.8v4.2c0 1.4 2.5 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-4.2" fill="none" stroke="#1f5f99" stroke-width="2"/></svg>', ["$10,474 a year", "Private school"]) +
-        '<p class="st-p">State money a family can spend on private school. Texas started them this year and calls them Education Freedom Accounts. Most students can get <b>$10,474</b> a year.</p>'; } },
-    { bg: "#FCEBD8", next: "How Texas got here", html: function () {
-      var kids = ""; for (var k = 0; k < 10; k++) kids += '<i class="' + (k < 7 ? "a" : "b") + '" style="animation-delay:' + (200 + k * 90) + 'ms">' + KID + '</i>';
-      return '<span class="st-kick">Where the money went</span><h2 class="st-h">7 in 10 vouchers went to kids who were <span class="st-or">already in private school</span> or homeschool.</h2><div class="sk-kids" role="img" aria-label="Ten children, seven orange for already in private school or homeschool, three blue for from public school">' + kids + '</div>' +
-        '<div class="st-legend"><span><i style="background:#e08a2c"></i>Already private or homeschool</span><span><i style="background:#3b80b6"></i>From public school</span></div>' +
-        '<p class="st-p small">274,000+ families applied. About 118,000 had awards by August, and 121,000+ were waitlisted.</p>'; } },
-    { bg: "#EEF3FB", next: "Where Maya stands", html: function () {
-      return '<span class="st-kick">How Texas got here</span><h2 class="st-h">A three-year fight, then a new law</h2>' +
-        '<div class="sk-tl"><div class="sk-t"><b>2023</b><span>The Texas House stripped vouchers out of a bill.</span></div><div class="sk-t"><b>2024</b><span>Gov. Abbott and his allies spent millions to replace more than a dozen anti-voucher Republicans in their primaries.</span></div><div class="sk-t on"><b>2025</b><span>The voucher law passed.</span></div></div>' +
-        '<p class="st-p small">Both candidates took sides in this fight in Texas. Now they’re running for the US Senate, where the question is whether vouchers go nationwide.</p>'; } },
-    ssCard("#EEF3FB", "Public money belongs in public schools.", ["Stop: vouchers going nationwide", "She says they’re “taking tax dollars out of our public schools to subsidize private education.”"], ["Protect: public schools", "A former public school teacher, she voted no on the Texas law and tried to send it to a statewide vote."], "She’d also oppose gutting the US Department of Education.", "How her opponent differs"),
-    { bg: "#FBF6EE", next: "What changes if she wins", html: function () {
-      return '<span class="st-kick">Texas record, Senate plan</span><h2 class="st-h">Should tax dollars pay for private school?</h2>' +
-        '<div class="st-vs rec"><div class="half k"><small>Maya Kaur · Democrat</small><b>No</b><div class="rr"><em>In Texas</em>Voted no on the voucher law and tried to send it to a statewide vote.</div><div class="rr"><em>In the Senate</em>Fight against vouchers going nationwide.</div></div><div class="vsb">vs</div>' +
-        '<div class="half j"><small>Her Republican opponent</small><b>Yes</b><div class="rr"><em>In Texas</em>As attorney general, vowed: “I promise to vigorously defend this law.”</div><div class="rr"><em>In the Senate</em>Back vouchers, which he says give parents more say.</div></div></div>' +
-        '<p class="st-p small">A senator can’t undo the Texas law. What a senator can do: vote on vouchers nationwide.</p>'; } },
-    forkCard("Which senator Texas sends to Washington", "A senator who fights against vouchers going nationwide.", "A senator who backs vouchers and vowed to defend them.", "A senator can’t cancel the Texas program either way."),
+  var GA_STORY = [
+    cover(1, "Health coverage", "My Republican opponent and I see what Georgia should do here very differently. Here’s what you need to know."),
+    { bg: "#FDE9EC", next: "Who gets left out today", src: [S_.kffGA], html: function () {
+      return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">What’s Medicaid?</h2>' +
+        icard(["#b23a5a", "#fde9ec", "#f3dbe1", "rgba(150,40,70,.45)"], "MEDICAID", '<svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.2 0 3.6 1.3 5.3 3.3 1.7-2 3.1-3.3 5.3-3.3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="#e2557a"/><path d="M12 9.5v6M9 12.5h6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>', ["Doctor", "Hospital", "Medicine"]) +
+        '<p class="st-p">Health insurance run by the state for people with low incomes. About <b>1.8 million</b> Georgians have it, roughly 1 in 6, and most are children.</p>' +
+        '<p class="st-p small">Working-age adults mostly can’t get it: in a family of three, a parent qualifies only under about $8,000 a year.</p>'; } },
+    { bg: "#E8F1FB", next: "How many Georgians this touches", src: [S_.hhs, S_.paFlier], html: function () {
+      var sis = [["Bri", "$14,000", "Home health aide, hours that swing week to week", "No help to buy insurance (that starts at the poverty line, about $16,000). Medicaid only through Pathways, if she proves 80 work hours a month.", "bad"], ["Cam", "$19,000", "Cook, full time", "Gets help buying a private plan, but premiums jumped this year.", "mid"], ["Dee", "$45,000", "Office manager", "Insurance through her job.", "ok"]];
+      return '<span class="st-kick">Who gets left out today</span><h2 class="st-h">Three sisters, three paychecks</h2><div class="sibs">' + sis.map(function (p) { return '<div class="sib ' + p[4] + '"><div class="ic">' + PERSON + '</div><div><b>' + p[0] + ' · ' + p[1] + ' a year</b><small>' + p[2] + '</small><span>' + p[3] + '</span></div></div>'; }).join("") + '</div>' +
+        '<p class="st-p hl">The sister earning the least gets the least help. Expanding Medicaid would cover any adult earning up to about <b>$22,000</b> a year, so Bri and Cam would both qualify.</p>'; } },
+    { bg: "#F7E4BF", next: "How other states fixed it", src: [S_.kffAdults, S_.ccf], html: function () {
+      return '<span class="st-kick">How big the problem is</span><h2 class="st-h">If Georgia were 100 working-age adults</h2>' +
+        p100([["job insurance", 60, "#c9b38e"], ["buy their own", 10, "#dccaa5"], ["Medicaid", 9, "#6cbf92"], ["other", 4, "#e6d8bd"], ["no insurance", 17, "#b5541b"]]) +
+        '<p class="st-p small">17 in 100 have no insurance (nationally it’s 11). Among them are <b>200,000 or more</b> poor adults with no realistic way in: cashiers, cooks, housekeepers, servers, stock workers.</p>'; } },
+    { bg: "#DDF1E5", next: "What Georgia tried instead", src: [S_.kffStatus], html: function () {
+      var yes = ["AR", "KY", "WV", "LA", "VA", "OK", "MO", "NC"], no = ["GA", "FL", "AL", "MS", "SC", "TN", "TX"];
+      return '<span class="st-kick">How other states fixed it</span><h2 class="st-h">40 states expanded Medicaid, including most of Georgia’s Southern neighbors.</h2>' +
+        '<div class="south"><div><small>Expanded</small><div class="tiles">' + yes.map(function (s, k) { return '<i class="y" style="animation-delay:' + (k * 70) + 'ms">' + s + '</i>'; }).join("") + '</div></div><div><small>Didn’t</small><div class="tiles">' + no.map(function (s, k) { return '<i class="' + (s === "GA" ? "ga" : "n") + '" style="animation-delay:' + (600 + k * 70) + 'ms">' + s + '</i>'; }).join("") + '</div></div></div>' +
+        '<div class="so"><b>So what?</b> Washington pays 90% of the cost. For every $1 Georgia puts in, Washington puts in $9, and Georgians’ federal taxes already help pay for it in those 40 states.</div>'; } },
+    promise({ kick: "Georgia’s own fix", h: "In 2023, Republican Gov. Brian Kemp chose his own plan over expansion: Pathways.", quote: "a pathway to an education, a job, a career, and a better life without government assistance", who: "Gov. Kemp, on why it beats expansion", pv: "100,000", ph: 135, pl: "Expected to sign up in year one", rv: "~20,000", rh: 27, rl: "Enrolled today, 3 years in", punch: "One fifth of the first-year goal. And it spent more on administration than on care: <b>$54 million</b> vs $26 million.", next: "Where Maya stands", src: [S_.kemp, S_.cbeat23, S_.dch, S_.gao] }),
+    stance("#EEF3FB", "End what isn’t working. Cover working Georgians.", [["end", "Georgia Pathways", "It reached about 20,000 people and spent more on administration than on care. She’d replace it with “real coverage that actually works for families.”"], ["start", "Full Medicaid expansion", "Any adult earning up to about $22,000 a year qualifies, like in 40 other states. Washington pays 90%."], ["fund", "Rural hospitals and clinics", "A separate plan, Rural Care First: higher payments to keep small-town care open."]], "Expansion needs the legislature. On day one she’d order state agencies to get ready, then push lawmakers to pass it.", [S_.care]),
+    vs("Same problem, two fixes", "How should Georgia cover its uninsured working adults?", ["Expand Medicaid", "Covers every adult earning up to about $22,000 a year.", "A 2025 federal law adds work rules to expansion: 80 hours a month, with exemptions like parents of kids 13 and under."], ["Keep a Pathways-style plan", "“We will cover those who need it the most and keep work requirements in place.”", "He hasn’t said how many it covers. The AJC: it “goes further than Pathways but stops short of full expansion.”"], "Both plans have work rules. The real difference is how many people get covered. And Washington’s 90% share is guaranteed only for full expansion.", [S_.jackson, S_.ajcJ, S_.cms]),
+    fork("Which plan Georgia’s next governor fights for", "Medicaid for every adult up to about $22,000 a year, and Pathways ends.", "A Pathways-style plan with work rules that covers fewer people than full expansion.", "The governor can’t do it alone: the legislature votes. But the governor sets the agenda and pushes lawmakers, so this vote decides which plan gets pushed.", [S_.ajcJ]),
     anchorCard()
   ];
 
+  var S_TX = {
+    tefa: ["Texas Education Freedom Accounts", "https://educationfreedom.texas.gov/"],
+    tea: ["TEA enrollment 2025-26", "https://tea.texas.gov/data-reports/school-performance/accountability-research/enroll-2025-26.pdf"],
+    lbb: ["SB 2 fiscal note", "https://capitol.texas.gov/tlodocs/89R/fiscalnotes/html/SB00002H.htm"],
+    trib: ["Texas Tribune, Sept 2026", "https://www.texastribune.org/2026/09/03/texas-school-voucher-program-2-billion-expansion-budget-comptroller/"],
+    kprc: ["KPRC, state voucher data", "https://www.click2houston.com/news/local/2026/08/18/70-of-texas-voucher-awardees-previously-attended-private-school-or-were-homeschooled-state-data-shows/"],
+    ag: ["Her opponent’s AG release", "https://www.texasattorneygeneral.gov/news/releases/attorney-general-ken-paxton-celebrates-school-choice-texans-and-vows-defend-new-law"],
+    abbott: ["Gov. Abbott’s signing release", "https://gov.texas.gov/news/post/governor-abbott-signs-landmark-school-choice-legislation-into-law"],
+    irs: ["IRS, federal scholarship credit", "https://www.irs.gov/charities-non-profits/federal-scholarship-tax-credit-fstc"],
+    ivg: ["Her opponent’s questionnaire", "https://ivoterguide.com/candidate/2902/race/28707/election/1433"],
+    site: ["Talarico campaign, public education", "https://jamestalarico.com/issue/public-education/"],
+    vote: ["KWTX/Texas Tribune, the House vote", "https://www.kwtx.com/2025/04/17/voucher-vote-updates-bid-send-voucher-plan-statewide-vote-is-defeated/"]
+  };
+  var TX_STORY = [
+    cover(2, "School vouchers", "My Republican opponent and I see this very differently. Here’s what you need to know."),
+    { bg: "#E6EFFA", next: "How many kids it reaches", src: [S_TX.tefa], html: function () {
+      return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">What’s a voucher?</h2>' +
+        icard(["#1f5f99", "#e3eef8", "#d4e3f2", "rgba(31,95,153,.4)"], "VOUCHER", '<svg viewBox="0 0 24 24" width="30" height="30"><path d="M2 9.5 12 4.5l10 5-10 5z" fill="#1f5f99"/><path d="M6.5 11.8v4.2c0 1.4 2.5 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-4.2" fill="none" stroke="#1f5f99" stroke-width="2"/></svg>', ["Tax money", "Private school"]) +
+        '<p class="st-p">State tax money a family can spend on private school instead of public school. Texas started them this school year: <b>$10,474</b> a year for most private school students, up to $30,000 with a disability, $2,000 for homeschoolers.</p><p class="st-p small">Year one budget: $1 billion.</p>'; } },
+    { bg: "#FCEBD8", next: "Who got the money", src: [S_TX.tea, S_TX.lbb, S_TX.trib], html: function () {
+      return '<span class="st-kick">How many kids it reaches</span><h2 class="st-h">If Texas were 100 school-age kids</h2>' +
+        p100([["public school", 86, "#3b80b6"], ["homeschool", 9, "#c9b9a4"], ["private school", 3, "#e0b98a"], ["got a voucher", 2, "#e08a2c"]]) +
+        '<p class="st-p small">About 110,000 students got vouchers this fall, roughly 2 in 100 Texas kids. Another 106,000 were on the waitlist in September.</p>'; } },
+    { bg: "#FDF1D6", next: "Where it’s headed", src: [S_TX.ag, S_TX.kprc], html: function () {
+      var kids = ""; for (var k = 0; k < 10; k++) kids += '<i class="' + (k < 7 ? "a" : "b") + '" style="animation-delay:' + (200 + k * 90) + 'ms">' + PERSON + '</i>';
+      return '<span class="st-kick">The promise vs what happened</span><h2 class="st-h">Pitched as rescuing kids from struggling schools.</h2><p class="st-q dk">“not be trapped in schools that fail to meet their academic needs”<small>Her opponent, as attorney general</small></p>' +
+        '<div class="sk-kids">' + kids + '</div><div class="st-legend"><span><i style="background:#e08a2c"></i>Already in private school or homeschool</span><span><i style="background:#3b80b6"></i>From public school</span></div>' +
+        '<p class="st-p small">7 in 10 vouchers went to kids who weren’t in public school to begin with.</p>'; } },
+    { bg: "#EEF3FB", next: "Where Maya stands", src: [S_TX.lbb, S_TX.trib, S_TX.abbott], html: function () {
+      return '<span class="st-kick">Where it’s headed</span><h2 class="st-h">It’s built to grow, out of the same budget that pays for public schools.</h2>' +
+        vbars([["2027", "$1.0B", 1, "#e0b98a"], ["2028", "$3.1B", 3.1, "#e08a2c"], ["2030", "$4.0B", 4, "#b5541b"]], 4) + '<p class="st-p small">The Legislature’s own cost estimate for the program.</p>' +
+        '<p class="st-p small">Gov. Abbott promised in 2022: “If you like the public school your child is attending, it will still be fully funded.”</p>'; } },
+    stance("#EEF3FB", "Public money belongs in public schools.", [["end", "Vouchers going nationwide", "She calls them “voucher scams” that “defund public schools,” and wants to stop the push to take them national."], ["start", "Protect public education funding", "Keep the US Department of Education and the federal oversight that guarantees special education money."], ["fund", "Teachers and pre-K", "Hire more teachers, raise their pay and bring universal pre-K."]], "Her record: a former public school teacher, she voted no on the Texas law and tried to send it to a statewide vote. The House killed that, 86 to 62.", [S_TX.site, S_TX.vote]),
+    vs("Texas record, Senate vote", "Should tax dollars pay for private school?", ["No", "<em>In Texas</em>Voted no on the voucher law and tried to put it to voters.", "<em>In the Senate</em>Fight vouchers going nationwide; protect the Department of Education."], ["Yes", "<em>In Texas</em>As attorney general: “I promise to vigorously defend this law.”", "<em>In the Senate</em>“I support eliminating the U.S. Department of Education.”"], "A senator votes on a new federal tax credit for private school scholarships and on the Department of Education. A senator can’t cancel the Texas program.", [S_TX.ag, S_TX.ivg, S_TX.irs]),
+    fork("Which senator Texas sends to Washington", "A senator who fights against vouchers going nationwide and protects public school funding.", "A senator who backs vouchers and wants the Department of Education gone.", "The Texas program itself is up to the legislature, which sets its next budget in 2027.", [S_TX.ivg]),
+    anchorCard()
+  ];
+
+  var S_OH = {
+    occ: ["Ohio Consumers’ Counsel", "https://occ.ohio.gov/sites/default/files/2026-03/OCC-Data-Centers-in-Ohio.pdf"],
+    pf: ["PolitiFact, PUCO bill data", "https://politifact.com/factchecks/2026/jul/20/sherrod-brown/sherrod-brown-blames-hb-6-for-electric-bill-spike-experts-say-the-law-wasnt-the-main-cause/"],
+    imm: ["Utility Dive, PJM market monitor", "https://www.utilitydive.com/news/data-centers-pjm-capacity-auction/808951/"],
+    doj: ["US Justice Department", "https://www.justice.gov/usao-sdoh/pr/former-ohio-house-speaker-sentenced-20-years-prison-leading-racketeering-conspiracy"],
+    hus: ["Her opponent’s Senate release", "https://www.husted.senate.gov/?p=12816"],
+    n5: ["News 5 Cleveland, his floor remarks", "https://www.news5cleveland.com/news/local-news/data-centers-remain-a-flashpoint-in-ohios-u-s-senate-race"],
+    rc: ["Roll Call, Senate vote", "https://rollcall.com/2026/09/30/voluntary-ratepayer-protection-bill-blocked-in-senate-again/"],
+    jobs: ["JobsOhio release, 2023", "https://www.jobsohio.com/news-press/amazon-web-services-plans-to-invest-an-estimated-7-8-billion-in-ohio"],
+    fox: ["Brown campaign video via Fox News", "https://www.foxnews.com/politics/brown-embraced-amazon-data-centers-blaming-higher-utility-costs-high-stakes-senate-race"]
+  };
   var OH_STORY = [
-    coverCard(3, "Your electric bill"),
-    { bg: "#E9EEF6", next: "What’s happening to bills", html: function () {
+    cover(3, "Your electric bill", "My Republican opponent and I see who should pay for this very differently. Here’s what you need to know."),
+    { bg: "#E9EEF6", next: "What’s happened to bills", src: [S_OH.occ], html: function () {
       var racks = ""; for (var c = 0; c < 3; c++) for (var r = 0; r < 5; r++) racks += '<rect x="' + (44 + c * 74) + '" y="' + (40 + r * 18) + '" width="62" height="12" rx="3" fill="#33435f"/><circle class="blink" style="animation-delay:' + ((c * 5 + r) * 170 % 1300) + 'ms" cx="' + (96 + c * 74) + '" cy="' + (46 + r * 18) + '" r="2.6" fill="#7ee0a8"/>';
       return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">What’s a data center?</h2>' +
-        '<svg class="sk-dc" viewBox="0 0 300 150" aria-hidden="true"><rect x="30" y="26" width="240" height="114" rx="14" fill="#1f2a3d"/><path d="M30 40 Q150 6 270 40" fill="none" stroke="#1f2a3d" stroke-width="10" stroke-linecap="round"/>' + racks + '<path d="M150 140 L150 150" stroke="#1f2a3d" stroke-width="4"/><path class="bolt" d="M262 10 L250 32 H260 L252 52 L274 24 H263 L270 10z" fill="#f2b134"/></svg>' +
-        '<p class="st-p">A building packed with computers that run the internet and AI, humming day and night. They use a lot of electricity.</p>'; } },
-    { bg: "#FDF1D6", next: "Why data centers matter", html: function () {
-      return '<span class="st-kick">The problem</span><div class="st-big am"><span data-count="13">13</span>.5%</div><h2 class="st-h">Ohio home electric bills jumped in one year</h2>' +
-        '<svg class="sk-line" viewBox="0 0 300 120" aria-hidden="true"><path d="M10 104 C 80 100, 120 86, 170 64 S 250 30, 288 14 L288 120 L10 120z" fill="#f2b134" opacity=".18"/><path class="draw" d="M10 104 C 80 100, 120 86, 170 64 S 250 30, 288 14" fill="none" stroke="#e08a1a" stroke-width="5" stroke-linecap="round"/><circle cx="288" cy="14" r="7" fill="#e08a1a"/><text x="12" y="96" class="sv-l">six years ago</text><text x="284" y="38" text-anchor="end" class="sv-l">now</text></svg>' +
-        '<p class="st-p">Families pay about <b>50% more</b> for electricity than six years ago.</p>'; } },
-    { bg: "#E6F2EC", next: "What Ohio remembers", html: function () {
-      var nine = ""; for (var k = 0; k < 9; k++) nine += '<i style="animation-delay:' + (300 + k * 110) + 'ms">' + DC + '</i>';
-      return '<span class="st-kick">Why data centers matter</span><h2 class="st-h">Ohio’s data centers grew <span class="st-gr">ninefold</span> since 2020.</h2>' +
-        '<div class="sk-nine"><div class="g one"><div class="ic"><i>' + DC + '</i></div><span>2020</span></div><div class="arrow">→</div><div class="g"><div class="ic three">' + nine + '</div><span>Now</span></div></div>' +
-        '<p class="st-p">Columbus is the second-fastest-growing data center market. The fight: who pays for all that new power, families or data centers?</p>'; } },
-    { bg: DARK_BG, dark: true, next: "Where Maya stands", html: function () {
+        '<svg class="sk-dc" viewBox="0 0 300 150" aria-hidden="true"><rect x="30" y="26" width="240" height="114" rx="14" fill="#1f2a3d"/>' + racks + '<path class="bolt" d="M262 10 L250 32 H260 L252 52 L274 24 H263 L270 10z" fill="#f2b134"/></svg>' +
+        '<p class="st-p">A building packed with computers that run the internet and AI, day and night. Ohio has about <b>200</b>, the fifth most in the country.</p><p class="st-p small">By 2030 they could use about a tenth of all the electricity Ohio sells.</p>'; } },
+    { bg: "#FDF1D6", next: "Why bills went up", src: [S_OH.pf], html: function () {
+      return '<span class="st-kick">What’s happened to bills</span><h2 class="st-h">The average Ohio home electric bill rose by more than half since 2019.</h2>' +
+        vbars([["Oct 2019", "$89/mo", 89, "#f2c76b"], ["Jan 2026", "$145/mo", 145, "#e08a1a"]], 145) +
+        '<p class="st-p small">Up 13.5% in the last year alone.</p>'; } },
+    { bg: "#E6F2EC", next: "What Ohio remembers", src: [S_OH.imm], html: function () {
+      return '<span class="st-kick">Why bills went up</span><h2 class="st-h">The grid’s own watchdog says data centers are the main reason.</h2>' +
+        '<div class="pie"><div class="pc" style="--p:45"></div><div><b>45%</b><span>of a $47 billion jump in grid power costs over three years came from data center demand</span></div></div>' +
+        '<p class="st-p small">Ohio is part of PJM, the grid serving 13 states. Its independent market monitor calls data center growth “the primary reason” capacity prices jumped, and those costs flow into your bill.</p>'; } },
+    { bg: DARK_BG, dark: true, next: "Her opponent’s fix", src: [S_OH.doj, S_OH.pf], html: function () {
       return '<span class="st-kick">What Ohio remembers</span><h2 class="st-h">House Bill 6: a $1.3 billion power-company bailout passed with bribes.</h2><p class="st-p dim">A former Ohio House speaker is serving 20 years.</p>' +
-        '<div class="sk-note"><b>Get this right at the door</b><span>HB6 isn’t the main reason bills rose: its bailout charge was repealed before it was collected. And Maya’s opponent was never charged.</span></div>'; } },
-    ssCard("#EEF3FB", "Make data centers pay their own way.", ["Stop: families covering their power", "Require data centers to pay the full cost of their electricity, and end their tax breaks."], ["Start: a cap on rate hikes", "Limit how much utilities can raise your rates."], "Towns decide where data centers go. She hasn’t proposed banning them.", "How her opponent differs"),
-    vsCard("Who should pay for data centers’ power?", ["Require them to pay the full cost", "And cap how much your rates can rise."], ["Ask states to make them pay", "“If you create the cost, you should pay the cost.” His bill leaves it up to each state, with no cap on rates."], "Both say towns should decide where data centers go.", "What changes if she wins"),
-    forkCard("Which senator Ohio sends to Washington", "A senator pushing to make data centers pay their full power costs, and to cap rate hikes.", "Ohio keeps a senator whose bill leaves it up to each state.", "Her opponent holds the seat now."),
+        '<div class="sk-note"><b>Get this right at the door</b><span>HB6 isn’t why bills are up now: its nuclear charge was repealed before it was collected, and its coal charge ended in 2025. Maya’s opponent backed HB6 but was never charged.</span></div>'; } },
+    { bg: "#F4EEE6", next: "Where Maya stands", src: [S_OH.n5, S_OH.hus, S_OH.rc, S_OH.jobs], html: function () {
+      return '<span class="st-kick">Her opponent’s fix, at its strongest</span><h2 class="st-h">The Ratepayer Protection Act</h2><p class="st-q dk">“In plain language, if you create the cost, you should pay the cost.”<small>Her opponent, on the Senate floor</small></p>' +
+        '<div class="facts"><div><b>What it does</b><span>Asks every state to consider rules making data centers pay for the grid upgrades they need. No state has to adopt them.</span></div><div><b>Where it stands</b><span>Passed the House 417 to 3. Stalled in the Senate: 57 votes, 60 needed.</span></div><div><b>His record</b><span>As lieutenant governor he recruited data centers: Amazon’s $7.8 billion “positions Ohio as a critical location for” AI, he said.</span></div></div>'; } },
+    stance("#EEF3FB", "Data centers pay their own way.", [["start", "Require data centers to pay their full power costs", "In her words: “I’ll require the data centers to pay the full cost of their own electricity, not you.”"], ["start", "Fight to cap rate hikes", "Limit how much utilities can raise your rates. She hasn’t published details."], ["end", "Tax breaks for data centers", "And let towns decide where data centers go. She hasn’t proposed banning them."]], "A senator can write federal rules for the grid; Ohio sets local rates and tax breaks. Say “fighting for,” not “will cap.”", [S_OH.fox]),
+    vs("Same problem, two fixes", "Who should pay for data centers’ power?", ["Require them to pay", "Data centers pay the full cost of their electricity.", "Plus a fight to cap how fast rates rise."], ["Ask states to make them pay", "His bill has each state consider rules; none has to adopt them.", "No cap on rates."], "Both say towns should decide where data centers go.", [S_OH.hus, S_OH.rc]),
+    fork("Which senator Ohio sends to Washington", "A senator pushing to require data centers to pay their full power costs.", "A senator whose bill leaves it to each state to decide.", "Her opponent holds the seat now. He was appointed in 2025.", []),
     anchorCard()
   ];
 
+  var S_ME = {
+    eia: ["EIA, how Maine heats", "https://www.eia.gov/consumption/residential/data/2020/state/pdf/State%20Space%20Heating%20Fuels.pdf"],
+    doer: ["Maine Dept. of Energy Resources prices", "https://www.maine.gov/energy/heating-fuel-prices"],
+    mills: ["Gov. Mills’s letter to Congress", "https://www.maine.gov/governor/mills/sites/maine.gov.governor.mills/files/2026-10/JTM%20to%20Delegation%20-%20LIHEAP%2010-02-2026.pdf"],
+    heap: ["MaineHousing, HEAP", "https://www.mainehousing.org/programs-services/energy/energydetails/home-energy-assistance-program"],
+    heapN: ["MaineHousing, 2025 households", "https://mainehousing.org/news/news-detail/2026/03/12/mainehousing--home-energy-assistance-program-accepting-applications-through-may-29"],
+    col1: ["Her opponent: early aid release", "https://www.collins.senate.gov/newsroom/as-mainers-face-rising-home-heating-oil-costs-senator-collins-announces-release-of-more-than-38-million-in-federal-home-heating-aid-for-maine-households"],
+    col2: ["Her opponent: reserve release", "https://www.collins.senate.gov/newsroom/administration-responds-to-senators-collins-and-king-by-releasing-home-heating-oil-from-northeast-reserve"],
+    col3: ["Her opponent: Apr 30 vote", "https://www.collins.senate.gov/newsroom/senator-collins-statement-on-her-vote-to-end-hostilities-in-iran-ahead-of-60-day-deadline"],
+    bdn: ["Bangor Daily News fact check", "https://www.bangordailynews.com/2026/10/08/news/maine-election-senate-2026-troy-jackson-susan-collins-debate-fact-check/"],
+    doe: ["US Energy Department", "https://www.energy.gov/node/4860871"],
+    jk: ["Jackson campaign", "https://www.jacksonformaine.com/news/jackson-hits-the-airwaves-directing-mainers-to-heating-assistance-as-energy-costs-skyrocket"],
+    dafs: ["Maine DAFS, 2023 checks", "https://maine.gov/dafs/news/mills-administration-announces-all-450-winter-energy-relief-checks-have-been-mailed"]
+  };
   var ME_STORY = [
-    coverCard(4, "Heating oil"),
-    { bg: "#FCEBDD", next: "What it costs this year", html: function () {
+    cover(4, "Heating oil", "My Republican opponent and I see this winter very differently. Here’s what you need to know."),
+    { bg: "#FCEBDD", next: "What a tank costs now", src: [S_ME.eia], html: function () {
       return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">Half of Maine heats with oil.</h2>' +
-        '<div class="sk-duo"><div class="c"><b class="o">~50%</b><div class="bar" style="--h:120px"></div><span>Maine homes</span></div><div class="c"><b>~3%</b><div class="bar us" style="--h:8px"></div><span>US homes</span></div></div>' +
-        '<p class="st-p">Many Maine homes have an oil tank that gets filled by truck and burned to keep the house warm all winter.</p>'; } },
-    { bg: DARK_BG, dark: true, next: "Help that exists today", html: function () {
-      return '<span class="st-kick">The problem</span><div class="st-big lt">~$6</div><h2 class="st-h">a gallon this fall, near a record</h2>' +
-        '<div class="sk-tank" aria-hidden="true"><div class="tk"><i></i></div><span class="tag">$1,650 to fill</span></div>' +
-        '<p class="st-p dim">A full tank costs about 80% more than a year ago. Reporting ties the spike to the war with Iran.</p>'; } },
-    { bg: "#E8F1FB", next: "Where Maya stands", html: function () {
-      return '<span class="st-kick">Help that exists today</span><h2 class="st-h">Most worried voters can get help right now</h2>' +
-        '<div class="st-ss info"><div class="ss"><i>$</i><div><b>HEAP heating aid</b><span>Homeowners and renters can apply. A family of four can earn up to about $73,000. Open until funds run out or May 29, 2027.</span></div></div>' +
-        '<div class="ss"><i>⛁</i><div><b>The oil reserve</b><span>Up to 315,000 barrels are being released. One analyst calls it a very small volume, and it won’t reach home tanks right away.</span></div></div></div>'; } },
-    ssCard("#EEF3FB", "Fix the cause. Help families now.", ["Stop: the war driving prices", "End the war in Iran, which reporting ties to the price spike."], ["Start: more heating aid", "More money for LIHEAP, the federal program behind HEAP."], "She’s done it before: in 2023 she helped pass $450 checks to 880,000+ Mainers and $40 million more for heating aid.", "How her opponent differs"),
-    vsCard("How should Maine get through this winter?", ["End the war and fund more heating aid", "Her ad says her opponent is “funding this reckless war.”"], ["More oil supply and earlier aid", "Pressed the administration “to use every tool to increase supply”; pushed the reserve release; Maine’s aid went out early."], "On the war: her opponent voted five times against ending it, then has voted to end it since late April.", "What changes if she wins"),
-    forkCard("Which senator Maine sends to Washington", "A senator pushing to end the war and fund more heating aid.", "Maine keeps a senator pressing for more supply and earlier aid.", "Her opponent holds the seat now."),
+        '<div class="sk-duo"><div class="c"><b class="o">49%</b><div class="bar" style="--h:120px"></div><span>Maine homes</span></div><div class="c"><b>3%</b><div class="bar us" style="--h:8px"></div><span>US homes</span></div></div>' +
+        '<p class="st-p">An oil tank in the basement, filled by truck, burned all winter. No state depends on heating oil more.</p>'; } },
+    { bg: DARK_BG, dark: true, next: "The help that exists", src: [S_ME.doer, S_ME.mills], html: function () {
+      return '<span class="st-kick">What a tank costs now</span><h2 class="st-h">Oil is about $6 a gallon, up about 80% from a year ago.</h2>' +
+        '<div class="tanks"><div><div class="tk sm"><i></i></div><b>~$920</b><span>One fill, last fall</span></div><div><div class="tk"><i></i></div><b class="glow">~$1,660</b><span>One 275-gallon fill, now</span></div></div>' +
+        '<p class="st-p dim">$6.05 a gallon on Oct 26, against about $3.35 a year earlier. Reporting ties the spike to the war in Iran.</p>'; } },
+    { bg: "#E8F1FB", next: "Her opponent’s record", src: [S_ME.heap, S_ME.heapN, S_ME.mills], html: function () {
+      return '<span class="st-kick">The help that exists</span><h2 class="st-h">Heating aid (HEAP) helps, but covers less than a third of one tank.</h2>' +
+        hrows([["One tank now", "$1,660", 1660, "#e07a1e"], ["Average HEAP benefit", "~$510", 510, "#3b80b6"]], 1660) +
+        '<div class="facts"><div><b>Who qualifies</b><span>Homeowners and renters earning up to $38,070 alone or $73,213 for a family of four. Apply now through May 29.</span></div><div><b>Why Washington matters</b><span>Congress votes on its money every year. The President’s 2027 budget proposed eliminating it.</span></div></div>'; } },
+    { bg: "#F4EEE6", next: "Where Maya stands", src: [S_ME.col1, S_ME.col2, S_ME.doe, S_ME.col3, S_ME.bdn], html: function () {
+      return '<span class="st-kick">Her opponent’s record, at its strongest</span><h2 class="st-h">A longtime heating aid champion who pushed for help this fall</h2>' +
+        '<div class="facts"><div><b>Heating aid</b><span>As chair of Senate Appropriations she backs heating aid every year; she pushed for $36.7 million to reach Maine early, “one of the earliest releases in the program’s history.”</span></div><div><b>The oil reserve</b><span>She urged a release; the government is lending up to 315,000 barrels. Industry experts call it “two or three days’ worth of supply for the Northeast.”</span></div><div><b>The war</b><span>She voted five times against ending it, then nine times to end it from April 30 on.</span></div></div>'; } },
+    stance("#EEF3FB", "Fix the cause. Help families now.", [["end", "The war in Iran", "Reporting ties the price spike to it. In her words: “I don’t want to spend it in Iran. I want to spend it here.”"], ["start", "More money for heating aid", "Bigger heating aid budgets from Washington, so help covers more than a fraction of a tank."]], "She’s done it before: in 2023, as Maine Senate President, she helped pass $450 checks to about 876,000 Mainers and $40 million more for heating aid. She hasn’t named a dollar figure this time.", [S_ME.jk, S_ME.dafs]),
+    vs("Same winter, two approaches", "How should Maine get through this winter?", ["Stop the cause, fund the help", "End the war driving prices.", "Put more federal money into heating aid."], ["Ease supply, speed up aid", "Pushed for the reserve release and early aid.", "Voted five times against ending the war, then to end it since April 30."], "A senator votes on heating aid money and on the war. Oil prices and the reserve are set elsewhere.", [S_ME.col2, S_ME.bdn]),
+    fork("Which senator Maine sends to Washington", "A senator pushing to end the war and fund more heating aid.", "Maine keeps a senator pressing for supply and earlier aid.", "Her opponent holds the seat now.", []),
     anchorCard()
   ];
 
+  var S_MI = {
+    nyfed: ["New York Fed, who pays tariffs", "https://libertystreeteconomics.newyorkfed.org/2026/02/who-is-paying-for-the-2025-u-s-tariffs/"],
+    wh: ["White House fact sheet, Canada tariffs", "https://www.whitehouse.gov/fact-sheets/2026/07/fact-sheet-president-donald-j-trump-imposes-additional-tariffs-on-canada/"],
+    ustr: ["USTR, Michigan trade", "https://ustr.gov/countries-regions/united-states-trade-data/michigan"],
+    medc: ["Michigan auto jobs dashboard", "https://www.michiganbusiness.org/globalassets/documents/car-medc-michigan-dashboard-q2-2026.pdf"],
+    uaw: ["UAW statement, Aug 2026", "https://uaw.org/uaw-president-shawn-fain-on-u-s-trade-escalation-with-canada/"],
+    nw: ["Newsweek, his September statement", "https://www.newsweek.com/mike-rogers-turns-on-trumps-tariffs-what-michigan-republican-said-before-12538135"],
+    gv: ["Reuters via GV Wire, his Oct 7 ad", "https://gvwire.com/2026/10/07/michigan-republican-rogers-calls-for-end-to-canada-tariff-fight-breaking-with-trump-again/"],
+    cod: ["ClickOnDetroit, both on tariffs", "https://www.clickondetroit.com/news/local/2026/10/21/heres-where-michigan-us-senate-candidates-el-sayed-rogers-stand-on-tariffs/"],
+    ad: ["El-Sayed campaign ad", "https://abdulforsenate.com/2026/09/new-ad-nafta/"]
+  };
   var MI_STORY = [
-    coverCard(5, "Tariffs and auto jobs"),
-    { bg: "#E3F3F0", next: "Why Michigan feels it", html: function () {
+    cover(5, "Tariffs and auto jobs", "My Republican opponent and I see tariffs very differently. Here’s what you need to know."),
+    { bg: "#E3F3F0", next: "What changed this year", src: [S_MI.nyfed], html: function () {
       return '<span class="st-kick">First, the basics</span><h2 class="st-h lg">What’s a tariff?</h2>' +
         '<svg class="sk-crate" viewBox="0 0 300 140" aria-hidden="true"><path d="M150 6 V134" stroke="#9cc7bf" stroke-width="3" stroke-dasharray="6 7"/><g class="mv"><rect x="40" y="52" width="70" height="62" rx="6" fill="#c58a4a"/><path d="M40 72 H110 M40 94 H110 M62 52 V114 M88 52 V114" stroke="#a46f35" stroke-width="3"/><g transform="translate(96 30) rotate(12)"><rect width="56" height="28" rx="6" fill="#d9483b"/><text x="28" y="19" text-anchor="middle" class="tag">+ tax</text></g></g><text x="70" y="134" text-anchor="middle" class="sv-l">Canada</text><text x="232" y="134" text-anchor="middle" class="sv-l">US</text></svg>' +
-        '<p class="st-p">A tax on goods brought in from another country. This year the US and Canada hit each other with big ones.</p>'; } },
-    { bg: "#E9EEF6", next: "What it’s costing", html: function () {
-      return '<span class="st-kick">Why Michigan feels it</span><h2 class="st-h">Michigan’s auto industry runs across the Canadian border.</h2>' +
-        '<svg class="sk-border" viewBox="0 0 300 120" aria-hidden="true"><rect x="0" y="0" width="150" height="120" rx="14" fill="#dbe6f4"/><rect x="150" y="0" width="150" height="120" rx="14" fill="#f6e1dc"/><path d="M150 0 V120" stroke="#fff" stroke-width="4" stroke-dasharray="8 8"/><g class="gear"><circle cx="0" cy="0" r="16" fill="none" stroke="#2a3a55" stroke-width="7" stroke-dasharray="6 4.5"/><circle cx="0" cy="0" r="6" fill="#2a3a55"/></g><text x="75" y="108" text-anchor="middle" class="sv-l">Michigan</text><text x="225" y="108" text-anchor="middle" class="sv-l">Canada</text></svg>' +
-        '<div class="st-big sm">~$80B</div><p class="st-p">a year in Michigan trade with Canada. Car parts cross the border back and forth while a vehicle gets built.</p>'; } },
-    { bg: DARK_BG, dark: true, next: "Where the workers are", html: function () {
-      return '<span class="st-kick">What it’s costing</span><div class="st-big lt">~$<span data-count="5600">5,600</span></div><h2 class="st-h">a year in tariff costs per Michigan household, third-highest in the US</h2>' +
-        '<div class="sk-chips"><span><b>50%</b> tariffs on $27.6 billion of Canadian goods, matched by Canada</span><span><b>64%</b> of likely Michigan voters oppose the 50% tariffs</span></div>'; } },
-    { bg: "#F4EEE6", next: "Where Maya stands", html: function () {
-      return '<span class="st-kick">Where the workers are</span><h2 class="st-h">The autoworkers’ union is for some tariffs, not these.</h2>' +
-        '<div class="sk-q"><p>“We support strategic targeted tariffs.”</p><p>“The 50% on Canada, we don’t agree with that.”</p><small>UAW President Shawn Fain</small></div>' +
-        '<p class="st-p">The UAW endorsed Maya. So Democrats here aren’t simply anti-tariff, and neither is she.</p>'; } },
-    ssCard("#EEF3FB", "Smart tariffs, not dumb ones.", ["Stop: the 50% tariffs on Canada", "She opposes these, like the UAW."], ["Start: targeted tariffs for Michigan jobs", "On growth industries, with benchmarks, ending once US makers are established, and unions at the table."], "In her words: “I’m not against tariffs per se. I’m just against dumb tariffs.”", "How her opponent differs"),
-    vsCard("What should tariffs do for Michigan?", ["Targeted tariffs tied to a plan for Michigan jobs", "With unions at the table."], ["Keep the tariffs he says are working", "Called tariffs “necessary” in September. Since October: “Canada is not our enemy,” end the tariff war."], "", "What changes if she wins"),
-    forkCard("Which senator Michigan sends to Washington", "A senator pushing tariffs tied to a plan for Michigan jobs, with unions at the table.", "A senator who’d work with the president on the tariffs he says are working.", "Open seat: the current senator is retiring."),
+        '<p class="st-p">A tax on goods brought in from another country. The US company importing them pays it, and most of the cost passes on: about 90% landed on US businesses and shoppers last year.</p>'; } },
+    { bg: "#E9EEF6", next: "What’s happened to jobs", src: [S_MI.wh, S_MI.ustr], html: function () {
+      return '<span class="st-kick">What changed this year</span><h2 class="st-h">Canadian goods went from tariff-free to taxed.</h2>' +
+        hrows([["Before 2025 (USMCA goods)", "0%", 0.5, "#9cc7bf"], ["Canadian cars (non-US parts), now", "25%", 25, "#e08a1a"], ["Steel and aluminum, now", "50%", 50, "#c8402f"], ["About $20B of other goods, since Aug 22", "50%", 50, "#c8402f"]], 50) +
+        '<p class="st-p small">Canada hit back with its own tariffs. Michigan trades about $60 billion a year in goods with Canada, and some car parts cross the border four times before a vehicle is done.</p>'; } },
+    promise({ kick: "The promise vs what happened", h: "Tariffs were sold as bringing the auto industry back.", quote: "the auto industry is back... pulling Detroit and Michigan along with it", who: "The President, at GM in July", pv: "113,600", ph: 140, pl: "Michigan auto parts jobs, June 2025", rv: "109,600", rh: 135, rl: "June 2026", punch: "<b>4,000 fewer</b> parts jobs since the tariffs began. Michigan auto jobs overall are down 3,500.", next: "What autoworkers say", src: [S_MI.medc] }),
+    { bg: "#F4EEE6", next: "Her opponent’s record", src: [S_MI.uaw], html: function () {
+      return '<span class="st-kick">What autoworkers say</span><h2 class="st-h">The autoworkers’ union backs some tariffs, not these.</h2>' +
+        '<div class="sk-q"><p>“Tariffs work, but only if they are deployed intentionally to protect workers.”</p><p>“The UAW rejects any escalation on Canada.”</p><small>United Auto Workers, Aug 2026</small></div>' +
+        '<p class="st-p">The UAW endorsed Maya. So the fight isn’t tariffs or no tariffs; it’s which tariffs, and for whom.</p>'; } },
+    { bg: "#EEF3FB", next: "Where Maya stands", src: [S_MI.nw, S_MI.gv, S_MI.cod], html: function () {
+      return '<span class="st-kick">Her opponent’s record, at its strongest</span><h2 class="st-h">Backed the tariffs, then broke with the Canada fight</h2>' +
+        '<div class="sk-tl"><div class="sk-t"><b>September</b><span>“Tariffs are necessary, but are not a one-size-fits-all solution.”</span></div><div class="sk-t"><b>Oct 7</b><span>“Canada is not our enemy.” “We need to end this tariff war now.”</span></div><div class="sk-t on"><b>Oct 20</b><span>“But there are tariffs that have helped.” He says he called the Commerce Secretary to get a deal done.</span></div></div>'; } },
+    stance("#EEF3FB", "Smart tariffs, not dumb ones.", [["end", "The tariff fight with Canada", "She calls it chaotic and says her opponent “cheerled this tariff war from the beginning.”"], ["start", "Targeted tariffs tied to a plan for Michigan jobs", "Protect auto and manufacturing industries she wants to grow, with clear goals for when each tariff lifts."], ["fund", "Workers at the table", "Unions help write trade rules. “No more bad trade deals. No dumb tariffs.”"]], "In her words: “I’m not against tariffs per se. I’m just against dumb tariffs.”", [S_MI.cod, S_MI.ad]),
+    vs("Now they agree on Canada. Here’s the difference.", "What should tariffs do for Michigan?", ["Build Michigan industry", "Tariffs tied to a plan for jobs here, with goals for when they end.", "Unions at the table."], ["Keep the ones he says help", "End the Canada fight; keep other tariffs he credits with bringing jobs back.", "Work with the President to make deals."], "Congress holds the tariff power but has handed much of it to the President. A senator votes on taking it back and on trade deals.", [S_MI.cod]),
+    fork("Which senator Michigan sends to Washington", "A senator pushing tariffs tied to a plan for Michigan jobs, with unions at the table.", "A senator who works with the President on the tariffs he says help.", "Open seat: the current senator is retiring.", []),
     anchorCard()
   ];
-  L[1].story = TX_STORY; L[2].story = OH_STORY; L[3].story = ME_STORY; L[4].story = MI_STORY;
+  L[0].story = GA_STORY; L[1].story = TX_STORY; L[2].story = OH_STORY; L[3].story = ME_STORY; L[4].story = MI_STORY;
 
-  function renderStory() {
-    var x = X(), cards = x.story, c = cards[S.card];
-    var bars = '<div class="st-seg">' + cards.map(function (_, k) { return '<i class="' + (k < S.card ? "full" : k === S.card ? "cur" : "") + '"></i>'; }).join("") + '</div>';
-    var top = '<div class="st-top"><img src="' + MAYA_PHOTO + '" alt=""><b>Maya Kaur</b><span>' + esc(x.issue) + '</span><button class="st-x" type="button" id="home" aria-label="Close lesson">✕</button></div>';
-    $("body").innerHTML = '<div class="story' + (c.dark ? " dark" : "") + '" id="story" style="background:' + c.bg + '">' + bars + top + '<div class="st-body">' + c.html() + '</div><button class="st-next" type="button" id="stnext">' + esc(c.next) + ' <span aria-hidden="true">→</span></button><p class="st-hint">Tap the left side to go back</p></div>';
-    $("foot").innerHTML = "";
-    var reduce = false; try { reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
-    var st = $("story");
-    requestAnimationFrame(function () { requestAnimationFrame(function () { if (st) st.classList.add("go"); }); });
-    Array.prototype.forEach.call(st.querySelectorAll("[data-count]"), function (el) {
-      var to = +el.dataset.count; if (reduce) return;
-      var t0 = null; el.textContent = "0";
-      function step(t) { if (!t0) t0 = t; var p = Math.min(1, (t - t0) / 1100), e = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * e).toLocaleString("en-US"); if (p < 1 && document.body.contains(el)) requestAnimationFrame(step); }
-      requestAnimationFrame(step);
-    });
-  }
-  function storyStep(d) {
-    try { speechSynthesis.cancel(); } catch (e) {}
-    var n = S.card + d, len = X().story.length;
-    if (n < 0) { home(); return; }
-    if (n >= len) { go(TEST_START); return; }
-    S.card = n; render(); $("body").scrollTop = 0;
-  }
-  L[0].story = GA_STORY;
+  /* ---------- three questions per lesson, listed up front ---------- */
+  L[0].anchor = '<span class="k">Maya</span> wants to <em>end Georgia Pathways</em>, which reached about 20,000 people, and <em>expand Medicaid</em> so any adult earning up to about $22,000 can get covered. <span class="j">Her Republican opponent</span> wants <em>a Pathways-style plan</em> with work rules and hasn’t said how many it would cover.';
+  L[1].anchor = '<span class="k">Maya</span>, a former public school teacher, <em>fought against vouchers</em> and wants <em>public money in public schools</em>. <span class="j">Her Republican opponent</span> <em>backs vouchers</em> and wants to <em>eliminate the US Department of Education</em>.';
+  L[2].anchor = '<span class="k">Maya</span> wants to <em>require data centers to pay the full cost of their power</em> and fight rate hikes. <span class="j">Her Republican opponent’s</span> bill asks states to consider making data centers pay, but <em>leaves it up to each state</em>.';
+  L[3].anchor = '<span class="k">Maya</span> would <em>end the war</em> driving oil prices and put <em>more money into heating aid</em>. <span class="j">Her Republican opponent</span> pushed for <em>early heating aid and a small release</em> from the oil reserve.';
+  L[4].anchor = '<span class="k">Maya</span> wants <em>smart, targeted tariffs</em> tied to a plan for Michigan jobs, with <em>unions at the table</em>. <span class="j">Her Republican opponent</span> backed the tariffs, now wants <em>the Canada fight ended</em> and keeps the ones he says helped.';
+  var GAP = /(gap|uninsured|no (health )?(insurance|coverage)|without (health )?(insurance|coverage)|can'?t afford|200,?000|two hundred thousand|left out|working (adults|people))/;
+  L[0].tests = [
+    { label: "The issue and Maya’s plan", q: "What’s the issue, and what does Maya want to do?", model: "About 200,000 or more poor Georgia adults have no insurance. Maya wants to end Georgia Pathways, which reached about 20,000 people, and expand Medicaid like 40 other states.", ideas: [["Uninsured working adults left out", GAP], ["Expand Medicaid", /expan/], ["End Georgia Pathways", "ENDPW"]], need: 2, must: [1] },
+    { label: "How her opponent differs", q: "How is her Republican opponent’s plan different?", model: "He wants a Pathways-style plan with work requirements, which he calls intelligent Medicaid expansion, and he hasn’t said how many people it would cover.", ideas: [["A Pathways-style plan", /pathways/], ["With work requirements", /work/], ["Covers fewer, or no number given", /(fewer|less|smaller|not (say|said)|hasn'?t said|how many|intelligent|not full|stops short|limited)/]], need: 2 },
+    { label: "Catch the mistake", q: "A volunteer tells a voter, “Maya’s opponent is against Medicaid.” What’s wrong with that?", model: "He says he’ll expand coverage too, with what he calls intelligent Medicaid expansion. His version is a Pathways-style plan with work rules that covers fewer people.", ideas: [["He says he’ll expand coverage too", /(intelligent|says he|claims|promis|plans? to|wants to|not against|also|too)[^.]{0,40}(expan|close|cover)|(expan|close the gap)[^.]{0,20}too/], ["His version: Pathways-style, with work rules", /(pathways|work)/]], need: 1, must: [0] }
+  ];
+  L[1].tests = [
+    { label: "The issue and Maya’s stand", q: "What’s the issue, and where does Maya stand?", model: "Texas now uses tax money to pay for private school through vouchers. Maya, a former public school teacher, fought against them and wants public money in public schools.", ideas: [["Vouchers: tax money for private school", /(voucher|private school)/], ["Maya fought against vouchers", /(against|oppos|fought|fight|stop|scam|voted no|vote against)[^.]{0,40}voucher|voucher[^.]{0,30}(scam|bad)/], ["Public money in public schools", /public (money|dollar|school)/]], need: 2, must: [1] },
+    { label: "How her opponent differs", q: "Where does her Republican opponent stand?", model: "He backs vouchers, vowed to defend the Texas law, and wants to eliminate the US Department of Education.", ideas: [["Backs vouchers", /(back|support|for|defend|like|want|pro)[^.]{0,30}voucher|voucher[^.]{0,40}(support|defend|back)/], ["Vowed to defend the law", /defend/], ["Wants to eliminate the Department of Education", /(department|dept|education)/]], need: 2 },
+    { label: "Catch the mistake", q: "A volunteer says, “If Maya wins, your family’s voucher goes away.” What’s wrong?", model: "Vouchers are a Texas state law, and a US senator can’t cancel them. The Senate fight is about vouchers going nationwide.", ideas: [["It’s a Texas state law", /(state|texas law|legislature|abbott|state program)/], ["A senator can’t cancel it", /(senat|federal|can'?t|cannot|not able|no power|won'?t)/]], need: 2 }
+  ];
+  L[2].tests = [
+    { label: "The issue and Maya’s plan", q: "What’s the issue, and what does Maya want to do?", model: "Ohio electric bills are up by more than half since 2019, and the grid’s watchdog blames data centers. Maya wants to require data centers to pay the full cost of their power and fight to cap rate hikes.", ideas: [["Bills up, driven by data centers", /(bill|rate|electric|power|utilit)[^.]{0,80}data cent|data cent[^.]{0,80}(bill|rate|electric|power)/], ["Make data centers pay their full costs", /data cent[^.]{0,60}(pay|cost)|(pay|cost)[^.]{0,60}data cent/], ["Fight to cap rate hikes", /(cap|limit|stop)[^.]{0,30}(rate|bill|increase|hike|rise)/]], need: 2, must: [1] },
+    { label: "How her opponent differs", q: "How is her Republican opponent’s plan different?", model: "His bill asks states to consider making data centers pay, but each state decides. He says if you create the cost, you should pay it.", ideas: [["His bill leaves it to each state", /(state|optional|voluntar|up to|consider|decide)/], ["“If you create the cost, you pay it”", /(create|pay)[^.]{0,30}cost|should pay/], ["No cap on rates", /(no cap|doesn'?t cap|not cap|without (a )?cap)/]], need: 1, must: [0] },
+    { label: "Catch the mistake", q: "A volunteer says, “Maya’s opponent was charged in the HB6 scandal, and that’s why your bill went up.” What’s wrong?", model: "He was never charged. And HB6’s charges were repealed or ended, so it isn’t why bills are up now; data center demand is the main reason.", ideas: [["He was never charged", /(never|not|wasn'?t|was not)[^.]{0,20}charg/], ["HB6 isn’t why bills are up now", /(repeal|not the main|isn'?t the (main|reason)|other reason|data cent|ended|not why|no longer)/]], need: 2 }
+  ];
+  L[3].tests = [
+    { label: "The issue and Maya’s plan", q: "What’s the issue, and what would Maya do?", model: "Half of Maine heats with oil, and it’s up about 80% this year. Maya would end the war driving prices and put more money into heating aid.", ideas: [["Heating oil prices are way up", /(heat|oil|fuel)/], ["End the war in Iran", /(war|iran)/], ["More money for heating aid", /(lie ?heap|liheap|heap|heating (aid|assistance|help)|assistance|aid)/]], need: 2, must: [1] },
+    { label: "How her opponent differs", q: "What has her Republican opponent done?", model: "She pushed for early heating aid and a small release from the oil reserve, and voted five times against ending the war before voting to end it since late April.", ideas: [["Pushed for early aid or the oil reserve", /(reserve|release|barrel|supply|early)/], ["Backs heating aid", /(aid|liheap|heap|assistance|money)/], ["Voted against ending the war, then to end it", /(voted|vote)[^.]{0,40}(war|end)|five|5 times|april/]], need: 2 },
+    { label: "Catch the mistake", q: "A volunteer says, “Maya’s opponent never voted to end the war.” What’s wrong?", model: "She has voted to end it since late April, after voting five times against ending it.", ideas: [["She has voted to end it since April", /(has|did|since|april|nine|9|voted)[^.]{0,40}(end|war)|(end|stop)[^.]{0,20}war/], ["After five votes against", /(five|5|before|first|earlier|against)/]], need: 1, must: [0] }
+  ];
+  L[4].tests = [
+    { label: "The issue and Maya’s plan", q: "What’s the issue, and what does Maya want?", model: "Tariffs on Canada are hitting Michigan’s auto industry. Maya is against dumb tariffs, not all tariffs: she wants targeted ones tied to a plan for Michigan jobs, with unions at the table.", ideas: [["Tariffs hitting Michigan autos", /tariff/], ["Smart, targeted, not all tariffs", /(dumb|smart|target|not against|not all|some|right kind)/], ["A plan for Michigan jobs, unions at the table", /(union|plan|protect|manufactur|job)/]], need: 2, must: [1] },
+    { label: "How her opponent differs", q: "How has her Republican opponent handled tariffs?", model: "He called tariffs necessary until October, then said Canada isn’t our enemy and wants that fight ended, while keeping tariffs he says helped.", ideas: [["Now wants the Canada fight ended", /(end|stop|over)[^.]{0,40}(canad|tariff|war|fight)|canad[^.]{0,30}(not|enemy)/], ["Backed the tariffs before", /(backed|supported|support|necessary|until|before|used to|october|september|flip)/], ["Keeps tariffs he says help", /(help|work|some tariff|keep)/]], need: 2 },
+    { label: "Catch the mistake", q: "A volunteer says, “Maya is against all tariffs.” What’s wrong?", model: "She’s against dumb tariffs, not all of them. She backs targeted tariffs that protect Michigan manufacturing.", ideas: [["Against dumb tariffs, not all", /(dumb|not all|some|smart|target|not against)/], ["Backs tariffs that protect Michigan jobs", /(protect|target|smart|job|manufactur)/]], need: 1, must: [0] }
+  ];
+  L[0].key = "Maya holds Bottoms's positions: end Georgia Pathways (about 20,000 enrolled against a first-year goal of 100,000; GAO found more spent on administration than care) and expand Medicaid to adults up to 138% of poverty, about $22,000 for one person; separate Rural Care First plan for rural hospitals; needs the legislature, day one she readies agencies. Federal law since 2025 adds work rules to expansion (80 hours, exemptions such as parents of kids 13 and under). About 200,000 or more poor Georgia adults are uninsured. The opponent (Rick Jackson) promises 'intelligent Medicaid expansion': a Pathways-style waiver with work requirements; no income limit or coverage number published. Anything else: offer the campaign follow-up.";
+  L[1].key = "Maya holds Talarico's positions: a former public school teacher, voted no on SB 2 and offered a referendum amendment (tabled 86 to 62); calls vouchers scams that defund public schools; would fight vouchers going nationwide, protect the US Department of Education and special education oversight, hire teachers, raise pay, universal pre-K. Texas vouchers: $10,474 a year for most students; about 110,000 funded this fall; 7 in 10 awardees were already in private school or homeschool; cost projected to reach about $4.8 billion by 2030. The opponent (Paxton) vowed to vigorously defend the law and supports eliminating the US Department of Education. A senator can't cancel the Texas program. Anything else: offer the campaign follow-up.";
+  L[2].key = "Maya holds Brown's positions: require data centers to pay the full cost of their own electricity, fight to cap rate hikes (no details), end data center tax breaks, let towns decide siting; no ban. Ohio bills averaged $89 a month in 2019 and $145 in January 2026; up 13.5% in a year; PJM's market monitor says data centers are the primary reason capacity costs jumped. HB6 was a bribery scandal; its charges ended, so it isn't why bills are up; the opponent backed HB6 but was never charged. The opponent (Husted) says if you create the cost you should pay the cost; his Ratepayer Protection Act asks states to consider rules, none must adopt; passed the House 417 to 3, stalled in the Senate. Anything else: offer the campaign follow-up.";
+  L[3].key = "Maya holds Troy Jackson's positions: end the war in Iran and put more money into LIHEAP heating aid; in 2023 helped pass $450 checks to about 876,000 Mainers and $40 million for HEAP; no new dollar figure. About half of Maine homes heat with oil; $6.05 a gallon Oct 26, up about 80%; a 275-gallon fill about $1,660. HEAP: up to $38,070 single, $73,213 family of four, average benefit about $510; homeowners and renters; apply through May 29. The opponent (Collins) pushed for early aid ($36.7 million) and the reserve release (up to 315,000 barrels, two or three days of Northeast supply); voted five times against ending the war, then to end it since April 30. Anything else: offer the campaign follow-up.";
+  L[4].key = "Maya holds El-Sayed's positions: not against tariffs per se, against dumb tariffs; wants targeted tariffs tied to an industrial plan with benchmarks for when they lift; unions at the table; opposes the Canada tariff fight. Tariffs are paid by US importers; most cost passes to US businesses and shoppers. Since Aug 22 a 50% tariff covers about $20 billion of Canadian goods (not cars; car parts face 25%, steel and aluminum 50%). Michigan auto parts jobs are down 4,000 in a year. The UAW endorsed Maya and backs targeted tariffs but rejects escalation on Canada. The opponent (Rogers) called tariffs necessary in September, said Oct 7 Canada is not our enemy and the tariff war should end, and says some tariffs helped. Don't cite $5,600 per household. Anything else: offer the campaign follow-up.";
+  L[0].sources = [S_.kffGA, S_.kffAdults, S_.hhs, S_.paFlier, S_.ccf, S_.kffStatus, S_.kemp, S_.cbeat23, S_.dch, S_.gao, S_.care, S_.jackson, S_.ajcJ, S_.cms];
+  L[1].sources = Object.keys(S_TX).map(function (k) { return S_TX[k]; });
+  L[2].sources = Object.keys(S_OH).map(function (k) { return S_OH[k]; });
+  L[3].sources = Object.keys(S_ME).map(function (k) { return S_ME[k]; });
+  L[4].sources = Object.keys(S_MI).map(function (k) { return S_MI[k]; });
+  L[4].wrong = /(against all tariffs|hates tariffs|no tariffs|(rogers|opponent|republican) wants to keep the canada|5,?600|liar|lying)/;
+
 
   var ICONS = [
     ['<svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.2 0 3.6 1.3 5.3 3.3 1.7-2 3.1-3.3 5.3-3.3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="#fff"/><path d="M12 9.3v6M9 12.3h6" stroke="var(--c)" stroke-width="2.2" stroke-linecap="round"/></svg>', "#e2557a"],
@@ -887,141 +1072,136 @@
   window.__warmupLines = function () { var out = []; L.forEach(function (x) { x.voters.forEach(function (v) { ["open", "follow", "bye"].forEach(function (f) { out.push({ t: cleanSay(v[f]), v: KV[v.name] || "af_heart" }); }); }); }); return out; };
 
   /* ---------- state ---------- */
-  var S = { card: 0, lesson: null, i: 0, t: {}, voter: null, door: null, sources: false, done: {} };
+  var S = { lesson: null, ph: 0, idx: 0, t: {}, voter: null, door: null, done: {}, doorN: 0 };
   var ALL = /[?&#]all\b/.test(location.search + location.hash);
   var LOCK = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
-  var LEARN_END = 6, TEST_START = 7, TEST_END = 11, SUMMARY = 12, PICK = 13, DOOR = 14, DONE = 15;
-  var rec = null, recTimers = [];
+  var PHASES = ["Learn", "Say it back", "Practice"];
+  var rec = null, recTimers = [], recSession = null;
   function X() { return L[S.lesson]; }
   function foot(h) { $("foot").innerHTML = h; }
-  function stopAll() { try { if (rec) rec.abort(); } catch (e) {} rec = null; recTimers.forEach(clearTimeout); recTimers = []; try { speechSynthesis.cancel(); } catch (e) {} try { if (curAudio) { curAudio.pause(); curAudio = null; } } catch (e) {} }
-  function go(n) { stopAll(); S.i = n; S.sources = false; if (n <= LEARN_END) S.card = n === 0 ? 0 : 1; render(); $("body").scrollTop = 0; }
+  function stopAll() { if (recSession) recSession.cancel(); recSession = null; try { if (rec) rec.abort(); } catch (e) {} rec = null; recTimers.forEach(clearTimeout); recTimers = []; try { speechSynthesis.cancel(); } catch (e) {} try { if (curAudio) { curAudio.pause(); curAudio = null; } } catch (e) {} }
+  function phaseLen(ph) { var x = X(); return ph === 0 ? x.story.length : ph === 1 ? x.tests.length + 1 : 2; }
+  function goStep(ph, idx) { stopAll(); S.ph = ph; S.idx = idx; render(); $("body").scrollTop = 0; }
   function home() { stopAll(); S.lesson = null; render(); $("body").scrollTop = 0; }
-  var NEXT = function (n, label) { return '<button class="btn" type="button" data-go="' + n + '">' + (label || "Next") + '</button>'; };
-  function reveal(x) { return '<div class="reveal"><span class="kick">Where this lesson came from</span><p>Maya stood in for <b>' + esc(x.from) + '</b>, the Democrat in the 2026 ' + esc(x.race) + ' race. Her Republican opponent is <b>' + esc(x.opp) + '</b>.</p><p class="muted">The positions, quotes and facts are theirs, drawn from public sources. We showed them as Maya Kaur’s campaign so you can see how a campaign’s own lesson would look in Warmup.</p><button class="srcbtn" type="button" id="srcs">See the sources</button></div>'; }
+  function step(d) {
+    var n = S.idx + d;
+    if (n < 0) { if (S.ph === 0) { home(); return; } goStep(S.ph - 1, phaseLen(S.ph - 1) - 1); return; }
+    if (n >= phaseLen(S.ph)) { if (S.ph === 1) { startDoor(); return; } if (S.ph < 2) { goStep(S.ph + 1, 0); return; } home(); return; }
+    goStep(S.ph, n);
+  }
+  function reveal(x) { return '<div class="reveal"><span class="kick">Where this lesson came from</span><p>Maya stood in for <b>' + esc(x.from) + '</b>, the Democrat in the 2026 ' + esc(x.race) + ' race. Her Republican opponent is <b>' + esc(x.opp) + '</b>.</p><p class="muted">The positions, quotes and facts are theirs, drawn from public sources. We showed them as Maya Kaur’s campaign so you can see how a campaign’s own lesson would look in Warmup.</p><button class="srcbtn" type="button" id="srcs">See all sources</button></div>'; }
+  function srcLine(src) { if (!src || !src.length) return ""; return '<p class="st-src">Source' + (src.length > 1 ? "s" : "") + ': ' + src.map(function (s) { return '<a href="' + esc(s[1]) + '" target="_blank" rel="noopener">' + esc(s[0]) + ' ↗</a>'; }).join(" · ") + '</p>'; }
 
-  function setProg() {
-    var on = S.lesson != null; $("prog").hidden = !on; $("back").hidden = !on;
-    if (!on) return;
-    var i = S.i, lab = X().title, num = "";
-    var l = Math.min(Math.max(i, 0), LEARN_END), t = Math.min(Math.max(i - LEARN_END, 0), 5), p = i >= DONE ? 1 : (i === DOOR ? .5 : (i >= PICK ? .15 : 0));
-    if (i >= 1 && i <= LEARN_END) num = "Learn " + i + " of 6"; else if (i >= TEST_START && i <= TEST_END) num = "Say it " + (i - LEARN_END) + " of 5"; else if (i >= PICK && i <= DOOR) num = "Practice";
-    $("plab").textContent = lab; $("pnum").textContent = num;
-    $("b1").style.width = (l / 6 * 100) + "%"; $("b2").style.width = (t / 5 * 100) + "%"; $("b3").style.width = (p * 100) + "%";
+  /* the lesson shell: one header for every screen in a lesson (phase strip with its own segments, tappable like Instagram) */
+  function shell(o) {
+    var x = X(), strip = '<div class="ph-strip">' + PHASES.map(function (name, p) {
+      var n = phaseLen(p), segs = "";
+      for (var k = 0; k < n; k++) segs += '<button type="button" class="sg' + (p < S.ph || (p === S.ph && k < S.idx) ? " full" : p === S.ph && k === S.idx ? " cur" : "") + '" data-seg="' + p + ',' + k + '" aria-label="' + name + ', step ' + (k + 1) + '"></button>';
+      return '<div class="ph' + (p === S.ph ? " on" : p < S.ph ? " past" : "") + '" style="flex:' + (p === 0 ? 1.5 : 1) + '"><button type="button" class="ph-l" data-seg="' + p + ',0"><i>' + (p < S.ph ? "✓" : p + 1) + '</i>' + name + '</button><div class="ph-sg">' + segs + '</div></div>';
+    }).join("") + '</div>';
+    var top = '<div class="st-top"><img src="' + MAYA_PHOTO + '" alt=""><b>Maya Kaur</b><span>' + esc(x.issue) + '</span><button class="st-x" type="button" id="home" aria-label="Close lesson">✕</button></div>';
+    $("body").innerHTML = '<div class="story' + (o.dark ? " dark" : "") + (o.cls ? " " + o.cls : "") + (o.tap ? " tap" : "") + '" id="story" style="background:' + o.bg + '">' + top + strip + '<div class="st-body">' + o.body + '</div>' + (o.btns || "") + '</div>';
+    foot("");
+    var st = $("story"), reduce = false; try { reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+    requestAnimationFrame(function () { requestAnimationFrame(function () { if (st) st.classList.add("go"); }); });
+    Array.prototype.forEach.call(st.querySelectorAll("[data-count]"), function (el) {
+      var to = +el.dataset.count; if (reduce) return;
+      var t0 = null; el.textContent = "0";
+      function tick(t) { if (!t0) t0 = t; var p = Math.min(1, (t - t0) / 1100), e = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * e).toLocaleString("en-US"); if (p < 1 && document.body.contains(el)) requestAnimationFrame(tick); }
+      requestAnimationFrame(tick);
+    });
+  }
+  var NEXTB = function (label, id) { return '<button class="st-next" type="button" id="' + (id || "stnext") + '">' + esc(label) + ' <span aria-hidden="true">→</span></button>'; };
+
+  function renderLearn() {
+    var c = X().story[S.idx];
+    shell({ bg: c.bg, dark: c.dark, tap: true, body: c.html() + srcLine(c.src), btns: NEXTB(c.next) });
+  }
+
+  /* ---------- home ---------- */
+  function renderHome() {
+    var b = $("body"), ndone = L.filter(function (_, k) { return S.done[k]; }).length, bobbed = false;
+    var XS = [30, 68, 32, 66, 38], ROW = 108, Y0 = 84, H = ROW * (L.length - 1) + Y0 + 96, path = "";
+    L.forEach(function (_, k) { var y = Y0 + k * ROW; if (k === 0) path += "M" + XS[0] + " " + y; else { var py = Y0 + (k - 1) * ROW; path += " C" + XS[k - 1] + " " + (py + 54) + " " + XS[k] + " " + (y - 54) + " " + XS[k] + " " + y; } });
+    var nodes = L.map(function (x, k) {
+      var open = ALL || k === 0 || S.done[k - 1], done = S.done[k], cur = open && !done, left = XS[k] < 50, bob = cur && !bobbed;
+      if (bob) bobbed = true;
+      var sub = done ? "Done · tap to redo" : open ? "5 minutes" : (k === 1 ? "Opens after your first lesson" : "Opens after lesson " + k);
+      return '<div class="nd' + (done ? " done" : cur ? " cur" : open ? "" : " locked") + (bob ? " bob" : "") + (left ? " l" : " r") + '" style="left:' + XS[k] + '%;top:' + (Y0 + k * ROW) + 'px;--c:' + ICONS[k][1] + '">' +
+        (cur ? '<span class="nd-go">' + (k === 0 && !ndone ? "Start here" : "Up next") + '</span>' : "") +
+        '<button type="button" class="nd-b"' + (open ? ' data-lesson="' + k + '"' : ' disabled aria-disabled="true"') + ' aria-label="' + esc(x.title) + '">' + ICONS[k][0] + (done ? '<i class="nd-badge ok">✓</i>' : !open ? '<i class="nd-badge">' + LOCK + '</i>' : "") + '</button>' +
+        '<div class="nd-t"><b>' + esc(x.title) + '</b><span>' + sub + '</span></div></div>';
+    }).join("");
+    b.innerHTML = '<div class="hm"><div class="hm-hero"><div class="hm-top"><span class="camp-mark lite"><b>Maya Kaur</b></span><span class="hm-count"><svg viewBox="0 0 36 36" width="22" height="22"><circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="5"/><circle cx="18" cy="18" r="14" fill="none" stroke="#7ee0a8" stroke-width="5" stroke-linecap="round" stroke-dasharray="' + (88 * ndone / 5).toFixed(1) + ' 88" transform="rotate(-90 18 18)"/></svg>' + ndone + ' of 5 done</span></div>' +
+      '<div class="hm-hi"><div class="st-photo sm"><img src="' + MAYA_PHOTO + '" alt="Maya Kaur"></div><div><h2>Hi, I’m Maya.</h2><p>Thanks for knocking doors with us. These are the 5 issues voters raise most at the door. Learn each one in 5 minutes.</p></div></div>' +
+      '<i class="hm-blob a"></i><i class="hm-blob b"></i></div>' +
+      '<div class="hm-sec"><span class="kick">What voters ask about most</span></div>' +
+      '<div class="hm-path" style="height:' + H + 'px"><svg class="hm-line" viewBox="0 0 100 ' + H + '" preserveAspectRatio="none" aria-hidden="true"><path d="' + path + '" fill="none" stroke="#d9cfbf" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12" vector-effect="non-scaling-stroke"/></svg>' + nodes + '</div>' +
+      '<p class="pw-line hm-pw"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="#e6dfd3" stroke-width="10"/><path d="M24 5 A19 19 0 1 1 5 24" fill="none" stroke="#35b57c" stroke-width="10"/></svg>Powered by Warmup</p></div>';
+    foot("");
   }
 
   function render() {
-    setProg();
-    var b = $("body");
-    var storyOn = S.lesson != null && !!X().story && S.i <= LEARN_END && !S.sources;
-    var sayOn = S.lesson != null && S.i >= TEST_START && S.i <= SUMMARY && !S.sources;
-    $("phone").classList.toggle("story-on", storyOn || sayOn);
+    $("prog").hidden = true; $("back").hidden = true;
     $("phone").classList.toggle("home-on", S.lesson == null);
-    if (storyOn) { renderStory(); return; }
-    if (S.lesson == null) {
-      var ndone = L.filter(function (_, k) { return S.done[k]; }).length;
-      var XS = [30, 68, 32, 66, 38], ROW = 108, Y0 = 84, H = ROW * (L.length - 1) + Y0 + 72, path = "";
-      L.forEach(function (_, k) { var y = Y0 + k * ROW; if (k === 0) path += "M" + XS[0] + " " + y; else { var py = Y0 + (k - 1) * ROW; path += " C" + XS[k - 1] + " " + (py + 54) + " " + XS[k] + " " + (y - 54) + " " + XS[k] + " " + y; } });
-      var nodes = L.map(function (x, k) {
-        var open = ALL || k === 0 || S.done[k - 1], done = S.done[k], cur = open && !done, left = XS[k] < 50;
-        var sub = done ? "Done · tap to redo" : open ? "5 minutes" : (k === 1 ? "Opens after your first lesson" : "Opens after lesson " + k);
-        return '<div class="nd' + (done ? " done" : cur ? " cur" : open ? "" : " locked") + (left ? " l" : " r") + '" style="left:' + XS[k] + '%;top:' + (Y0 + k * ROW) + 'px;--c:' + ICONS[k][1] + '">' +
-          (cur ? '<span class="nd-go">' + (k === 0 && !ndone ? "Start here" : "Up next") + '</span>' : "") +
-          '<button type="button" class="nd-b"' + (open ? ' data-lesson="' + k + '"' : ' disabled aria-disabled="true"') + ' aria-label="' + esc(x.title) + '">' + ICONS[k][0] + (done ? '<i class="nd-badge ok">✓</i>' : !open ? '<i class="nd-badge">' + LOCK + '</i>' : "") + '</button>' +
-          '<div class="nd-t"><b>' + esc(x.title) + '</b><span>' + sub + '</span></div></div>';
-      }).join("");
-      b.innerHTML = '<div class="hm"><div class="hm-hero"><div class="hm-top"><span class="camp-mark lite"><b>Maya Kaur</b></span><span class="hm-count"><svg viewBox="0 0 36 36" width="22" height="22"><circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="5"/><circle cx="18" cy="18" r="14" fill="none" stroke="#7ee0a8" stroke-width="5" stroke-linecap="round" stroke-dasharray="' + (88 * ndone / 5).toFixed(1) + ' 88" transform="rotate(-90 18 18)"/></svg>' + ndone + ' of 5 done</span></div>' +
-        '<div class="hm-hi"><div class="st-photo sm"><img src="' + MAYA_PHOTO + '" alt="Maya Kaur"></div><div><h2>Hi, I’m Maya.</h2><p>Thanks for knocking doors with us. Five quick lessons, and you’ll know exactly what’s at stake.</p></div></div>' +
-        '<i class="hm-blob a"></i><i class="hm-blob b"></i></div>' +
-        '<div class="hm-sec"><span class="kick">Your path · about 5 minutes each</span></div>' +
-        '<div class="hm-path" style="height:' + H + 'px"><svg class="hm-line" viewBox="0 0 100 ' + H + '" preserveAspectRatio="none" aria-hidden="true"><path d="' + path + '" fill="none" stroke="#d9cfbf" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12" vector-effect="non-scaling-stroke"/></svg>' + nodes + '</div>' +
-        '<p class="pw-line hm-pw"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="#e6dfd3" stroke-width="10"/><path d="M24 5 A19 19 0 1 1 5 24" fill="none" stroke="#35b57c" stroke-width="10"/></svg>Powered by Warmup</p></div>';
-      foot("");
-      return;
-    }
-    var x = X(), i = S.i;
-    if (S.sources) {
-      b.innerHTML = '<span class="kick">Sources for this lesson</span><ul class="srclist">' + x.sources.map(function (s) { return '<li><a href="' + esc(s[1]) + '" target="_blank" rel="noopener">' + esc(s[0]) + '</a></li>'; }).join("") + '</ul><p class="note">Every claim in the lesson ties to one of these. The full review sheet is in the campaign demos folder.</p>';
-      foot('<button class="btn" type="button" id="srcback">Back to the lesson</button>'); return;
-    }
-    if (i === 0) {
-      var steps = [["1", "Learn", "The issue, where Maya stands and how her opponent differs. About 2 minutes."], ["2", "Say it back", "Five questions, out loud, in your own words. About 2 minutes."], ["3", "Practice a door", "A voter talks back, and you get coached."]];
-      b.innerHTML = '<span class="kick">Lesson ' + (S.lesson + 1) + ' · about 5 minutes</span><h2 class="h sm">' + esc(x.title) + '</h2>' +
-        '<div class="msg"><img src="' + MAYA_PHOTO + '" alt="" width="46" height="46"><div><small>From Maya</small>' + esc(x.issue) + ' is one of the biggest issues in this election. My Republican opponent and I see it very differently, and I need voters to understand where I stand.</div></div>' +
-        '<div class="road"><span class="kick">How this lesson works</span>' + steps.map(function (st) { return '<div class="step"><i>' + st[0] + '</i><div><b>' + st[1] + '</b><span>' + st[2] + '</span></div></div>'; }).join("") + '</div>' +
-        '<p class="goal">By the end, you can explain where Maya stands, and how her opponent differs, at any door in under 30 seconds.</p>';
-      foot(NEXT(1, "Start")); return;
-    }
-    if (i >= 1 && i <= LEARN_END) {
-      var sc = x.screens[i - 1];
-      b.innerHTML = '<span class="kick">' + i + ' · ' + esc(sc[0]) + '</span>' + sc[1];
-      foot(NEXT(i + 1, i === LEARN_END ? "Say it back" : "Next")); return;
-    }
-    if (i >= TEST_START && i <= TEST_END) { renderTest(i - TEST_START); return; }
-    if (i === SUMMARY) { renderSummary(); return; }
-    if (i === PICK) {
-      b.innerHTML = '<span class="kick">Practice a door</span><h2 class="h sm">Pick a voter. They talk, you talk back.</h2><div class="voters">' + x.voters.map(function (v, k) { return '<button type="button" class="voter" data-voter="' + k + '">' + face(v, "happy") + '<b>' + v.name + '</b><span>' + esc(v.meta) + '</span></button>'; }).join("") + '</div>';
-      foot('<button class="btn ghost" type="button" id="home">Back to lessons</button>'); return;
-    }
-    if (i === DOOR) { renderDoor(); return; }
-    b.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;padding-top:8px"><svg viewBox="0 0 48 48" width="96" height="96" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="#35b57c" stroke-width="6"/><path d="M16 24.5 L21.5 30 L32 19" fill="none" stroke="#1b7a4d" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><h2 class="h">Lesson done.</h2></div>' + reveal(x);
-    foot('<button class="btn" type="button" id="home">Back to lessons</button><button class="btn ghost" type="button" id="startdoor">Knock on another door</button>');
+    $("phone").classList.toggle("story-on", S.lesson != null);
+    if (S.lesson == null) { renderHome(); return; }
+    if (S.sources) { renderSources(); return; }
+    if (S.ph === 0) { renderLearn(); return; }
+    if (S.ph === 1) { if (S.idx < X().tests.length) renderTest(S.idx); else renderSummary(); return; }
+    if (S.idx === 0) { renderDoor(); return; }
+    renderDone();
+  }
+  function renderSources() {
+    var x = X();
+    shell({ bg: "#FBF6EE", body: '<span class="st-kick">Sources for this lesson</span><ul class="srclist">' + x.sources.map(function (s) { return '<li><a href="' + esc(s[1]) + '" target="_blank" rel="noopener">' + esc(s[0]) + '</a></li>'; }).join("") + '</ul>', btns: NEXTB("Back to the lesson", "srcback") });
+  }
+  function renderDone() {
+    var x = X();
+    S.done[S.lesson] = true;
+    shell({ bg: "linear-gradient(165deg,#24569f 0%,#1F4C91 55%,#163a72 100%)", dark: true, cls: "donec", body: '<div class="dn-top"><svg viewBox="0 0 48 48" width="74" height="74" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="#7ee0a8"/><path d="M15.5 24.5 L21.5 30.5 L33 18.5" fill="none" stroke="#163a72" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg><h2 class="st-h lg">Lesson done.</h2><p class="st-p dim">You can explain where Maya stands on ' + esc(x.issue.toLowerCase()) + ', and how her opponent differs, at any door.</p></div>' + reveal(x),
+      btns: NEXTB("Back to all lessons", "home") + '<button class="sy-retry" type="button" id="startdoor">Knock on another door</button>' });
   }
 
-  /* ---------- spoken test ---------- */
+  /* ---------- say it back ---------- */
   function micSvg() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>'; }
-  function sayShell(cls, segIdx, label, inner, btns) {
-    var x = X(), seg = '<div class="st-seg">' + [0, 1, 2, 3, 4].map(function (k) { return '<i class="' + (k < segIdx ? "full" : k === segIdx ? "cur" : "") + '"></i>'; }).join("") + '</div>';
-    var top = '<div class="st-top"><img src="' + MAYA_PHOTO + '" alt=""><b>' + label + '</b><span>' + esc(x.issue) + '</span><button class="st-x" type="button" id="home" aria-label="Close lesson">✕</button></div>';
-    $("body").innerHTML = '<div class="story sayc dark ' + cls + '" id="say">' + seg + top + '<div class="st-body"><div class="st-in">' + inner + '</div></div>' + btns + '</div>';
-    foot("");
+  function qList(k) {
+    return '<ol class="qlist">' + X().tests.map(function (T, j) { var r = S.t[j] || {}; return '<li class="' + (j === k ? "on" : r.state === "graded" ? (r.pass ? "ok" : "tried") : "") + '"><i>' + (r.state === "graded" && j !== k ? (r.pass ? "✓" : "·") : j + 1) + '</i>' + esc(T.label) + '</li>'; }).join("") + '</ol>';
+  }
+  function micBlock(r, hint) {
+    if (CAN_LISTEN) {
+      if (r.error) return { body: '<div class="sy-alert">' + esc(r.error) + '</div>' + (r.text ? '<div class="sy-bubble"><small>So far</small><div class="sy-txt">' + esc(r.text) + '</div></div>' : ""), btns: (r.text ? NEXTB("Check my answer", "mic2") : "") + '<button class="sy-retry" type="button" id="micretry">' + (r.text ? "Keep talking" : "Try again") + '</button>' };
+      var live = r.listening || r.text;
+      return { body: '<div class="sy-micwrap' + (live ? " small" : "") + '"><button class="sy-mic' + (r.listening ? " on" : "") + '" type="button" id="mic" aria-label="' + (r.listening ? "Pause" : "Tap to talk") + '">' + micSvg() + '</button><span class="sy-miclab">' + (r.listening ? "Listening. Take your time." : r.text ? "Paused. Tap the mic to keep talking." : hint) + '</span></div>' +
+          (live ? '<div class="sy-bubble live"><small>' + (r.listening ? "Hearing" : "So far") + '</small><div class="sy-txt" id="livetext">' + esc(r.text || "") + '</div></div>' : ""),
+        btns: r.listening || r.text ? NEXTB("I’m done, check it", "mic2") : '<p class="st-hint big">Your own words are fine</p>' };
+    }
+    return { body: '<div class="sy-alert">' + (IN_CLAUDE ? "Inside claude.ai a page can’t open the microphone, so answers are spoken only at the Warmup link. Here, tap your keyboard’s mic and say it." : "This browser can’t listen. Open the link in Safari or Chrome to talk; for now, use your keyboard’s mic.") + '</div><div class="tray"><textarea id="said" rows="3" placeholder="Tap the keyboard’s mic and talk">' + esc(r.text || "") + '</textarea></div>', btns: NEXTB("Check my answer", "typed") };
   }
   function renderTest(k) {
-    var T = X().tests[k], r = S.t[k] || {}, cls = "", inner = '<span class="st-kick">Question ' + (k + 1) + ' of 5</span><h2 class="st-h q">' + esc(T.q) + '</h2>', btns = "";
+    var T = X().tests[k], r = S.t[k] || {}, body = qList(k) + '<h2 class="st-h q' + (r.state === "graded" ? " sm" : "") + '">' + esc(T.q) + '</h2>', btns = "", bg = "#FBF6EE", cls = "sayc";
     if (r.state === "graded") {
-      cls = r.pass ? "pass" : "miss";
-      inner += '<div class="sy-bubble"><small>You said</small>' + esc(r.text || "") + '</div>' +
+      bg = r.pass ? "#E2F3E8" : "#FCEED8"; cls += r.pass ? " pass" : " miss";
+      body += '<div class="sy-bubble said"><small>You said</small><div class="sy-txt">' + esc(r.text || "") + '</div></div>' +
         '<div class="sy-verdict"><i>' + (r.pass ? "✓" : "!") + '</i>' + (r.pass ? "Got it!" : "Almost. Here’s what was missing.") + '</div>' +
-        '<div class="sy-ideas">' + T.ideas.map(function (id, j) { return '<span class="' + (r.hits[j] ? "hit" : "") + '" style="animation-delay:' + (150 + j * 140) + 'ms"><b>' + (r.hits[j] ? "✓" : "·") + '</b>' + esc(id[0]) + '</span>'; }).join("") + '</div>' +
+        '<div class="sy-ideas">' + T.ideas.map(function (id, j) { return '<span class="' + (r.hits[j] ? "hit" : "") + '" style="animation-delay:' + (150 + j * 120) + 'ms"><b>' + (r.hits[j] ? "✓" : "·") + '</b>' + esc(id[0]) + '</span>'; }).join("") + '</div>' +
         '<div class="sy-model"><small>A strong answer</small>' + esc(T.model) + '</div>';
-      btns = '<button class="st-next" type="button" data-go="' + (S.i + 1) + '">' + (k === 4 ? "See how you did" : "Next question") + ' <span aria-hidden="true">→</span></button><button class="sy-retry" type="button" id="retry">Say it again</button>';
+      btns = NEXTB(k === X().tests.length - 1 ? "See how you did" : "Next question", "qnext") + '<button class="sy-retry" type="button" id="retry">Say it again</button>';
     } else if (r.state === "grading") {
-      inner += '<div class="sy-bubble"><small>You said</small>' + esc(r.text) + '</div><p class="sy-think">Checking your answer…</p>';
-    } else if (CAN_LISTEN) {
-      if (r.error) { inner += '<div class="sy-alert">' + esc(r.error) + '</div>'; btns = '<button class="st-next" type="button" id="micretry">Try again</button>'; }
-      else {
-        inner += '<div class="sy-micwrap"><button class="sy-mic' + (r.listening ? " on" : "") + '" type="button" id="mic" aria-label="' + (r.listening ? "I’m done" : "Tap to talk") + '">' + micSvg() + '</button><span class="sy-miclab">' + (r.listening ? "Listening… tap when you’re done" : "Tap and answer out loud") + '</span></div>' +
-          (r.listening || r.text ? '<div class="sy-bubble live"><small>Hearing</small><span id="livetext">' + esc(r.text || "") + '</span></div>' : "");
-        btns = r.listening ? '<button class="st-next" type="button" id="mic2">I’m done</button>' : '<p class="st-hint big">Your own words are fine</p>';
-      }
-    } else {
-      inner += '<div class="sy-alert">' + (IN_CLAUDE ? "Inside claude.ai a page can’t open the microphone, so this is spoken only at the Warmup link. Here, tap your keyboard’s mic and say it." : "This browser can’t listen. Open the link in Safari or Chrome to talk; for now, use your keyboard’s mic.") + '</div><div class="tray"><textarea id="said" rows="3" placeholder="Tap the keyboard’s mic and talk">' + esc(r.text || "") + '</textarea></div>';
-      btns = '<button class="st-next" type="button" id="typed">Check my answer</button>';
-    }
-    sayShell(cls, k, "Say it back", inner, btns);
+      body += '<div class="sy-bubble said"><small>You said</small><div class="sy-txt">' + esc(r.text) + '</div></div><p class="sy-think">Checking your answer…</p>';
+    } else { var m = micBlock(r, "Tap and answer out loud"); body += m.body; btns = m.btns; }
+    shell({ bg: bg, cls: cls, body: body, btns: btns });
   }
   function renderSummary() {
-    var x = X(), got = x.tests.map(function (t, k) { var r = S.t[k]; return !!(r && r.pass); }), n = got.filter(Boolean).length;
-    S.done[S.lesson] = true;
-    var inner = '<span class="st-kick">What you learned</span><h2 class="st-h lg">' + (n >= 4 ? "You can explain it." : n >= 2 ? "Most of it is there." : "Let’s run it again.") + '</h2>' +
+    var x = X(), got = x.tests.map(function (t, k) { var r = S.t[k]; return !!(r && r.pass); }), n = got.filter(Boolean).length, all = n === got.length;
+    var body = '<span class="st-kick">Step 2 done</span><h2 class="st-h lg">' + (all ? "You can explain it." : n ? "Most of it is there." : "Let’s run it again.") + '</h2>' +
       '<div class="sy-dots">' + got.map(function (g, k) { return '<i class="' + (g ? "on" : "") + '" style="animation-delay:' + (k * 120) + 'ms">' + (g ? "✓" : k + 1) + '</i>'; }).join("") + '</div>' +
-      '<p class="st-p dim">' + n + ' of 5 answered with the key ideas. Tomorrow’s Warmup asks two of these again, because recalling it a day later makes it stick.</p>' +
-      '<div class="st-anchor sm">' + x.anchor + '</div>';
-    var btns = '<button class="st-next" type="button" id="startdoor">Knock on a door <span aria-hidden="true">→</span></button>' + (n < 4 ? '<button class="sy-retry" type="button" data-go="1">Review the lesson</button>' : '<button class="sy-retry" type="button" id="home">Back to lessons</button>');
-    sayShell(n >= 4 ? "pass" : "", 5, "Lesson recap", inner, btns);
+      '<p class="st-p">' + n + ' of ' + got.length + ' answered with the key ideas. Tomorrow’s Warmup asks one again, because recalling it a day later makes it stick.</p>' +
+      '<div class="st-anchor sm light">' + x.anchor + '</div>';
+    shell({ bg: all ? "#E2F3E8" : "#FBF6EE", cls: "sayc", body: body, btns: NEXTB("Start step 3: Practice a door", "startdoor") + (all ? "" : '<button class="sy-retry" type="button" data-seg="0,0">Review the lesson</button>') });
   }
-  function voiceBlock(r) {
-    if (CAN_LISTEN) {
-      if (r.error) return '<div class="card-alert">' + esc(r.error) + '</div>';
-      return '<button class="mic' + (r.listening ? " on" : "") + '" type="button" id="mic" aria-label="' + (r.listening ? "I’m done" : "Tap to talk") + '">' + micSvg() + '</button><div class="miclab">' + (r.listening ? "Listening… tap when you’re done" : "Tap to talk") + '</div>' +
-        (r.listening || r.text ? '<div class="heard"><small>' + (r.listening ? "Hearing" : "You said") + '</small><span id="livetext">' + esc(r.text || "") + '</span></div>' : "");
-    }
-    return '<div class="note">' + (IN_CLAUDE ? "Inside claude.ai a page can’t open the microphone, so this is spoken only at the Warmup link. Here, tap your keyboard’s mic and say it." : "This browser can’t listen. Open the link in Safari or Chrome to talk; for now, use your keyboard’s mic.") + '</div><div class="tray"><label class="kick" for="said">Your answer</label><textarea id="said" rows="3" placeholder="Tap the keyboard’s mic and talk">' + esc(r.text || "") + '</textarea></div>';
-  }
-  function voiceFoot(r) {
-    if (CAN_LISTEN) { if (r.error) return '<button class="btn" type="button" id="micretry">Try again</button>'; return r.listening ? '<button class="btn" type="button" id="mic2">I’m done</button>' : '<p class="think" style="margin:6px 0 14px">Answer out loud. Your own words are fine.</p>'; }
-    return '<button class="btn" type="button" id="typed">Done</button>';
-  }
+
+  /* listening that survives pauses: Safari ends recognition on silence, so we restart it until the volunteer taps done */
   function fold(parts) {
     if (!parts.length) return "";
     var builds = parts.length > 1 && parts.every(function (p, i) { return i === 0 || p.toLowerCase().indexOf(parts[i - 1].toLowerCase().slice(0, 12)) === 0; });
@@ -1031,50 +1211,58 @@
   }
   function listen(r, onDone) {
     stopAll();
-    var R = new SR(); rec = R; R.lang = "en-US"; R.interimResults = true; R.continuous = true;
-    var started = false, ended = false, err = "";
-    r.listening = true; r.text = ""; r.error = ""; render();
-    R.onstart = function () { started = true; };
-    R.onresult = function (e) { var parts = []; for (var j = 0; j < e.results.length; j++) parts.push(String(e.results[j][0].transcript || "").trim()); r.text = fold(parts.filter(Boolean)); var live = $("livetext"); if (live) live.textContent = r.text; else render(); };
-    R.onerror = function (e) { err = e && e.error; };
-    R.onend = function () {
-      if (ended) return; ended = true; recTimers.forEach(clearTimeout); recTimers = []; rec = null; r.listening = false;
-      if (err === "not-allowed" || err === "service-not-allowed") { r.error = "Warmup needs your microphone. This lesson is spoken, not typed. Allow the microphone for this site in your browser settings, then tap Try again."; render(); return; }
-      if (err === "audio-capture") { r.error = "We can’t reach your microphone. Another app is probably using it, like FaceTime or a call. Close or mute that app, then tap Try again."; render(); return; }
-      if (!r.text) { r.error = "Nothing came through. Tap Try again and talk a little louder."; render(); return; }
-      onDone(r.text);
-    };
-    try { R.start(); } catch (e) { r.listening = false; r.error = "The microphone didn’t start. Tap Try again."; render(); return; }
-    recTimers.push(setTimeout(function () { if (!started && !ended) { try { R.abort(); } catch (e) {} if (!ended) { ended = true; rec = null; r.listening = false; r.error = "Nothing came through. Tap Try again."; render(); } } }, 4000));
-    recTimers.push(setTimeout(function () { try { R.stop(); } catch (e) {} }, 30000));
+    var base = r.text ? r.text + " " : "", userDone = false, cancelled = false, t0 = Date.now(), restarts = 0;
+    r.listening = true; r.error = ""; render();
+    var sess = recSession = { cancel: function () { cancelled = true; }, finish: function () { userDone = true; try { if (rec) rec.stop(); } catch (e) {} recTimers.push(setTimeout(function () { if (!cancelled && r.listening) wrap(); }, 1500)); } };
+    function wrap() { if (cancelled) return; cancelled = true; recTimers.forEach(clearTimeout); recTimers = []; rec = null; recSession = null; r.listening = false; if (!r.text) { r.error = "Nothing came through. Tap Try again and talk a little louder."; render(); return; } onDone(r.text); }
+    function open() {
+      var R = new SR(), err = "", started = false; rec = R; R.lang = "en-US"; R.interimResults = true; R.continuous = true;
+      R.onstart = function () { started = true; };
+      R.onresult = function (e) { var parts = []; for (var j = 0; j < e.results.length; j++) parts.push(String(e.results[j][0].transcript || "").trim()); r.text = (base + fold(parts.filter(Boolean))).trim(); var live = $("livetext"); if (live) { live.textContent = r.text; live.scrollTop = live.scrollHeight; } else render(); };
+      R.onerror = function (e) { err = e && e.error; };
+      R.onend = function () {
+        if (cancelled || rec !== R) return;
+        if (err === "not-allowed" || err === "service-not-allowed") { if (restarts && r.text) { pause(); return; } cancelled = true; rec = null; recSession = null; r.listening = false; r.error = "Warmup needs your microphone. This lesson is spoken, not typed. Allow the microphone for this site in your browser settings, then tap Try again."; render(); return; }
+        if (err === "audio-capture") { cancelled = true; rec = null; recSession = null; r.listening = false; r.error = "We can’t reach your microphone. Another app is probably using it, like FaceTime or a call. Close or mute that app, then tap Try again."; render(); return; }
+        if (userDone || Date.now() - t0 > 120000) { wrap(); return; }
+        base = r.text ? r.text + " " : ""; restarts++;
+        try { open(); } catch (e) { pause(); }
+      };
+      R.start();
+      recTimers.push(setTimeout(function () { if (!started && rec === R && !cancelled && !restarts) { try { R.abort(); } catch (e) {} cancelled = true; rec = null; recSession = null; r.listening = false; r.error = "Nothing came through. Tap Try again."; render(); } }, 4000));
+    }
+    function pause() { cancelled = true; rec = null; recSession = null; r.listening = false; render(); }
+    try { open(); } catch (e) { r.listening = false; recSession = null; r.error = "The microphone didn’t start. Tap Try again."; render(); }
   }
-  function finishListening() { if (!rec) return; var R = rec; try { R.stop(); } catch (e) {} recTimers.push(setTimeout(function () { if (rec === R && R.onend) R.onend(); }, 1500)); }
+  function finishListening(r, onDone) { if (recSession) { recSession.finish(); return; } if (r && r.text) onDone(r.text); }
   async function gradeTest(k, text) {
     var T = X().tests[k], r = S.t[k], at = S.lesson;
     r.text = text; r.state = "grading"; render();
     var hits = hitsFor(T, text);
     if (sample) { try { hits = await aiHits(T, text); } catch (e) {} }
-    if (S.lesson !== at || S.i !== TEST_START + k) return;
+    if (S.lesson !== at || S.ph !== 1 || S.idx !== k) return;
     r.hits = hits; r.pass = passed(T, hits); r.state = "graded"; render();
   }
 
-  /* ---------- the door ---------- */
+  /* ---------- the door (step 3), in the same shell ---------- */
   function renderDoor() {
-    var x = X(), v = x.voters[S.voter], d = S.door, b = $("body");
+    var x = X(), v = x.voters[S.voter], d = S.door;
     var last = d.turns.filter(function (t) { return !t.me; }).slice(-1)[0];
-    var h = '<span class="kick">Your door · ' + v.name + ', ' + esc(v.meta) + '</span><div class="stage"><div class="say"><small>' + v.name + '</small>' + esc(last ? last.text : "") + '</div>' + face(v, "happy") + '</div><button class="hear" type="button" id="hearvoter">▶ Hear ' + v.name + ' again</button>';
+    var body = '<span class="st-kick">Your door · ' + esc(v.name) + ', ' + esc(v.meta) + '</span><div class="stage"><div class="say"><small>' + esc(v.name) + '</small>' + esc(last ? last.text : "") + '</div>' + face(v, "happy") + '<button class="hear" type="button" id="hearvoter" aria-label="Hear ' + esc(v.name) + ' again">▶</button></div>', btns = "", bg = "#F3ECE1";
     if (d.ended) {
       if (d.grade) {
         var G = d.grade;
-        h += '<div class="grade"><span class="kick">The coach</span>' + [["accurate", "Accurate"], ["short", "Short"], ["vote", "Back to voting"]].map(function (rw) { var g = G[rw[0]] || {}; var m = ["Yes", "Partly", "No"].indexOf(g.mark) >= 0 ? g.mark : "Partly"; return '<div class="gr"><span class="pill ' + m + '">' + m + '</span><div><b>' + rw[1] + '</b><span>' + esc(g.why || "") + '</span></div></div>'; }).join("") + (G.tip ? '<div class="tip"><b>One tip.</b> ' + esc(G.tip) + '</div>' : "") + '</div>';
-        b.innerHTML = h; foot(NEXT(DONE, "Finish") + '<button class="btn ghost" type="button" id="startdoor">Knock on another door</button>');
-      } else { b.innerHTML = h + '<p class="think">The coach is grading your door…</p>'; foot('<button class="btn" type="button" disabled>Grading…</button>'); }
-      return;
-    }
-    if (d.busy) { b.innerHTML = h + '<p class="think">' + v.name + ' is answering…</p>'; foot('<button class="btn" type="button" disabled>…</button>'); return; }
-    b.innerHTML = h + voiceBlock(d.r); foot(voiceFoot(d.r));
+        body += '<div class="grade"><span class="kick">The coach</span>' + [["accurate", "Accurate"], ["short", "Short"], ["vote", "Back to voting"]].map(function (rw) { var g = G[rw[0]] || {}; var m = ["Yes", "Partly", "No"].indexOf(g.mark) >= 0 ? g.mark : "Partly"; return '<div class="gr"><span class="pill ' + m + '">' + m + '</span><div><b>' + rw[1] + '</b><span>' + esc(g.why || "") + '</span></div></div>'; }).join("") + (G.tip ? '<div class="tip"><b>One tip.</b> ' + esc(G.tip) + '</div>' : "") + '</div>';
+        btns = NEXTB("Finish the lesson", "finish") + '<button class="sy-retry" type="button" id="startdoor">Knock on another door</button>';
+      } else body += '<p class="sy-think">The coach is grading your door…</p>';
+    } else if (d.busy) body += '<p class="sy-think">' + esc(v.name) + ' is answering…</p>';
+    else { var m = micBlock(d.r, "Tap and answer " + v.name); body += m.body; btns = m.btns; }
+    shell({ bg: bg, cls: "doorc", body: body, btns: btns });
   }
-  function startDoor(k) { var v = X().voters[k]; S.voter = k; S.door = { turns: [{ me: false, text: v.open }], step: 0, r: {}, ended: false, grade: null, busy: false }; go(DOOR); speak(v.open, v); }
+  function startDoor(k) {
+    var nv = X().voters.length; if (k == null) { k = (S.lesson + S.doorN) % nv; S.doorN++; }
+    var v = X().voters[k]; S.voter = k; S.door = { turns: [{ me: false, text: v.open }], step: 0, r: {}, ended: false, grade: null, busy: false }; goStep(2, 0); speak(v.open, v);
+  }
   function transcript() { var v = X().voters[S.voter]; return S.door.turns.map(function (t) { return (t.me ? "CANVASSER: " : v.name.toUpperCase() + ": ") + t.text; }).join("\n"); }
   function said(text) {
     var d = S.door, v = X().voters[S.voter];
@@ -1087,7 +1275,7 @@
   async function liveVoter() {
     var x = X(), d = S.door, v = x.voters[S.voter]; d.busy = true; render();
     var mine = d.turns.filter(function (t) { return t.me; }).length;
-    var p = "You are role-playing a voter at a front door so a canvasser for Maya Kaur, the Democrat in this race (election Tuesday, November 3, 2026), can practice. Topic: " + x.title + ". Call the candidates only Maya, Maya Kaur or her Republican opponent; never say the names " + x.from + " or " + x.opp + ".\n\nYOUR CHARACTER: " + v.name + ", " + v.meta + ". Your opening line was: " + v.open + "\n\nRULES: Stay in character. One or two short spoken sentences, plain words, no stage directions. React honestly to what the canvasser actually said. " + (mine >= 2 ? "Wrap up now in character and end with [door closes]." : "If they ask you to make a plan to vote, wrap up and end with [door closes].") + "\n\nWhat the canvasser is supposed to know (for your reactions only): In this practice, Maya Kaur holds " + x.from + "'s real positions and 'her Republican opponent' is " + x.opp + ". The canvasser learned them only as Maya and her opponent, so treat those names as correct. " + x.key + "\n\nTHE DOOR SO FAR\n" + transcript() + "\n\nWrite only " + v.name + "'s next line.";
+    var p = "You are role-playing a voter at a front door so a canvasser for Maya Kaur, the Democrat in this race (election Tuesday, November 3, 2026), can practice. Topic: " + x.title + ". Call the candidates only Maya, Maya Kaur or her Republican opponent; never say the names " + x.from + " or " + x.opp + ".\n\nYOUR CHARACTER: " + v.name + ", " + v.meta + ". Your opening line was: " + v.open + "\n\nRULES: Stay in character. One or two short spoken sentences, plain words, no stage directions. React honestly to what the canvasser actually said. " + (mine >= 2 ? "Wrap up now in character and end with [door closes]." : "If they ask you to make a plan to vote, wrap up and end with [door closes].") + "\n\nWhat the canvasser is supposed to know (for your reactions only): In this practice, Maya Kaur holds " + x.from + "'s real positions and 'her Republican opponent' is " + x.opp + ". " + x.key + "\n\nTHE DOOR SO FAR\n" + transcript() + "\n\nWrite only " + v.name + "'s next line.";
     try {
       var res = await sample(p, { modelTier: "quick", cache: false });
       var line = res.text.replace(/^\s*[A-Za-z]+:\s*/, "").trim(), close = /\[door closes\]/i.test(line);
@@ -1105,50 +1293,51 @@
         var a = await sample.json(p, { cache: false }); if (a && a.accurate) g = a;
       } catch (e) {}
     }
-    d.grade = g; if (S.i === DOOR) render();
+    d.grade = g; if (S.ph === 2 && S.idx === 0) render();
   }
   function scriptGrade() {
     var x = X(), mine = S.door.turns.filter(function (t) { return t.me; }).map(function (t) { return t.text; }), all = norm(mine.join(" . "));
     var wrong = x.wrong.test(all), right = x.right.test(all), long = mine.filter(function (t) { return t.split(/\s+/).length > 40; }).length, vote = /(vote|voting|ballot|polls|early|tuesday|plan)/.test(all);
     var G = {
-      accurate: wrong ? { mark: "No", why: "Something you said doesn’t match the candidate’s record." } : right ? { mark: "Yes", why: "What you said matches the candidate’s positions." } : { mark: "Partly", why: "Nothing wrong, but you didn’t say where the candidate stands." },
+      accurate: wrong ? { mark: "No", why: "Something you said doesn’t match Maya’s record." } : right ? { mark: "Yes", why: "What you said matches Maya’s positions." } : { mark: "Partly", why: "Nothing wrong, but you didn’t say where Maya stands." },
       short: long === 0 ? { mark: "Yes", why: "Each answer stayed short." } : long === 1 ? { mark: "Partly", why: "One answer ran long." } : { mark: "No", why: "Your answers ran long." },
       vote: vote ? { mark: "Yes", why: "You came back to the plan to vote." } : { mark: "No", why: "You didn’t ask about their plan to vote." }
     };
-    G.tip = wrong ? "Stick to the line you learned in the lesson." : !right ? "Give the candidate’s position in one sentence before you ask." : !vote ? "End every answer with a question like “When are you planning to vote?”" : long ? "Two sentences is plenty at a door." : "That’s a door a field director would be happy with.";
+    G.tip = wrong ? "Stick to the line you learned in the lesson." : !right ? "Give Maya’s position in one sentence before you ask." : !vote ? "End every answer with a question like “When are you planning to vote?”" : long ? "Two sentences is plenty at a door." : "That’s a door a field director would be happy with.";
     return G;
   }
 
   /* ---------- events ---------- */
   function currentR() {
     if (S.lesson == null) return null;
-    if (S.i >= TEST_START && S.i <= TEST_END) { var k = S.i - TEST_START; S.t[k] = S.t[k] || {}; return S.t[k]; }
-    if (S.i === DOOR && S.door) return S.door.r;
+    if (S.ph === 1 && S.idx < X().tests.length) { S.t[S.idx] = S.t[S.idx] || {}; return S.t[S.idx]; }
+    if (S.ph === 2 && S.idx === 0 && S.door) return S.door.r;
     return null;
   }
-  function onSaid(text) { if (S.i >= TEST_START && S.i <= TEST_END) gradeTest(S.i - TEST_START, text); else if (S.i === DOOR) said(text); }
+  function onSaid(text) { if (S.ph === 1) gradeTest(S.idx, text); else if (S.ph === 2) said(text); }
   document.addEventListener("click", function (e) {
-    var stEl = e.target.closest("#story");
-    if (stEl && !e.target.closest("button")) { var rc = stEl.getBoundingClientRect(); storyStep((e.clientX - rc.left) < rc.width * 0.3 ? -1 : 1); return; }
+    if (e.target.closest("a")) return;
+    var stEl = e.target.closest("#story.tap");
+    if (stEl && !e.target.closest("button")) { var rc = stEl.getBoundingClientRect(); step((e.clientX - rc.left) < rc.width * 0.3 ? -1 : 1); return; }
     var t = e.target.closest("button"); if (!t) return;
-    if (t.id === "stnext") { storyStep(1); return; }
-    if (t.dataset.lesson != null) { S.lesson = +t.dataset.lesson; S.t = {}; S.door = null; go(0); return; }
-    if (t.dataset.go != null) { go(+t.dataset.go); return; }
-    if (t.dataset.voter != null) { startDoor(+t.dataset.voter); return; }
+    if (t.dataset.seg) { var sp = t.dataset.seg.split(","); var ph = +sp[0], ix = +sp[1]; if (ph === 2 && ix === 0) { if (S.ph === 2 && S.door) goStep(2, 0); else startDoor(); return; } if (ph === 2 && ix === 1 && !S.door) { startDoor(); return; } goStep(ph, ix); return; }
+    if (t.dataset.lesson != null) { S.lesson = +t.dataset.lesson; S.t = {}; S.door = null; goStep(0, 0); return; }
     var r;
     switch (t.id) {
-      case "back": if (S.sources) { S.sources = false; render(); } else if (S.i === 0) home(); else go(S.i === DOOR ? SUMMARY : S.i - 1); break;
+      case "stnext": step(1); break;
+      case "qnext": step(1); break;
       case "home": home(); break;
-      case "startdoor": var nv = X().voters.length; startDoor((S.lesson + (S.doorN || 0)) % nv); S.doorN = (S.doorN || 0) + 1; break;
+      case "finish": goStep(2, 1); break;
+      case "startdoor": startDoor(); break;
       case "srcs": S.sources = true; render(); $("body").scrollTop = 0; break;
       case "srcback": S.sources = false; render(); break;
       case "hearanchor": speak(X().anchor, COACH); break;
       case "hearvoter": var lv = S.door.turns.filter(function (q) { return !q.me; }).slice(-1)[0]; if (lv) speak(lv.text, X().voters[S.voter]); break;
-      case "mic": r = currentR(); if (!r) break; if (r.listening) finishListening(); else listen(r, onSaid); break;
-      case "mic2": finishListening(); break;
+      case "mic": r = currentR(); if (!r) break; if (r.listening) { if (recSession) recSession.cancel(); try { if (rec) rec.stop(); } catch (er) {} rec = null; recSession = null; r.listening = false; render(); } else listen(r, onSaid); break;
+      case "mic2": r = currentR(); finishListening(r, onSaid); break;
       case "micretry": r = currentR(); if (r) { r.error = ""; listen(r, onSaid); } break;
       case "typed": r = currentR(); var ta = $("said"), txt = ta ? ta.value.trim() : ""; if (r && txt) { r.text = txt; onSaid(txt); } break;
-      case "retry": S.t[S.i - TEST_START] = {}; render(); break;
+      case "retry": S.t[S.idx] = {}; render(); break;
     }
   });
 
