@@ -1,0 +1,532 @@
+<title>Maya's Georgia Briefing</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one phone-sized app; on a laptop it sits in a phone frame, on a phone it fills the screen. A printed campaign briefing, not a game. */
+:root{
+  --paper:#F6F6F3; --ink:#14171F; --ink2:#4E5563; --ink3:#868C99; --rule:#DCDEE3;
+  --maya:#1F4C91; --maya-soft:#E7EDF6; --gap:#C23B2E; --gap-soft:#F7E3E0; --go:#2E7A55; --go-soft:#E2F0E8;
+  --clip:#FFFFFF; --stage:#0E1014;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif; --sans:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+html,body{height:100%}
+body{background:var(--stage);color:var(--ink);font-family:var(--sans);display:flex;align-items:center;justify-content:center;padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px))}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:3px solid var(--maya);outline-offset:2px}
+.phone{width:100%;height:100%;background:var(--paper);position:relative;overflow:hidden;container-type:size;display:flex;flex-direction:column}
+@media (min-width:600px) and (min-height:700px){
+  .phone{width:400px;height:min(820px,calc(100% - 40px));border-radius:44px;box-shadow:0 0 0 10px #050608,0 30px 80px rgba(0,0,0,.5)}
+}
+/* top bar */
+.top{display:flex;align-items:center;gap:10px;padding:max(14px,4cqh) 20px 0}
+.top img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+.top .who{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.top .who b{font-size:14px;font-weight:600}
+.top .who span{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.top .x{margin-left:auto;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--ink2)}
+.top .x:hover{background:var(--rule)}
+/* stepper */
+.step{display:flex;align-items:center;gap:8px;padding:12px 20px 0;min-height:30px}
+.bars{display:flex;gap:4px;flex:1}
+.bars i{flex:1;height:3px;border-radius:2px;background:var(--rule);position:relative;overflow:hidden}
+.bars i.done{background:var(--ink)}
+.bars i.now::after{content:"";position:absolute;inset:0;background:var(--ink);transform-origin:left;transform:scaleX(.5)}
+.lchip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--go);background:var(--go-soft);padding:4px 9px;border-radius:99px;white-space:nowrap}
+.pname{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);padding:6px 20px 0;display:flex;justify-content:space-between}
+/* body */
+.body{flex:1;min-height:0;display:flex;flex-direction:column;padding:2.4cqh 22px 0;overflow:hidden}
+.eyebrow{font-family:var(--mono);font-size:max(10.5px,1.45cqh);letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin:0 0 1.2cqh}
+h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:max(28px,4.6cqh);line-height:1.08}
+h2{font-size:max(25px,3.85cqh);line-height:1.1}
+h2 em{font-style:normal;color:var(--gap)}
+h2 .m{color:var(--maya)}
+p{margin:0}
+.lede{font-size:max(15.5px,2.15cqh);line-height:1.42;color:var(--ink2);margin-top:1.6cqh}
+.lede b{color:var(--ink);font-weight:600}
+.small{font-size:max(13.5px,1.85cqh);line-height:1.4;color:var(--ink2)}
+.grow{display:flex;flex-direction:column}
+.inner{display:flex;flex-direction:column;transform-origin:top left}
+sup.s{font-family:var(--mono);font-size:.55em;color:var(--ink3);margin-left:1px}
+/* footer */
+.foot{padding:1.6cqh 22px max(18px,3cqh);display:flex;flex-direction:column;gap:10px}
+.srcbtn{align-self:flex-start;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--rule);padding:2px 0}
+.srcbtn:hover{color:var(--ink)}
+.cta{width:100%;min-height:54px;border-radius:14px;background:var(--ink);color:#fff;font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 18px;text-align:center}
+.cta:hover{background:#262a35}
+.cta.go{background:var(--go)}
+.cta.go:hover{background:#246346}
+.cta[disabled]{opacity:.45;cursor:default}
+.link{font-size:14px;font-weight:600;color:var(--ink2);text-decoration:underline;text-underline-offset:3px;align-self:center}
+/* sheet */
+.scrim{position:absolute;inset:0;background:rgba(14,16,20,.45);display:flex;align-items:flex-end;z-index:20}
+.sheet{background:var(--paper);width:100%;border-radius:20px 20px 0 0;padding:20px 22px 26px;max-height:80%;overflow:auto}
+.sheet h3{font-family:var(--serif);font-weight:500;font-size:22px;margin:0 0 6px}
+.sheet ol{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.sheet li{display:flex;gap:10px;font-size:14.5px;line-height:1.35}
+.sheet li i{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--ink3);min-width:16px;padding-top:2px}
+.sheet a{color:var(--maya)}
+.sheet .cta{margin-top:18px}
+.toast{position:absolute;left:22px;right:22px;bottom:96px;background:var(--ink);color:#fff;border-radius:12px;padding:12px 14px;font-size:14px;z-index:30;line-height:1.35}
+
+/* home */
+.hm-brief{display:flex;gap:12px;align-items:center;margin:2.2cqh 0 0;padding:1.6cqh 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.hm-brief img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+.hm-brief p{font-family:var(--serif);font-size:max(15.5px,2.05cqh);line-height:1.35;font-style:italic;color:var(--ink2)}
+.today{margin-top:2.2cqh;background:var(--ink);color:#fff;border-radius:16px;padding:2.2cqh 18px;display:flex;flex-direction:column;gap:6px;text-align:left;width:100%}
+.today:hover{background:#262a35}
+.today .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#9ec3a9;display:flex;justify-content:space-between}
+.today b{font-family:var(--serif);font-weight:500;font-size:max(24px,3.4cqh);line-height:1.1}
+.today span{font-size:14.5px;color:#C9CDD6;line-height:1.35}
+.next{margin-top:1.8cqh;display:flex;flex-direction:column}
+.next .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px}
+.nrow{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:baseline;padding:1.15cqh 0;border-bottom:1px solid var(--rule);text-align:left;width:100%}
+.nrow b{font-weight:600;font-size:max(15px,2cqh)}
+.nrow small{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.nrow span{grid-column:1/-1;font-size:13.5px;color:var(--ink2)}
+/* how */
+.how{display:flex;flex-direction:column;gap:0;margin-top:3cqh}
+.how .part{display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;padding:2.4cqh 0;border-top:1px solid var(--rule)}
+.how .part:last-child{border-bottom:1px solid var(--rule)}
+.how .n{font-family:var(--serif);font-size:max(34px,5cqh);line-height:.9;color:var(--maya);grid-row:1/3}
+.how b{font-size:max(18px,2.5cqh);font-weight:600}
+.how em{font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);align-self:center}
+.how span{grid-column:2/4;font-size:max(14.5px,1.95cqh);line-height:1.4;color:var(--ink2)}
+.how ul{grid-column:2/4;margin:4px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.how li{font-size:12.5px;font-weight:600;background:var(--maya-soft);color:var(--maya);padding:4px 9px;border-radius:99px}
+/* cover */
+.three{list-style:none;margin:3cqh 0 0;padding:0;display:flex;flex-direction:column}
+.three li{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:2cqh 0;border-top:1px solid var(--rule);font-size:max(17px,2.4cqh);line-height:1.3;font-weight:500}
+.three li:last-child{border-bottom:1px solid var(--rule)}
+.three li i{font-style:normal;font-family:var(--serif);font-size:max(22px,3cqh);color:var(--maya);line-height:1}
+.three li small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-bottom:3px}
+/* lanes: how people get insurance */
+.lanes{display:flex;flex-direction:column;gap:1.3cqh;margin-top:2.6cqh}
+.lane{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:center}
+.lane .ic{width:max(40px,5.2cqh);height:max(40px,5.2cqh);border-radius:12px;display:grid;place-items:center;grid-row:1/3}
+.lane .ic svg{width:55%;height:55%}
+.lane b{font-size:max(16px,2.15cqh);font-weight:600}
+.lane span{font-size:max(13.5px,1.8cqh);color:var(--ink2);line-height:1.3}
+.lane.med .ic{background:var(--maya);color:#fff}
+.lane .ic{background:#E9EAEE;color:var(--ink2)}
+/* big number */
+.big{font-family:var(--serif);font-size:max(64px,10cqh);line-height:.95;letter-spacing:-.02em;color:var(--ink);white-space:nowrap}
+.big small{font-size:.32em;color:var(--ink2);letter-spacing:0;margin-left:6px}
+/* income line */
+.inc{margin-top:3cqh;position:relative}
+.inc .track{display:flex;height:max(46px,6.2cqh);border-radius:10px;overflow:hidden;font-size:12px;font-weight:600}
+.inc .z{overflow:hidden;white-space:nowrap;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 6px;line-height:1.15}
+.inc .z1{flex:0 0 20%;background:var(--maya-soft);color:var(--maya)}
+.inc .z2{flex:0 0 42%;background:var(--gap);color:#fff}
+.inc .z3{flex:1;background:#E3E6EA;color:var(--ink2)}
+.inc .ax{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--ink3);margin-top:5px;position:relative;height:14px}
+.inc .ax span{position:absolute;transform:translateX(-50%)}
+.sis{position:relative;height:max(92px,13cqh)}
+.sis .p{position:absolute;bottom:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;width:90px}
+.sis .p svg{width:max(28px,4cqh);height:max(34px,4.8cqh);color:#9097A3}
+.sis .p b{font-size:14px;font-weight:600}
+.sis .p small{font-size:12px;color:var(--ink2);line-height:1.2}
+.sis .p.bri svg{color:var(--gap)}
+.sis .p.bri b{color:var(--gap)}
+.sis .p.bri::before{content:"";position:absolute;inset:-6px -2px -4px;border:2px solid var(--gap);border-radius:12px;z-index:-1}
+.inc.ex .z1{flex-basis:62%}
+.inc.ex .z2{flex-basis:0;padding:0}
+.inc .z1,.inc .z2{transition:flex-basis .9s cubic-bezier(.2,.8,.2,1)}
+/* compare bars */
+.cmp{display:flex;flex-direction:column;gap:1.2cqh;margin-top:2.4cqh}
+.cmp .r{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;font-size:14px}
+.cmp .t{height:max(30px,4cqh);background:transparent;border-radius:8px;position:relative}
+.cmp .t i{position:absolute;inset:0 auto 0 0;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-style:normal;font-weight:700;font-size:13.5px;font-variant-numeric:tabular-nums}
+/* states */
+.st-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:2.6cqh;align-items:start}
+.st-pair .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.st-pair .bign{font-family:var(--serif);font-size:max(48px,7.4cqh);line-height:1;color:var(--maya)}
+.st-pair .bign.no{color:var(--gap)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.chips span{font-size:12.5px;font-weight:600;padding:3px 7px;border-radius:6px;background:#ECEDF0;color:var(--ink2)}
+.chips span.ga{background:var(--gap);color:#fff}
+/* steelman */
+.facts{margin-top:2.4cqh;display:flex;flex-direction:column}
+.facts div{display:grid;grid-template-columns:86px 1fr;gap:12px;padding:1.5cqh 0;border-top:1px solid var(--rule);font-size:max(14.5px,1.95cqh);line-height:1.35}
+.facts div:last-child{border-bottom:1px solid var(--rule)}
+.facts small{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding-top:3px}
+.quote{font-family:var(--serif);font-style:italic;font-size:max(18px,2.5cqh);line-height:1.3;margin-top:2.2cqh;padding-left:14px;border-left:2px solid var(--ink)}
+.quote small{display:block;font-family:var(--sans);font-style:normal;font-size:12.5px;color:var(--ink3);margin-top:6px}
+/* news */
+.clips{display:flex;flex-direction:column;gap:1.6cqh;margin-top:2.4cqh}
+.clip{background:var(--clip);border:1px solid var(--rule);padding:1.8cqh 16px;border-radius:4px;box-shadow:0 1px 0 rgba(0,0,0,.04),0 8px 20px -14px rgba(0,0,0,.35)}
+.clip:nth-child(1){transform:rotate(-.6deg)}
+.clip:nth-child(2){transform:rotate(.5deg)}
+.clip .o{font-family:var(--serif);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);border-bottom:1px solid var(--rule);padding-bottom:6px;display:block}
+.clip .h{font-family:var(--serif);font-weight:600;font-size:max(18.5px,2.55cqh);line-height:1.16;margin:8px 0 6px;display:block}
+.clip .d{font-size:12px;color:var(--ink3)}
+.stat{display:flex;gap:18px;margin-top:2.4cqh;align-items:baseline}
+.stat div{display:flex;flex-direction:column}
+.stat b{font-family:var(--serif);font-weight:500;font-size:max(30px,4.4cqh);line-height:1}
+.stat b.hot{color:var(--gap)}
+.stat span{font-size:12.5px;color:var(--ink2);margin-top:4px}
+/* stance */
+.plan{margin-top:2.4cqh;display:flex;flex-direction:column}
+.plan .row{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:1.8cqh 0;border-top:1px solid var(--rule)}
+.plan .row:last-child{border-bottom:1px solid var(--rule)}
+.plan i{font-style:normal;font-family:var(--serif);font-size:max(22px,3cqh);color:var(--maya);line-height:1}
+.plan b{font-size:max(16.5px,2.25cqh);font-weight:600;display:block}
+.plan span{font-size:max(13.5px,1.85cqh);color:var(--ink2);line-height:1.35;display:block;margin-top:3px}
+.then{margin-top:1.8cqh;display:flex;gap:10px;align-items:flex-start;font-size:max(14px,1.9cqh);color:var(--ink2);line-height:1.4}
+.then svg{flex:0 0 auto;margin-top:2px;color:var(--maya)}
+/* two outcomes */
+.fork2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:2.6cqh}
+.fork2 > div{border-radius:14px;padding:1.8cqh 14px;display:flex;flex-direction:column;gap:6px}
+.fork2 .a{background:var(--maya);color:#fff}
+.fork2 .b{background:#E9EAEE}
+.fork2 small{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.fork2 b{font-family:var(--serif);font-weight:500;font-size:max(19px,2.6cqh);line-height:1.15}
+.fork2 span{font-size:13px;line-height:1.35;opacity:.85}
+.power{margin-top:2.2cqh;padding:1.6cqh 14px;background:var(--maya-soft);border-radius:12px;font-size:max(14px,1.9cqh);line-height:1.4;color:var(--ink)}
+/* practice intro */
+.pintro .lede{margin-top:2cqh}
+.steps4{list-style:none;margin:3cqh 0 0;padding:0;display:flex;flex-direction:column}
+.steps4 li{display:grid;grid-template-columns:24px 1fr;gap:12px;padding:1.4cqh 0;border-top:1px solid var(--rule);font-size:max(15px,2cqh)}
+.steps4 li:last-child{border-bottom:1px solid var(--rule)}
+.steps4 i{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--ink3);padding-top:3px}
+.steps4 b{font-weight:600}
+.steps4 span{color:var(--ink2)}
+/* thread */
+.scene{display:flex;align-items:center;gap:12px;padding:1.2cqh 0 1.4cqh;border-bottom:1px solid var(--rule)}
+.av{width:44px;height:44px;border-radius:50%;flex:0 0 auto;overflow:hidden;background:#E8DCCB}
+.scene b{font-size:15px;font-weight:600;display:block}
+.scene span{font-size:12.5px;color:var(--ink3)}
+.pin{margin-top:1cqh;font-size:12.5px;color:var(--ink2);background:var(--maya-soft);border-radius:10px;padding:8px 12px;line-height:1.4}
+.pin b{color:var(--maya)}
+.thread{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:1.6cqh 0 6px;scroll-behavior:smooth}
+.note{align-self:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);text-align:center;padding:2px 10px}
+.msg{max-width:84%;padding:10px 13px;border-radius:16px;font-size:15px;line-height:1.38;animation:pop .28s ease-out both}
+.msg.v{align-self:flex-start;background:#ECEDF0;border-bottom-left-radius:5px}
+.msg.c{align-self:flex-start;background:var(--maya-soft);border-bottom-left-radius:5px}
+.msg.c::before{content:"Canvasser";display:block;font-size:11px;font-weight:700;color:var(--maya);margin-bottom:2px}
+.msg.c.wrong{background:var(--gap-soft)}
+.msg.c.wrong::before{color:var(--gap)}
+.msg.me{align-self:flex-end;background:var(--ink);color:#fff;border-bottom-right-radius:5px}
+.msg.me.live{background:#fff;color:var(--ink);border:1.5px solid var(--go);display:flex;gap:10px;align-items:flex-start;max-width:92%}
+.msg .lm{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--go);color:#fff;display:grid;place-items:center;position:relative}
+.msg .lm::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid var(--go);opacity:.35;animation:ring 1.4s ease-out infinite}
+.wave{display:flex;gap:3px;align-items:center;height:12px;margin-bottom:4px}
+.wave i{width:3px;height:4px;border-radius:2px;background:var(--go);animation:wv .8s ease-in-out infinite}
+.wave i:nth-child(2n){animation-delay:.15s}.wave i:nth-child(3n){animation-delay:.3s}
+.livewords:empty::before{content:"Listening. Say it your way.";color:var(--ink3)}
+.typing{align-self:flex-start;background:#ECEDF0;border-radius:16px;padding:12px 14px;display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#9AA0AC;animation:bob 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes ring{from{transform:scale(.9);opacity:.5}to{transform:scale(1.35);opacity:0}}
+@keyframes wv{0%,100%{height:3px}50%{height:12px}}
+@keyframes bob{0%,100%{transform:none}50%{transform:translateY(-4px)}}
+.typebox{display:flex;gap:8px}
+.typebox textarea{flex:1;min-height:54px;max-height:120px;border:1.5px solid var(--rule);border-radius:12px;padding:10px 12px;font:inherit;font-size:15px;resize:none;background:#fff;color:var(--ink)}
+.typebox button{width:54px;border-radius:12px;background:var(--ink);color:#fff;font-weight:700}
+/* key points tracker */
+.kp{border-top:1px solid var(--rule);padding-top:1.2cqh;display:flex;flex-direction:column;gap:6px}
+.kp div{display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--ink3);transition:color .3s}
+.kp div i{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;flex:0 0 auto;transition:all .3s}
+.kp div.on{color:var(--ink)}
+.kp div.on i{background:var(--go);border-color:var(--go);color:#fff}
+/* catch */
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:1.2cqh}
+.opt{text-align:left;border:1.5px solid var(--rule);border-radius:12px;padding:11px 14px;font-size:15px;line-height:1.3;background:#fff}
+.opt:hover{border-color:var(--ink3)}
+.opt.right{border-color:var(--go);background:var(--go-soft)}
+.opt.wrongpick{border-color:var(--gap);background:var(--gap-soft)}
+.fix{margin-top:10px;font-size:14.5px;line-height:1.4;padding:10px 12px;border-radius:10px;background:var(--go-soft)}
+/* result */
+.badge{width:max(84px,11cqh);height:max(84px,11cqh);border-radius:50%;background:var(--go);color:#fff;display:grid;place-items:center;animation:land .6s cubic-bezier(.2,1.4,.4,1) both}
+.badge svg{width:46%;height:46%}
+@keyframes land{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.score{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--go);margin-top:2.4cqh}
+.got{list-style:none;margin:2cqh 0 0;padding:0;display:flex;flex-direction:column}
+.got li{display:grid;grid-template-columns:24px 1fr;gap:10px;padding:1.3cqh 0;border-top:1px solid var(--rule);font-size:max(15px,2cqh);line-height:1.3}
+.got li:last-child{border-bottom:1px solid var(--rule)}
+.got li i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700}
+.got li.y i{background:var(--go);color:#fff}
+.got li.n i{background:var(--gap-soft);color:var(--gap)}
+.got li.n span b{color:var(--gap)}
+.said{margin-top:1.6cqh;font-size:13.5px;line-height:1.4;color:var(--ink2)}
+.said summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.said p{margin-top:6px}
+/* done */
+.growth{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2.4cqh}
+.growth > div{border-radius:14px;padding:1.6cqh 14px;background:#ECEDF0}
+.growth > div.after{background:var(--go-soft)}
+.growth small{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.growth b{display:block;font-family:var(--serif);font-weight:500;font-size:max(34px,5cqh);line-height:1.05;margin-top:4px}
+.growth .after b{color:var(--go)}
+.growth span{font-size:12.5px;color:var(--ink2)}
+.reveal{margin-top:2.2cqh;padding-top:1.8cqh;border-top:1px solid var(--rule);font-size:max(14.5px,1.95cqh);line-height:1.45;color:var(--ink2)}
+.reveal b{color:var(--ink)}
+.draftflag{position:absolute;top:6px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase;z-index:5;pointer-events:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="phone" id="app" aria-live="polite"></div>
+
+<script>
+(function(){
+var PHOTO = "data:image/jpeg;base64,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";
+var app = document.getElementById("app");
+var TOUCH = matchMedia("(pointer:coarse)").matches;
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+/* ---------- sources ---------- */
+var S = {
+  kffEmp:["KFF, health insurance coverage of the total population","https://www.kff.org/other/state-indicator/total-population/"],
+  gbpi:["GBPI, Georgia Medicaid budget overview, 2025","https://gbpi.org/?p=39138"],
+  kffPar:["KFF, Medicaid income limits for parents","https://www.kff.org/affordable-care-act/state-indicator/medicaid-income-eligibility-limits-for-parents/"],
+  hhs:["HHS 2026 poverty guidelines (help buying a plan starts at 100%)","https://aspe.hhs.gov/Poverty-Guidelines"],
+  rec:["Georgia Recorder via Cobb County Courier, Sep 2026","https://cobbcountycourier.com/2026/09/is-jacksons-intelligent-medicaid-expansion-weak-tea-or-a-revolutionary-fix/"],
+  census:["US Census, Savannah","https://www.census.gov/quickfacts/savannahcitygeorgia"],
+  ccf:["Georgetown CCF, Georgia’s uninsured workers","https://ccf.georgetown.edu/2021/04/28/a-profile-of-georgias-low-wage-uninsured-workers/"],
+  hc:["HealthCare.gov, Medicaid expansion","https://www.healthcare.gov/medicaid-chip/medicaid-expansion-and-you/"],
+  kffStatus:["KFF, which states expanded Medicaid","https://www.kff.org/status-of-state-medicaid-expansion-decisions/"],
+  kemp:["Gov. Kemp’s office, Aug 2024","https://gov.georgia.gov/press-releases/2024-08-19/governor-kemp-joined-commissioners-john-king-and-russel-carlson-provides"],
+  paFlier:["2026 Pathways limits","https://healthyfuturega.org/wp-content/uploads/2023/08/2026-Pathways-Eligibility-Flier-.pdf"],
+  cbeat23:["Capitol Beat, the state’s first-year estimate","https://capitol-beat.org/2023/06/limited-georgia-medicaid-expansion-launches-this-weekend/"],
+  dch:["Georgia DCH filing, Aug 2026","https://www.medicaid.gov/medicaid/section-1115-demonstrations/downloads/ga-pathways-fmap-amendment-app-10012026.pdf"],
+  ajcN:["The Atlanta Journal-Constitution (KFF Health News), Mar 2024","https://www.ajc.com/news/health-news/georgias-medicaid-work-requirements-costs-millions-despite-low-enrollment/5BOJLD6GQFBIZJMPTD64FPYRMQ/"],
+  wabe:["WABE, Sep 2025 (the GAO report)","https://www.wabe.org/report-georgia-pathways-spending-twice-as-much-on-admin-costs-compared-to-health-care/"],
+  care:["Maya’s plan (the Bottoms CARE Plan)","https://www.keishaforgovernor.com/klb-policy-careplan-1.pdf"],
+  ajcJ:["AJC on her opponent’s plan, Sep 2026","https://www.ajc.com/politics/2026/09/rick-jackson-proposes-intelligent-medicaid-expansion-in-georgia/"],
+  gpb:["GPB News, Oct 2026 (work rules either way)","https://www.gpb.org/news/2026/10/01/medicaid-work-requirements-are-here-stay-no-matter-who-wins-georgia-governors-race"]
+};
+function sup(n){return '<sup class="s">'+n+'</sup>';}
+
+var KP = ["About 200,000 working Georgians can’t get health insurance", "Maya’s plan: full Medicaid expansion", "Her opponent’s plan: a Pathways-style plan with work rules"];
+var KP_SHORT = ["The problem","Maya’s plan","Her opponent’s plan"];
+var GRADE = [/(gap|uninsured|no (health )?(insurance|coverage)|without (health )?(insurance|coverage)|can'?t (afford|get)|200,?000|two hundred thousand|left out|too much for medicaid|fall through|falls? (in|through))/, /expan/, /(pathways[- ]style|like pathways|keep(ing)? pathways|work (requirement|rule|hour)s?|intelligent|partial|smaller (plan|version))/];
+
+var PERSON = '<svg viewBox="0 0 24 30" aria-hidden="true"><circle cx="12" cy="7" r="5.5" fill="currentColor"/><path d="M3 29v-6c0-5 4-9 9-9s9 4 9 9v6z" fill="currentColor"/></svg>';
+var BRI_AV = '<svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" fill="#E8DCCB"/><path d="M8 44c0-9 6-14 14-14s14 5 14 14z" fill="#B8744A"/><path d="M11 26c-1-12 3-19 11-19s12 7 11 19z" fill="#17120f"/><ellipse cx="22" cy="20" rx="7.5" ry="8.5" fill="#6B4430"/><rect x="19" y="27" width="6" height="5" fill="#5a3826"/><circle cx="19.2" cy="19.5" r="1" fill="#17120f"/><circle cx="24.8" cy="19.5" r="1" fill="#17120f"/><path d="M19.5 24c1.6 1 3.4 1 5 0" stroke="#17120f" stroke-width="1" fill="none" stroke-linecap="round"/></svg>';
+var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+var MIC = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3" fill="currentColor" stroke="none"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>';
+
+/* ---------- state ---------- */
+var st = { i:0, try1:"", try2:"", g1:[0,0,0], g2:[0,0,0], seenHow:false };
+
+/* ---------- the screens ---------- */
+var LEARN = [
+  { next:"Where Georgia draws the line", src:[S.kffEmp,S.gbpi], html:function(){ return '<p class="eyebrow">How insurance works today</p><h2>Most people get health insurance through work. Medicaid covers people who can’t.</h2>'+
+    '<div class="lanes">'+
+    '<div class="lane"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div><b>Through a job</b><span>About half of Americans'+sup(1)+'</span></div>'+
+    '<div class="lane"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16l-1.5 9h-13z"/><circle cx="9" cy="19" r="1.5"/><circle cx="16" cy="19" r="1.5"/></svg></div><b>Buy their own</b><span>With federal help once income is high enough</span></div>'+
+    '<div class="lane med"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div><b>Medicaid</b><span>Government insurance for low incomes, paid by the state and the federal government</span></div>'+
+    '</div><p class="lede">Today about <b>18% of Georgians</b> have Medicaid, and most of them are children.'+sup(2)+'</p>'; } },
+  { next:"Meet Bri, stuck in the gap", src:[S.kffPar], html:function(){ return '<p class="eyebrow">Who qualifies today</p><h2>Georgia sets one of the lowest Medicaid limits for adults in the country.</h2>'+
+    '<div class="grow"><div class="big">$8,000<small>a year</small></div><p class="lede" style="margin-top:2cqh">For example, a parent of two can get Medicaid only if they earn <b>less than about $8,000 a year</b>.'+sup(1)+' Earn more and they don’t qualify.</p></div>'; } },
+  { next:"How many Georgians are like Bri", src:[S.kffPar,S.hhs], html:function(){
+    var p=function(cls,name,pay,cov,x){return '<div class="p '+cls+'" style="left:'+x+'%">'+PERSON+'<b>'+name+'</b><small>'+pay+' a year<br>'+cov+'</small></div>';};
+    return '<p class="eyebrow">The coverage gap</p><h2>Three sisters, each a mom of two. <em>Bri, in the middle, has no health insurance.</em></h2>'+
+    '<div class="grow"><div class="sis">'+p("","Ana","$7,000","Medicaid",11)+p("bri","Bri","$14,000","Uninsured",41)+p("","Dee","$45,000","Insured at work",82)+'</div>'+
+    '<div class="inc"><div class="track"><div class="z z1">Medicaid</div><div class="z z2">The coverage gap</div><div class="z z3">Help to buy a plan</div></div><div class="ax"><span style="left:0;transform:none">$0</span><span style="left:20%">$8K</span><span style="left:62%">$27K</span><span style="right:0;left:auto;transform:none">income</span></div></div>'+
+    '<p class="lede">Bri earns too much for Medicaid and too little to get help buying a plan, and her job doesn’t offer insurance.'+sup(1)+sup(2)+'</p></div>'; } },
+  { next:"The fix that already exists", src:[S.rec,S.census,S.ccf], html:function(){ return '<p class="eyebrow">How many</p><h2><em>About 200,000</em> Georgia adults are in the same gap as Bri.'+sup(1)+'</h2>'+
+    '<div class="grow"><div class="cmp"><div class="r"><span>In the gap</span><div class="t"><i style="width:100%;background:var(--gap)">~200,000</i></div></div><div class="r"><span>All of Savannah</span><div class="t"><i style="width:74%;background:#A9AFBA">148,000</i></div></div></div>'+
+    '<p class="lede">That’s more people than live in Savannah.'+sup(2)+' Most of them work as cashiers, cooks and home health aides: jobs that rarely offer insurance and pay just over the limit.'+sup(3)+'</p></div>'; } },
+  { next:"Which states accepted it", src:[S.hc,S.kffStatus], html:function(){ return '<p class="eyebrow">The fix</p><h2>Medicaid expansion raises the limit so <span class="m">people like Bri qualify</span>.</h2>'+
+    '<div class="grow"><div class="inc" id="exp"><div class="sis" style="height:auto;min-height:54px"><div class="p bri" style="left:23%;position:absolute;bottom:0;width:70px">'+PERSON+'<b>Bri</b></div></div><div class="track" style="margin-top:12px"><div class="z z1">Medicaid</div><div class="z z2">The coverage gap</div><div class="z z3">Help to buy a plan</div></div></div>'+
+    '<p class="lede">It’s already federal law, from President Obama’s Affordable Care Act in 2010. <b>The federal government pays 90%</b> of the cost. A state only has to accept it.'+sup(1)+sup(2)+'</p></div>'; },
+    after:function(){ setTimeout(function(){ var e=document.getElementById("exp"); if(e) e.classList.add("ex"); },500); } },
+  { next:"What Georgia did instead", src:[S.kffStatus], html:function(){ return '<p class="eyebrow">Which states accepted it</p><h2>40 states and DC have accepted Medicaid expansion. <em>Georgia is one of 10 that haven’t.</em>'+sup(1)+'</h2>'+
+    '<div class="st-pair"><div><p class="k">Accepted</p><p class="bign">40<span style="font-size:.45em"> + DC</span></p><p class="small" style="margin-top:6px">Even North Carolina, next door, accepted it in 2023.</p></div><div><p class="k">Haven’t</p><p class="bign no">10</p><div class="chips">'+
+    ["AL","FL","GA","KS","MS","SC","TN","TX","WI","WY"].map(function(s){return '<span'+(s==="GA"?' class="ga"':'')+'>'+s+'</span>';}).join("")+'</div></div></div>'; } },
+  { next:"How Pathways turned out", src:[S.kemp,S.paFlier], html:function(){ return '<p class="eyebrow">The other side</p><h2>In 2023, Gov. Brian Kemp chose a narrower plan instead: Georgia Pathways.</h2>'+
+    '<div class="facts"><div><small>Who</small><span>Adults earning up to about $16,000 a year'+sup(2)+'</span></div><div><small>The catch</small><span>Prove 80 hours a month of work, school or volunteering'+sup(2)+'</span></div><div><small>Why</small><span>He argued coverage should come with work, at a cost Georgia controls, not full expansion.'+sup(1)+'</span></div></div>'+
+    '<p class="quote">“A pathway to an education, a job, a career.”<small>Gov. Brian Kemp'+sup(1)+'</small></p>'; } },
+  { next:"Maya’s plan for people like Bri", src:[S.ajcN,S.wabe,S.cbeat23,S.dch], html:function(){ return '<p class="eyebrow">What the news found</p><h2>Three years in, Pathways covers a fraction of what it promised.</h2>'+
+    '<div class="clips"><div class="clip"><span class="o">The Atlanta Journal-Constitution</span><span class="h">Georgia’s Medicaid work requirements cost millions, despite low enrollment</span><span class="d">March 2024 · by KFF Health News'+sup(1)+'</span></div>'+
+    '<div class="clip"><span class="o">WABE · Atlanta</span><span class="h">Report: Georgia Pathways spending twice as much on admin costs as health care</span><span class="d">September 2025'+sup(2)+'</span></div></div>'+
+    '<div class="stat"><div><b>100,000</b><span>Goal for year one'+sup(3)+'</span></div><div><b class="hot">~20,000</b><span>Enrolled'+sup(4)+'</span></div></div>'; } },
+  { next:"What happens to Bri after the election", src:[S.care], html:function(){ return '<p class="eyebrow">Where Maya stands</p><h2><span class="m">Maya’s plan:</span> get people like Bri covered by passing full Medicaid expansion.'+sup(1)+'</h2>'+
+    '<div class="plan"><div class="row"><i>1</i><div><b>Pass full Medicaid expansion</b><span>Adults earning up to about $22,000 a year qualify, more with kids. The federal government pays 90%.</span></div></div>'+
+    '<div class="row"><i>2</i><div><b>Fund rural hospitals</b><span>A separate plan, Rural Care First, to keep small-town hospitals and clinics open.</span></div></div></div>'+
+    '<p class="then"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>With expansion in place, Georgia won’t need Pathways, so she’d end it.</span></p>'; } },
+  { next:"Your three points for the door", src:[S.rec,S.ajcJ,S.gpb], html:function(){ return '<p class="eyebrow">What your vote decides</p><h2>Whether Bri gets covered depends on who wins.</h2>'+
+    '<div class="fork2"><div class="a"><small>If Maya wins</small><b>Bri qualifies for Medicaid.</b><span>Full expansion covers adults up to about $22,000.</span></div><div class="b"><small>If her opponent wins</small><b>A Pathways-style plan.</b><span>He promises to “close the coverage gap.”'+sup(1)+' How many it covers isn’t set.'+sup(2)+'</span></div></div>'+
+    '<p class="small" style="margin-top:1.4cqh">Either way, a 2025 federal law adds work rules: 80 hours a month, with exemptions.'+sup(3)+'</p>'+
+    '<p class="power">A governor can’t do this alone; the legislature passes the law. Expansion will be Maya’s top priority to push the legislature to pass.</p>'; } },
+  { next:"Practice it at a door", src:[], html:function(){ return '<p class="eyebrow">Before you knock</p><h2>If a voter asks about health coverage, hit these three points.</h2>'+
+    '<ol class="three">'+KP.map(function(k,n){return '<li><i>'+(n+1)+'</i><span><small>'+KP_SHORT[n]+'</small>'+k.replace(/^(Maya’s plan|Her opponent’s plan): /,"")+'</span></li>';}).join("")+'</ol>'; } }
+];
+var NL = LEARN.length;
+
+/* ---------- shell ---------- */
+function top(){ return '<div class="top"><img src="'+PHOTO+'" alt=""><div class="who"><b>Maya Kaur</b><span>Health coverage</span></div><button class="x" data-go="home" aria-label="Close the lesson">'+'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'; }
+function learnBar(k){ var h='<div class="step"><div class="bars">'; for(var n=0;n<NL;n++) h+='<i class="'+(n<k?"done":n===k?"now":"")+'"></i>'; return h+'</div></div>'; }
+var PRACT = ["1st try","Hear it done","Catch the mistake","2nd try"];
+function practBar(k){ var h='<div class="step"><span class="lchip">'+CHECK.replace('<svg','<svg width="13" height="13"')+'Learn</span><div class="bars">'; for(var n=0;n<4;n++) h+='<i class="'+(n<k?"done":n===k?"now":"")+'"></i>'; h+='</div></div>';
+  return h+'<div class="pname"><span>Practice · '+(k<4?PRACT[k]:"Done")+'</span><span>'+(k<4?(k+1)+' of 4':'')+'</span></div>'; }
+function foot(btn, src, extra){ return '<div class="foot">'+(src&&src.length?'<button class="srcbtn" data-src>Sources ('+src.length+')</button>':'')+btn+(extra||"")+'</div>'; }
+function cta(label, go, cls){ return '<button class="cta '+(cls||"")+'" data-go="'+go+'">'+label+' <span aria-hidden="true">→</span></button>'; }
+var curSrc=[];
+function render(html){ app.innerHTML = '<span class="draftflag">Draft · Nov 1</span>'+html; var b=app.querySelector(".body"); if(b && !b.querySelector("#th")){ var w=document.createElement("div"); w.className="inner"; while(b.firstChild) w.appendChild(b.firstChild); b.appendChild(w); fit(); } }
+/* fit to screen: scale the screen's content to the largest size that fits, so nothing scrolls and no blank band sits above the button */
+function fit(){ var b=app.querySelector(".body"), w=b&&b.querySelector(".inner"); if(!w) return; var cs=getComputedStyle(b), avail=b.clientHeight-parseFloat(cs.paddingTop)-4, lo=.6, hi=1.45, mid;
+  for(var n=0;n<14;n++){ mid=(lo+hi)/2; w.style.zoom=mid; if(w.getBoundingClientRect().height<=avail && w.scrollWidth<=w.clientWidth+1) lo=mid; else hi=mid; } w.style.zoom=lo; }
+window.addEventListener("resize",function(){ fit(); });
+
+/* ---------- screens ---------- */
+var ISSUES = [["Health coverage","200,000 working Georgians can’t get insured","Today"],["School vouchers","$1 billion of tax money for private schools","Tomorrow"],["Electric bills","Up by more than half since 2019","In 2 days"],["Heating oil","About $6 a gallon this winter","In 3 days"],["Tariffs and auto jobs","Canada tariffs are costing auto jobs","In 4 days"]];
+function home(){
+  curSrc=[];
+  render('<div class="top"><img src="'+PHOTO+'" alt=""><div class="who"><b>Maya Kaur</b><span>For Governor · Canvasser briefings</span></div></div>'+
+  '<div class="body"><p class="eyebrow">Before you knock</p><h1>Five of the issues voters raise most at the door.</h1>'+
+  '<div class="hm-brief"><img src="'+PHOTO+'" alt="Maya Kaur"><p>“Here’s what voters are asking us, where I stand and what you’ll hear back. Five minutes each, one a day.”</p></div>'+
+  '<button class="today" data-go="start"><span class="k"><span>Today’s lesson · 5 min</span><span>Start →</span></span><b>'+ISSUES[0][0]+'</b><span>'+ISSUES[0][1]+'</span></button>'+
+  '<div class="next"><p class="k">Coming up · one a day</p>'+ISSUES.slice(1).map(function(x){return '<button class="nrow" data-lock="'+x[2]+'"><b>'+x[0]+'</b><small>'+x[2]+'</small><span>'+x[1]+'</span></button>';}).join("")+'</div></div><div style="height:max(16px,2.4cqh)"></div>');
+}
+function how(){
+  curSrc=[];
+  render(top()+'<div class="body"><p class="eyebrow">How each lesson works</p><h2>Two parts, about five minutes.</h2>'+
+  '<div class="how"><div class="part"><span class="n">1</span><b>Learn</b><em>3 MIN</em><span>The facts, where Maya stands and how her opponent differs, straight from the campaign.</span></div>'+
+  '<div class="part"><span class="n">2</span><b>Practice</b><em>2 MIN</em><span>A voter raises the issue at the door. You answer, hear a canvasser do it, catch a mistake, then answer again.</span><ul><li>1st try</li><li>Hear it done</li><li>Catch the mistake</li><li>2nd try</li></ul></div></div></div>'+
+  foot(cta("Start the health coverage lesson","cover")));
+}
+function cover(){
+  curSrc=[];
+  render(top()+'<div class="body"><p class="eyebrow">Learn · 3 min</p><h2>Three things you’ll know about health coverage.</h2><ol class="three">'+
+  KP.map(function(k,n){return '<li><i>'+(n+1)+'</i><span><small>'+KP_SHORT[n]+'</small>'+k.replace(/^(Maya’s plan|Her opponent’s plan): /,"")+'</span></li>';}).join("")+'</ol></div>'+
+  foot(cta("How most people get insurance","L0")));
+}
+function learn(k){
+  var c=LEARN[k]; curSrc=c.src||[];
+  render(top()+learnBar(k)+'<div class="body">'+c.html()+'</div>'+foot(cta(c.next, k+1<NL?"L"+(k+1):"pintro", k+1<NL?"":"go"), curSrc));
+  if(c.after) c.after();
+}
+function pintro(){
+  curSrc=[];
+  render(top()+practBar(0)+'<div class="body pintro"><p class="eyebrow">Practice · 2 min</p><h2>Now practice it at a door.</h2><p class="lede">You’ve already said you’re with Maya’s campaign. Partway through the conversation, the voter brings up health insurance. Answer in your own words.</p>'+
+  '<ol class="steps4"><li><i>1</i><span><b>1st try.</b> Answer the voter. No grade yet.</span></li><li><i>2</i><span><b>Hear it done.</b> A canvasser at the same door.</span></li><li><i>3</i><span><b>Catch the mistake.</b> Spot what a canvasser gets wrong.</span></li><li><i>4</i><span><b>2nd try.</b> Answer again, graded on the three points.</span></li></ol></div>'+
+  foot(cta("Start the conversation","try1","go")));
+}
+
+/* ---------- the conversation thread ---------- */
+var V_OPEN="Can I ask you something? I don’t get health insurance through my job. Is Maya going to do anything about that?";
+var V_FOLLOW="I heard the other guy wants to expand it too.";
+var V_BYE="Okay. That helps. Thanks for coming by.";
+function threadScreen(k, title, pin){
+  return top()+practBar(k)+'<div class="body"><div class="scene"><div class="av">'+BRI_AV+'</div><div><b>'+title+'</b><span>Bri, a mom of two, earns about $14,000 a year</span></div></div>'+(pin||"")+'<div class="thread" id="th"></div></div><div class="foot" id="ft"></div>';
+}
+function th(){ return document.getElementById("th"); }
+function add(cls, text){ var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=text; th().appendChild(d); th().scrollTop=th().scrollHeight; return d; }
+function note(text){ var d=document.createElement("div"); d.className="note"; d.textContent=text; th().appendChild(d); }
+function typing(ms, then){ var d=document.createElement("div"); d.className="typing"; d.innerHTML="<i></i><i></i><i></i>"; th().appendChild(d); th().scrollTop=th().scrollHeight; setTimeout(function(){ d.remove(); then(); }, ms); }
+function setFoot(h){ document.getElementById("ft").innerHTML=h; }
+
+/* the mic: the warm-up's pattern. Tap or click to talk; a live card shows the green mic, the wave and your words as you speak; the main button becomes "I'm done". Tapping the card's mic starts over. */
+function listen(done){
+  var label = TOUCH ? "Tap to talk" : "Click to talk";
+  if(!SR){ return typed(done); }
+  setFoot('<button class="cta" id="talk">'+MIC+' '+label+'</button>');
+  document.getElementById("talk").onclick=function(){
+    var bub=add("me live",'<button class="lm" aria-label="Start over">'+MIC+'</button><div><div class="wave">'+'<i></i>'.repeat(14)+'</div><div class="livewords"></div></div>');
+    var words=bub.querySelector(".livewords"), finalText="", r=new SR(), stopped=false;
+    r.lang="en-US"; r.continuous=true; r.interimResults=true;
+    r.onresult=function(e){ var interim=""; for(var n=e.resultIndex;n<e.results.length;n++){ if(e.results[n].isFinal) finalText+=e.results[n][0].transcript+" "; else interim+=e.results[n][0].transcript; } words.textContent=(finalText+interim).trim(); th().scrollTop=th().scrollHeight; };
+    r.onerror=function(ev){ if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){ stopped=true; bub.remove(); typed(done,"The microphone is blocked here, so type your answer."); } };
+    r.onend=function(){ if(!stopped){ try{ r.start(); }catch(e){} } };
+    bub.querySelector(".lm").onclick=function(){ finalText=""; words.textContent=""; };
+    try{ r.start(); }catch(e){}
+    setFoot('<button class="cta go" id="talk">'+MIC+' I’m done</button>');
+    document.getElementById("talk").onclick=function(){ stopped=true; try{ r.stop(); }catch(e){} var t=(words.textContent||"").trim(); bub.className="msg me"; bub.textContent=t||"(nothing heard)"; done(t); };
+  };
+}
+function typed(done, hint){
+  setFoot((hint?'<p class="small">'+hint+'</p>':'')+'<div class="typebox"><textarea id="say" placeholder="Type what you’d say" aria-label="Your answer"></textarea><button id="send" aria-label="Send">→</button></div>');
+  document.getElementById("send").onclick=function(){ var t=document.getElementById("say").value.trim(); if(!t) return; add("me",t.replace(/</g,"&lt;")); done(t); };
+}
+function grade(t){ t=(t||"").toLowerCase(); return GRADE.map(function(r){ return r.test(t)?1:0; }); }
+
+function tryDoor(k, key){
+  var second = k===3;
+  render(threadScreen(k, second?"Same door, 2nd try":"Your 1st try", second?'<p class="pin">Hit all three: <b>the problem</b>, <b>Maya’s plan</b> and <b>her opponent’s plan</b>.</p>':''));
+  note("You’ve introduced yourself as a volunteer with Maya’s campaign");
+  var all="";
+  typing(900,function(){ add("v",V_OPEN); listen(function(a){ all+=a+" "; setFoot("");
+    typing(1100,function(){ add("v",V_FOLLOW); listen(function(b){ all+=b; setFoot("");
+      typing(900,function(){ add("v",V_BYE);
+        st[key]=all; st[second?"g2":"g1"]=grade(all);
+        setFoot(second? cta("See how you did","result","go") : '<p class="small">Saved. Next, hear how a canvasser answers Bri.</p>'+cta("Hear a canvasser answer Bri","hear","go"));
+      }); }); }); }); });
+}
+function hear(){
+  render(threadScreen(1,"A canvasser at Bri’s door"));
+  var body=app.querySelector(".body");
+  var kp=document.createElement("div"); kp.className="kp"; kp.innerHTML=KP.map(function(k){return '<div><i>'+CHECK.replace('<svg','<svg width="12" height="12"')+'</i><span>'+k+'</span></div>';}).join(""); body.appendChild(kp);
+  var lines=[["v",V_OPEN],["c","She is. Right now about 200,000 working Georgians, people like you, earn too much for Medicaid and too little to buy insurance.",0],["c","Maya wants full Medicaid expansion, so adults earning up to about $22,000 a year can get covered. The federal government pays 90%.",1],["v",V_FOLLOW],["c","He wants a Pathways-style plan with work rules. Pathways only signed up about 20,000 people.",2],["v",V_BYE]];
+  var n=0; (function step(){ if(n>=lines.length){ setFoot(cta("Catch a canvasser’s mistake","catch","go")+'<button class="link" data-go="hear">Hear it again</button>'); return; }
+    var L=lines[n++]; typing(L[0]==="v"?800:1300,function(){ add(L[0],L[1]); if(L[2]!==undefined) kp.children[L[2]].classList.add("on"); setTimeout(step,1300); }); })();
+  setFoot('<button class="link" id="skip">Skip</button>'); document.getElementById("skip").onclick=function(){ go("catch"); };
+}
+function catchIt(){
+  render(threadScreen(2,"Another canvasser, same door"));
+  var lines=[["v",V_OPEN],["c","She is. About 200,000 working Georgians can’t get coverage right now."],["c","Maya wants full Medicaid expansion, so adults earning up to about $22,000 are covered."],["v",V_FOLLOW],["c wrong","He’s against Medicaid."]];
+  var n=0; (function step(){ if(n>=lines.length){ ask(); return; } var L=lines[n++]; typing(700,function(){ add(L[0],L[1]); setTimeout(step,700); }); })();
+  function ask(){
+    var opts=["The problem: 200,000 working Georgians can’t get coverage","Maya’s plan: full Medicaid expansion","Her opponent’s plan: he’s against Medicaid"];
+    setFoot('<p class="small" style="font-weight:600;color:var(--ink)">Which point did the canvasser get wrong?</p><div class="opts">'+opts.map(function(o,i){return '<button class="opt" data-o="'+i+'">'+o+'</button>';}).join("")+'</div><div id="fx"></div>');
+    Array.prototype.forEach.call(document.querySelectorAll(".opt"),function(b){ b.onclick=function(){
+      var i=+b.dataset.o; if(i===2){ b.classList.add("right"); document.getElementById("fx").innerHTML='<p class="fix"><b>Right.</b> He isn’t against Medicaid. He’s against full expansion and wants a Pathways-style plan with work rules instead.</p>'+'<div style="height:10px"></div>'+cta("Answer Bri again","try2","go"); }
+      else { b.classList.add("wrongpick"); document.getElementById("fx").innerHTML='<p class="small" style="margin-top:8px">That one was right. Look at what the canvasser said about her opponent.</p>'; }
+    }; });
+  }
+}
+function result(){
+  var g=st.g2, n=g[0]+g[1]+g[2], all=n===3;
+  curSrc=[];
+  render(top()+practBar(4)+'<div class="body"><div class="grow" style="justify-content:flex-start">'+
+    (all?'<div class="badge">'+CHECK+'</div><p class="score">3 of 3 key points</p><h1 style="margin-top:1cqh">You’re briefed on health coverage.</h1>'
+        :'<p class="score" style="color:var(--gap)">'+n+' of 3 key points</p><h1 style="margin-top:1cqh">Close. One more try gets you there.</h1>')+
+    '<ul class="got">'+KP.map(function(k,i){return '<li class="'+(g[i]?"y":"n")+'"><i>'+(g[i]?"✓":"–")+'</i><span>'+(g[i]?k:'<b>Missed:</b> '+k)+'</span></li>';}).join("")+'</ul>'+
+    '<details class="said"><summary>What you said</summary><p>“'+(st.try2||"").replace(/</g,"&lt;")+'”</p></details></div></div>'+
+    foot(all?cta("Finish the lesson","done","go"):cta("Try Bri’s door again","try2","go")+'<button class="link" data-go="done">Finish anyway</button>'));
+}
+function done(){
+  var a=st.g1[0]+st.g1[1]+st.g1[2], b=st.g2[0]+st.g2[1]+st.g2[2];
+  curSrc=[S.kffEmp,S.gbpi,S.kffPar,S.hhs,S.rec,S.census,S.ccf,S.hc,S.kffStatus,S.kemp,S.paFlier,S.ajcN,S.wabe,S.cbeat23,S.dch,S.care,S.ajcJ,S.gpb];
+  render(top()+practBar(4)+'<div class="body"><p class="eyebrow">Lesson done</p><h2>You went from '+a+' to '+b+' of the three points Maya needs you to make.</h2>'+
+    '<div class="growth"><div><small>1st try</small><b>'+a+' of 3</b><span>Before the lesson</span></div><div class="after"><small>2nd try</small><b>'+b+' of 3</b><span>After 5 minutes</span></div></div>'+
+    '<div class="reveal">Behind the curtain: Maya stood in for <b>Keisha Lance Bottoms</b>, the Democrat running for Georgia governor in 2026, against Republican <b>Rick Jackson</b>. Every fact and position is real and sourced.</div></div>'+
+    '<div class="foot"><button class="srcbtn" data-src data-live>All sources, with links ('+curSrc.length+')</button>'+cta("Back to lessons · next one tomorrow","home")+'</div>');
+}
+
+/* ---------- routing ---------- */
+function go(where){
+  if(where==="home") return home();
+  if(where==="start") return st.seenHow?cover():(st.seenHow=true,how());
+  if(where==="cover") return cover();
+  if(where==="pintro") return pintro();
+  if(where==="try1") return tryDoor(0,"try1");
+  if(where==="hear") return hear();
+  if(where==="catch") return catchIt();
+  if(where==="try2") return tryDoor(3,"try2");
+  if(where==="result") return result();
+  if(where==="done") return done();
+  if(where[0]==="L") return learn(+where.slice(1));
+}
+function sheet(live){
+  var d=document.createElement("div"); d.className="scrim";
+  d.innerHTML='<div class="sheet" role="dialog" aria-label="Sources"><h3>Sources</h3>'+(live?'':'<p class="small">Each number on this screen matches a source below. Clickable links to every source are on the last screen of the lesson.</p>')+
+    '<ol>'+curSrc.map(function(s,n){return '<li><i>'+(n+1)+'</i><span>'+(live?'<a href="'+s[1]+'" target="_blank" rel="noopener">'+s[0]+' ↗</a>':s[0])+'</span></li>';}).join("")+'</ol><button class="cta" id="closeS">Back to the lesson</button></div>';
+  app.appendChild(d);
+  d.onclick=function(e){ if(e.target===d||e.target.id==="closeS") d.remove(); };
+}
+function toast(t){ var d=document.createElement("div"); d.className="toast"; d.textContent=t; app.appendChild(d); setTimeout(function(){ d.remove(); },2600); }
+app.addEventListener("click",function(e){
+  var g=e.target.closest("[data-go]"); if(g){ go(g.dataset.go); return; }
+  var s=e.target.closest("[data-src]"); if(s){ sheet(s.hasAttribute("data-live")); return; }
+  var l=e.target.closest("[data-lock]"); if(l){ toast("This one opens "+l.dataset.lock.toLowerCase()+". One lesson a day helps it stick."); return; }
+});
+function boot(){ var q=location.hash.slice(1); document.querySelectorAll(".scrim").forEach(function(x){x.remove();}); if(/^L\d+$/.test(q)) learn(Math.min(+q.slice(1),NL-1)); else if(q) go(q); else home(); }
+window.addEventListener("hashchange",boot); boot();
+})();
+</script>
