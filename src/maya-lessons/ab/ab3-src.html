@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bri's door, two layouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* A/B round 3 (Nov 1): Georgia's Practice golden screen, GA P2, in the Learn look Robert picked (rounds 1 and 2).
+     Same moment in both: Bri's follow-up just arrived in the one chat thread, and the canvasser is answering out loud with the warm-up's mic.
+     A keeps the door big on top; B gives the screen to the conversation and shrinks the door to a thumbnail. */
+  :root {
+    --sans: "Figtree", system-ui, sans-serif; --serif: "Newsreader", Georgia, serif;
+    --ink: #3c3c3c; --body: #4b4b4b; --muted: #6a6a6a; --line: #e5e5e5; --panel: #f4f6f8;
+    --green: #35b57c; --green-deep: #1b7a4d; --you: #e7f6ee; --page: #ece7df;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--sans); }
+  .wrap { min-height: 100svh; display: flex; gap: 48px; justify-content: center; align-items: flex-start; padding: 22px 16px 28px; flex-wrap: wrap; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 10px; width: min(402px, 100%); }
+  .pick { font: 700 22px/1 var(--sans); }
+  .phone { position: relative; width: 100%; height: clamp(520px, calc(100svh - 90px), 800px); background: #fff; border-radius: 30px; overflow: hidden; display: flex; flex-direction: column; padding: 14px 18px 20px; box-shadow: 0 18px 48px -24px rgba(40,30,10,.35); border: 1px solid rgba(0,0,0,.06); }
+  .tag { position: absolute; right: 12px; bottom: 5px; font: 600 11px/1 var(--sans); color: rgba(38,35,32,.45); }
+
+  /* the story bar in Practice: Learn folds into a green chip, then one segment per Practice screen, full or empty */
+  .top { display: flex; align-items: center; gap: 10px; height: 26px; flex: none; }
+  .x { border: 0; background: none; padding: 0; width: 22px; height: 22px; color: #afafaf; }
+  .chip { flex: none; display: inline-flex; align-items: center; gap: 4px; font: 800 12px/1 var(--sans); color: var(--green-deep); background: var(--you); border-radius: 99px; padding: 4px 8px 4px 6px; }
+  .chip svg { width: 12px; height: 12px; }
+  .seg { display: flex; gap: 4px; flex: 1; }
+  .seg i { flex: 1; height: 5px; border-radius: 5px; background: var(--line); }
+  .seg i.full { background: var(--green); }
+
+  .body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding-top: 14px; }
+  .body > * { flex: none; }
+  h2 { margin: 0; font: 800 22px/1.2 var(--sans); letter-spacing: -.01em; color: var(--ink); }
+
+  /* the conversation: one thread, newest at the bottom, older turns slide up under a fade */
+  .thread { flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px); mask-image: linear-gradient(to bottom, transparent 0, #000 16px); }
+  .msg { flex: none; max-width: 88%; border-radius: 18px; padding: 9px 13px 10px; }
+  .msg b { display: block; font: 800 11.5px/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .msg p { margin: 0; font: 500 15.5px/1.4 var(--sans); color: var(--body); }
+  .msg.bri { align-self: flex-start; background: var(--panel); border-bottom-left-radius: 6px; }
+  .msg.you { align-self: flex-end; background: var(--you); border-bottom-right-radius: 6px; }
+  .msg.you b { color: var(--green-deep); }
+  .msg.now p { color: var(--ink); font-weight: 600; }
+
+  /* the warm-up's mic: green mic on the left, the waveform, your words appearing as you speak */
+  .live { display: flex; align-items: center; gap: 12px; border: 2px solid var(--line); border-radius: 18px; padding: 8px 12px 8px 8px; }
+  .mic { position: relative; flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--green); display: grid; place-items: center; }
+  .mic::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 3px solid var(--green); opacity: .35; animation: ring 1.4s ease-out infinite; }
+  .mic svg { width: 20px; height: 20px; }
+  .live .w { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+  .wave { display: flex; align-items: center; gap: 3px; height: 12px; }
+  .wave i { width: 3px; border-radius: 3px; background: var(--green); height: 4px; animation: bob 0.9s ease-in-out infinite; }
+  .wave i:nth-child(3n) { animation-delay: .15s; } .wave i:nth-child(3n+1) { animation-delay: .3s; } .wave i:nth-child(4n) { animation-delay: .45s; }
+  .live .words { font: 600 15.5px/1.3 var(--sans); color: var(--green-deep); }
+  @keyframes ring { 0% { transform: scale(.9); opacity: .5; } 100% { transform: scale(1.25); opacity: 0; } }
+  @keyframes bob { 50% { height: 12px; } }
+  @media (prefers-reduced-motion: reduce) { .mic::after, .wave i { animation: none; } .wave i { height: 8px; } }
+
+  .foot { flex: none; display: flex; margin-top: 14px; }
+  .next { flex: 1; border: 0; border-radius: 16px; min-height: 54px; background: var(--green); color: #fff; font: 800 16px/1 var(--sans); box-shadow: 0 4px 0 var(--green-deep); display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+  .next svg { width: 18px; height: 18px; }
+  .next:focus-visible, .x:focus-visible { outline: 3px solid #1F4C91; outline-offset: 2px; }
+
+  /* the door, drawn as in the warm-up, open, with Bri in it */
+  .voter .door-panel { transform-box: fill-box; transform-origin: right center; transform: scaleX(0.14); }
+
+  /* A: the door big on top */
+  .a .door { flex: 1 1 0; min-height: 130px; border-radius: 18px; overflow: hidden; background: #E3E6EC; }
+  .a .thread { flex: 0 1 auto; }
+  .a .door svg { display: block; width: 100%; height: 100%; }
+
+  /* B: the conversation fills the screen; the door is a thumbnail beside Bri's name */
+  .b .who { display: flex; align-items: center; gap: 12px; }
+  .b .thumb { flex: none; width: 58px; height: 58px; border-radius: 16px; overflow: hidden; background: #E3E6EC; }
+  .b .thumb svg { display: block; width: 100%; height: 100%; }
+  .b .who b { display: block; font: 800 18px/1.2 var(--sans); }
+  .b .who span { display: block; font: 500 14px/1.3 var(--sans); color: var(--muted); }
+  /* B scales the conversation to fill its space, so no blank band sits above it (playbook principle 21) */
+  .b { --k: 1; }
+  .b .thread { gap: calc(8px * var(--k)); }
+  .b .msg { padding: calc(9px * var(--k)) calc(13px * var(--k)) calc(10px * var(--k)); border-radius: calc(18px * var(--k)); }
+  .b .msg.bri { border-bottom-left-radius: 6px; } .b .msg.you { border-bottom-right-radius: 6px; }
+  .b .msg b { font-size: calc(11.5px * var(--k)); margin-bottom: calc(4px * var(--k)); }
+  .b .msg p { font-size: calc(16px * var(--k)); }
+
+  @media (max-width: 860px) { .wrap { gap: 28px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="col">
+    <div class="pick">A</div>
+    <div class="phone a">
+      <div class="top"><button class="x" type="button" aria-label="Close lesson"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></button><span class="chip"><svg viewBox="0 0 12 12"><path d="M2.5 6.5l2.2 2.2L9.5 3.8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Learn</span><div class="seg"><i class="full"></i><i class="full"></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="body">
+        <h2>Answer Bri out loud</h2>
+        <div class="door">DOOR_SVG</div>
+        <div class="thread">
+          <div class="msg bri"><b>Bri</b><p>Can I ask you something? My job doesn’t offer health insurance, and I can’t afford to buy it. Is Maya going to do anything about that?</p></div>
+          <div class="msg you"><b>You</b><p>She is. About 200,000 Georgians are in your spot, and Maya wants to expand Medicaid so you’d qualify.</p></div>
+          <div class="msg bri now"><b>Bri</b><p>I heard the other guy has a health plan too. What’s the difference?</p></div>
+        </div>
+        <div class="live"><span class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span><span class="w"><span class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="words">His plan is smaller, and</span></span></div>
+      </div>
+      <div class="foot"><button class="next" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>I’m done</button></div>
+      <span class="tag">GA P2A</span>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="pick">B</div>
+    <div class="phone b">
+      <div class="top"><button class="x" type="button" aria-label="Close lesson"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></button><span class="chip"><svg viewBox="0 0 12 12"><path d="M2.5 6.5l2.2 2.2L9.5 3.8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Learn</span><div class="seg"><i class="full"></i><i class="full"></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="body">
+        <h2>Answer Bri out loud</h2>
+        <div class="who"><span class="thumb">DOOR_THUMB</span><div><b>Bri</b><span>At her front door, mid-conversation</span></div></div>
+        <div class="thread">
+          <div class="msg bri"><b>Bri</b><p>Can I ask you something? My job doesn’t offer health insurance, and I can’t afford to buy it. Is Maya going to do anything about that?</p></div>
+          <div class="msg you"><b>You</b><p>She is. About 200,000 Georgians are in your spot, and Maya wants to expand Medicaid so you’d qualify.</p></div>
+          <div class="msg bri now"><b>Bri</b><p>I heard the other guy has a health plan too. What’s the difference?</p></div>
+        </div>
+        <div class="live"><span class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span><span class="w"><span class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="words">His plan is smaller, and</span></span></div>
+      </div>
+      <div class="foot"><button class="next" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>I’m done</button></div>
+      <span class="tag">GA P2B</span>
+    </div>
+  </div>
+
+</div>
+<script>
+  /* fit B: the largest text size (0.85x to 1.35x) at which the whole conversation shows */
+  function fitB() { var ph = document.querySelector('.phone.b'), t = ph.querySelector('.thread'); var lo = 0.85, hi = 1.35;
+    var fits = function (k) { ph.style.setProperty('--k', k); return t.firstElementChild.getBoundingClientRect().top >= t.getBoundingClientRect().top - 1; };
+    for (var i = 0; i < 14; i++) { var m = (lo + hi) / 2; if (fits(m)) lo = m; else hi = m; } ph.style.setProperty('--k', lo); }
+  fitB(); addEventListener('resize', fitB); if (document.fonts) document.fonts.ready.then(fitB);
+</script>
+</body>
+</html>
