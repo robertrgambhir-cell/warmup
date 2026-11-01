@@ -903,6 +903,30 @@
   .spot-ans .ans-miss { font-size: 15px; font-weight: 600; line-height: 1.38; }
   .fb.spot-ans.ok { border-color: #E6A23C; background: #FCF3E3; }
   @media (prefers-reduced-motion: reduce) { .voter .fig, .voter .eyes, .voter.knock, .moves.wlive li, .rep-quote.late { animation: none !important; } .voter .door-panel, .voter .fig-wrap { transition: none !important; } }
+
+  /* v11.2 (Robert, Oct 31, 6:18 PM): the stepper sized by time, Learn cut into one notch per card; newspaper headlines */
+  .pbar { margin: 2px 0 6px; }
+  .pb-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font: 600 12px/1.2 var(--sans); margin-bottom: 6px; }
+  .pb-row b { font-weight: 700; }
+  .pb-row span { opacity: .6; white-space: nowrap; }
+  .pb-segs { display: flex; gap: 5px; }
+  .pb-segs button { all: unset; cursor: pointer; min-width: 0; padding: 5px 0; display: flex; }
+  .pb-segs button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
+  .pb-segs .seg { flex: 1; height: 5px; border-radius: 5px; background: currentColor; opacity: .16; position: relative; overflow: hidden; }
+  .pb-segs button.cur .seg, .pb-segs button.done .seg { opacity: 1; background: rgba(0,0,0,.1); }
+  .story.dark .pb-segs button.cur .seg, .story.dark .pb-segs button.done .seg { background: rgba(255,255,255,.22); }
+  .pb-segs .seg i { position: absolute; inset: 0 auto 0 0; border-radius: 5px; background: currentColor; transition: width .45s cubic-bezier(.2,.8,.2,1); }
+  .pb-segs button.done .seg i { background: var(--accent); }
+  .pb-segs .ticks { flex: 1; display: flex; gap: 2px; }
+  .pb-segs .ticks i { flex: 1; height: 5px; border-radius: 3px; background: currentColor; opacity: .16; transition: opacity .3s; }
+  .pb-segs .ticks i.f { opacity: .9; }
+  .pb-segs button.done .ticks i { background: var(--accent); opacity: 1; }
+  .news { display: grid; gap: 5px; padding: 12px 14px 11px; border-radius: 6px; background: #FBF8F1; color: #1d1b18; text-decoration: none; box-shadow: 0 6px 18px -10px rgba(0,0,0,.45); border-top: 3px solid #1d1b18; transform: rotate(-.6deg); }
+  .news .nw-o { font: 700 10.5px/1.2 var(--serif); letter-spacing: .12em; text-transform: uppercase; opacity: .7; padding-bottom: 5px; border-bottom: 1px solid rgba(0,0,0,.15); }
+  .news .nw-h { font: 700 19px/1.18 var(--serif); letter-spacing: -.01em; }
+  .news .nw-d { font: 500 11.5px/1.2 var(--sans); opacity: .6; }
+  .st-h.sm { font-size: 22px; }
+  .usmap { grid-template-columns: repeat(12, 1fr); }
 </style>
 <div class="wrap">
   <p class="fine">Demo campaign. Maya Kaur is fictional. Each lesson presents a real 2026 Democratic candidate’s public record as Maya’s; the real candidates are named at the end of the lesson. Not affiliated with, endorsed by or approved by any campaign.</p>
@@ -995,7 +1019,7 @@
 
   /* cover: the issue, one line, then the five parts; Learn lists what you'll learn (the same three moves the practice checks) */
   function cover(issue, moves, next) { return { bg: BLUE_BG, dark: true, next: next, html: function () {
-    return '<h2 class="cv-h">' + issue + '</h2><p class="cv-sub">One of the top 5 issues voters raise at the door.</p>' +
+    return '<h2 class="cv-h">' + issue + '</h2><p class="cv-sub">One of the top 5 issues voters are raising at the door.</p>' +
       '<p class="cv-here">You’re here · about 5 minutes in all</p><ol class="cv-rm">' + PARTS.map(function (p, k) {
         return '<li class="' + (k === 0 ? "on" : "") + '"><i>' + (k + 1) + '</i><b>' + p + '</b><em>' + PART_MIN[k] + '</em>' + (k === 0 ? '<div class="lo">' + moves.map(function (m) { return '<span>' + m[0] + '</span>'; }).join("") + '</div>' : "") + '</li>';
       }).join("") + '</ol>'; } }; }
@@ -1017,12 +1041,15 @@
       '<div class="st-bars2"><div class="col"><b class="v">' + o.pv + '</b><div class="bar goal" style="--h:' + o.ph + 'px"></div><span>' + o.pl + '</span></div><div class="col"><b class="v glow">' + o.rv + '</b><div class="bar got" style="--h:' + o.rh + 'px"></div><span>' + o.rl + '</span></div></div>' +
       '<p class="st-punch">' + o.punch + '</p>'; } }; }
 
+  /* a headline from an independent newsroom, so the takeaway is theirs, not ours (Robert, Oct 31, 6:18 PM); the outlet's name in plain text, never its logo */
+  function news(outlet, date, head, url, by) { return '<a class="news" href="' + url + '" target="_blank" rel="noopener"><span class="nw-o">' + outlet + '</span><span class="nw-h">' + head + '</span><span class="nw-d">' + date + (by ? ' · ' + by : '') + ' ↗</span></a>'; }
   /* US tile map: 40 states and DC expanded Medicaid; 10 didn't */
-  var TILES = [["AK", 0, 0], ["ME", 0, 10], ["VT", 1, 9], ["NH", 1, 10], ["WA", 2, 0], ["ID", 2, 1], ["MT", 2, 2], ["ND", 2, 3], ["MN", 2, 4], ["IL", 2, 5], ["WI", 2, 6], ["MI", 2, 7], ["NY", 2, 8], ["RI", 2, 9], ["MA", 2, 10], ["OR", 3, 0], ["NV", 3, 1], ["WY", 3, 2], ["SD", 3, 3], ["IA", 3, 4], ["IN", 3, 5], ["OH", 3, 6], ["PA", 3, 7], ["NJ", 3, 8], ["CT", 3, 9], ["CA", 4, 0], ["UT", 4, 1], ["CO", 4, 2], ["NE", 4, 3], ["MO", 4, 4], ["KY", 4, 5], ["WV", 4, 6], ["VA", 4, 7], ["MD", 4, 8], ["DE", 4, 9], ["AZ", 5, 1], ["NM", 5, 2], ["KS", 5, 3], ["AR", 5, 4], ["TN", 5, 5], ["NC", 5, 6], ["SC", 5, 7], ["DC", 5, 8], ["OK", 6, 3], ["LA", 6, 4], ["MS", 6, 5], ["AL", 6, 6], ["GA", 6, 7], ["HI", 7, 0], ["TX", 7, 3], ["FL", 7, 8]];
+  /* placed by each state's real location (centroids assigned to a 12 by 7 grid, then hand-checked: DC beside Maryland and Virginia, North Carolina above South Carolina) */
+  var TILES = [["WA",0,0],["MT",0,2],["ND",0,3],["MN",0,4],["VT",0,10],["ME",0,11],["OR",1,0],["ID",1,1],["WY",1,2],["SD",1,3],["IA",1,4],["WI",1,5],["MI",1,6],["NY",1,9],["MA",1,10],["NH",1,11],["NV",2,0],["UT",2,1],["CO",2,2],["NE",2,3],["MO",2,4],["IL",2,5],["IN",2,6],["OH",2,7],["PA",2,8],["NJ",2,9],["CT",2,10],["RI",2,11],["CA",3,0],["AZ",3,1],["NM",3,2],["KS",3,3],["AR",3,4],["KY",3,6],["WV",3,7],["MD",3,8],["DE",3,9],["OK",4,3],["LA",4,4],["MS",4,5],["TN",4,6],["VA",4,7],["DC",4,8],["AK",5,0],["TX",5,3],["AL",5,5],["GA",5,6],["NC",5,7],["HI",6,1],["FL",6,6],["SC",6,7]];
   function usmap(no) {
-    var grid = {}; TILES.forEach(function (t) { grid[t[1] * 11 + t[2]] = t[0]; });
+    var grid = {}; TILES.forEach(function (t) { grid[t[1] * 12 + t[2]] = t[0]; });
     var h = "";
-    for (var c = 0; c < 88; c++) { var s = grid[c]; h += s ? '<i class="' + (s === "GA" ? "ga" : no.indexOf(s) >= 0 ? "n" : "y") + '" style="transition-delay:' + (c * 9) + 'ms">' + s + '</i>' : '<i class="e"></i>'; }
+    for (var c = 0; c < 84; c++) { var s = grid[c]; h += s ? '<i class="' + (s === "GA" ? "ga" : no.indexOf(s) >= 0 ? "n" : "y") + '" style="transition-delay:' + (c * 9) + 'ms">' + s + '</i>' : '<i class="e"></i>'; }
     return '<div class="usmap" role="img" aria-label="Map: 40 states and DC expanded Medicaid. 10 did not: ' + no.join(", ") + '.">' + h + '</div>';
   }
   var GA_SHAPE = '<svg viewBox="0 0 92 104" role="img" aria-label="Map of Georgia"><path d="M4.5 3.0 L48.6 3.0 L52.3 13.5 L57.6 23.0 L64.6 32.4 L69.9 38.8 L77.0 45.0 L84.0 57.6 L88.4 65.0 L84.0 70.2 L81.4 80.7 L77.9 92.3 L69.0 92.9 L67.3 97.5 L64.6 100.5 L63.7 96.1 L50.5 95.4 L32.9 93.8 L17.7 93.1 L16.1 87.0 L14.3 74.4 L15.2 66.0 L12.6 57.6 L12.1 49.2 L9.9 34.5 L6.9 17.8Z" fill="#f3c9bf" stroke="#C2412D" stroke-width="2" stroke-linejoin="round"/><g fill="#C2412D">' + (function () { var d = ""; for (var k = 0; k < 20; k++) { d += '<circle cx="' + (24 + (k % 5) * 10) + '" cy="' + (36 + Math.floor(k / 5) * 12) + '" r="3.4"/>'; } return d; })() + '</g></svg>';
@@ -1043,6 +1070,7 @@
     cbeat23: ["Capitol Beat, the state’s first-year estimate", "https://capitol-beat.org/2023/06/limited-georgia-medicaid-expansion-launches-this-weekend/"],
     dch: ["Georgia DCH filing, Aug 2026", "https://www.medicaid.gov/medicaid/section-1115-demonstrations/downloads/ga-pathways-fmap-amendment-app-10012026.pdf"],
     gao: ["GAO report via WABE, Sep 2025", "https://www.wabe.org/?p=866284"],
+    ajcN: ["The Atlanta Journal-Constitution (KFF Health News), Mar 2024", "https://www.ajc.com/news/health-news/georgias-medicaid-work-requirements-costs-millions-despite-low-enrollment/5BOJLD6GQFBIZJMPTD64FPYRMQ/"],
     care: ["Maya’s plan (the Bottoms CARE Plan)", "https://www.keishaforgovernor.com/klb-policy-careplan-1.pdf"],
     jackson: ["His Sept 8 rollout, Capitol Beat", "https://capitol-beat.org/?p=18845"],
     ajcJ: ["AJC on his plan", "https://www.ajc.com/politics/2026/09/rick-jackson-proposes-intelligent-medicaid-expansion-in-georgia/"],
@@ -1080,11 +1108,11 @@
     { bg: "#F4EEE6", next: "How Pathways turned out", src: [SG.kemp, SG.paFlier], html: function () {
       return '<h2 class="st-h">In 2023, Gov. Brian Kemp chose his own plan instead: Georgia Pathways.</h2>' +
         '<div class="fl"><div><small>Who</small><span>Adults earning up to about $16,000 a year.' + sup(2) + '</span></div><div><small>The catch</small><span>Prove 80 hours a month of work, school or volunteering.' + sup(2) + '</span></div><div><small>His case</small><span>Coverage tied to work, at a cost Georgia controls, as “a pathway to an education, a job, a career.”' + sup(1) + '</span></div></div>'; } },
-    { bg: DARK_BG, dark: true, next: "Where Maya stands", src: [SG.cbeat23, SG.dch, SG.gao], html: function () {
-      return '<h2 class="st-h">Brian Kemp’s Georgia Pathways reached 1 in 5 people it aimed for, and most of its money went to running it.</h2>' +
+    { bg: DARK_BG, dark: true, next: "Where Maya stands", src: [SG.cbeat23, SG.dch, SG.gao, SG.ajcN], html: function () {
+      return news("The Atlanta Journal-Constitution", "March 2024", "Georgia’s Medicaid work requirements cost millions, despite low enrollment", SG.ajcN[1], "by KFF Health News") + '<h2 class="st-h sm">Brian Kemp’s Georgia Pathways, three years in:</h2>' +
         '<div class="duo"><div><small>Who it reached</small><div class="bars"><div><b>100,000</b><i style="--h:96px"></i><span>Goal' + sup(1) + '</span></div><div><b>~20,000</b><i class="hot" style="--h:20px"></i><span>Enrolled' + sup(2) + '</span></div></div></div>' +
         '<div><small>Where $80M went</small><div class="bars"><div><b>$54M</b><i class="hot" style="--h:96px"></i><span>Running it' + sup(3) + '</span></div><div><b>$26M</b><i style="--h:46px"></i><span>Care' + sup(3) + '</span></div></div></div></div>' +
-        '<p class="st-p dim">The goal was year one; enrollment is three years in. About two of every three dollars went to administration.</p>'; } },
+        '<p class="st-p dim">The 100,000 goal was for year one. Two of every three dollars went to administration.</p>'; } },
     stance("End what isn’t working. Cover the gap.", [["end", "End Brian Kemp’s Georgia Pathways", "It reached about 20,000 people and spent most of its money on administration."], ["", "Pass full Medicaid expansion", "Every adult earning up to about $22,000 qualifies. The federal government pays 90%."], ["", "Fund rural hospitals", "A separate plan, Rural Care First: higher payments to keep small-town hospitals and clinics open."]],
       "She’d push the legislature to pass Medicaid expansion and rural hospital funding.", [SG.care]),
     plans("Two plans for Georgians like Bri", "Parents qualify under about $8,000. Other adults only through Pathways, with 80 work hours a month." + sup(1),
@@ -1127,7 +1155,7 @@
         '<div class="sk-kids" role="img" aria-label="7 of 10 voucher students were already in private school or homeschool; 3 came from public school">' + kids + '</div><div class="st-legend"><span><i style="background:#e08a2c"></i>Already in private school or homeschool</span><span><i style="background:#3b80b6"></i>From public school</span></div>' +
         '<p class="st-p small">About 110,000 students got one this fall, about 2% of Texas kids; 106,000 more were waitlisted.' + sup(2) + '</p>'; } },
     { bg: "#EEF3FB", next: "Where Maya stands", src: [ST.lbb, ST.trib, ST.abbott], html: function () {
-      return '<h2 class="st-h">It’s built to grow, out of the same budget that pays for public schools.</h2>' +
+      return news("The Texas Tribune", "Sept 3, 2026", "Comptroller requests doubling Texas school voucher program to $2 billion", ST.trib[1]) + '<h2 class="st-h sm">It’s built to grow, out of the same budget that pays for public schools.</h2>' +
         vbars([["2027", "$1.0B", 1, "#e0b98a"], ["2028", "$3.1B", 3.1, "#e08a2c"], ["2030", "$4.0B", 4, "#b5541b"]], 4) + '<p class="st-p small">The Legislature’s own cost estimate.' + sup(1) + ' Gov. Abbott promised in 2022: “If you like the public school your child is attending, it will still be fully funded.”' + sup(3) + '</p>'; } },
     stance("Public money for public schools.", [["end", "Stop vouchers going nationwide", "She calls them “voucher scams” that “defund public schools.”"], ["", "Protect public school funding", "Keep the US Department of Education and the special education money it guarantees."], ["", "Fund teachers and pre-K", "Hire more teachers, raise their pay and bring universal pre-K."]],
       "Her record: a former public school teacher, she voted no on the Texas law and tried to send it to a statewide vote. The House killed that, 86 to 62.", [ST.site, ST.vote]),
@@ -1192,6 +1220,7 @@
     doe: ["US Energy Department", "https://www.energy.gov/node/4860871"],
     bdn: ["Bangor Daily News fact check", "https://www.bangordailynews.com/2026/10/08/news/maine-election-senate-2026-troy-jackson-susan-collins-debate-fact-check/"],
     jk: ["Maya’s plan (Jackson campaign)", "https://www.jacksonformaine.com/news/jackson-hits-the-airwaves-directing-mainers-to-heating-assistance-as-energy-costs-skyrocket"],
+    bdnOil: ["Bangor Daily News / Maine Public, Sept 28, 2026", "https://www.bangordailynews.com/2026/09/28/business/business-energy/maine-heating-oil-prices-record-high-iran-war/"],
     dafs: ["Maine DAFS, 2023 checks", "https://maine.gov/dafs/news/mills-administration-announces-all-450-winter-energy-relief-checks-have-been-mailed"]
   };
   var ME_MOVES = [["The problem", "Half of Maine heats with oil, and it’s about $6 a gallon"], ["Maya’s plan", "End the war driving prices; more heating aid"], ["Her opponent’s plan", "Early aid and a small release from the oil reserve"]];
@@ -1201,10 +1230,10 @@
       return '<h2 class="st-h lg">Half of Maine heats with oil.' + sup(1) + '</h2>' +
         '<div class="sk-duo"><div class="c"><b class="o">49%</b><div class="bar" style="--h:120px"></div><span>Maine homes</span></div><div class="c"><b>3%</b><div class="bar us" style="--h:8px"></div><span>US homes</span></div></div>' +
         '<p class="st-p">An oil tank in the basement, filled by truck, burned all winter. No state depends on heating oil more.</p>'; } },
-    { bg: DARK_BG, dark: true, next: "The help that exists", src: [SM.doer, SM.mills], html: function () {
-      return '<h2 class="st-h">Oil is about $6 a gallon, up about 80% in a year.' + sup(1) + '</h2>' +
+    { bg: DARK_BG, dark: true, next: "The help that exists", src: [SM.doer, SM.mills, SM.bdnOil], html: function () {
+      return news("Bangor Daily News", "Sept 28, 2026", "Maine posts record-breaking heating oil prices amid Iran War", SM.bdnOil[1], "by Maine Public") + '<h2 class="st-h sm">Oil is about $6 a gallon, up about 80% in a year.' + sup(1) + '</h2>' +
         '<div class="tanks"><div><div class="tk sm"><i></i></div><b>~$920</b><span>One fill, last fall</span></div><div><div class="tk"><i></i></div><b class="glow">~$1,660</b><span>One 275-gallon fill, now</span></div></div>' +
-        '<p class="st-p dim">Reporting ties the spike to the war in Iran.' + sup(2) + '</p>'; } },
+        ''; } },
     { bg: "#E8F1FB", next: "Her opponent’s record", src: [SM.heap, SM.mills], html: function () {
       return '<h2 class="st-h">Heating aid (HEAP) covers less than a third of one tank.' + sup(1) + '</h2>' +
         hrows([["One tank now", "$1,660", 1660, "#e07a1e"], ["Average HEAP benefit", "~$510", 510, "#3b80b6"]], 1660) +
@@ -1367,17 +1396,29 @@
   function reveal(x) { return '<div class="reveal"><span class="kick">Where this lesson came from</span><p>Maya stood in for <b>' + esc(x.from) + '</b>, the Democrat in the 2026 ' + esc(x.race) + ' race. Her Republican opponent is <b>' + esc(x.opp) + '</b>.</p><p class="muted">The positions, quotes and facts are theirs, drawn from public sources. We showed them as Maya Kaur’s campaign so you can see how a campaign’s own lesson would look in Warmup.</p><button class="srcbtn" type="button" id="srcs">See all sources</button></div>'; }
 
   /* the five-part stepper, tappable like Instagram */
-  function stepper() {
+  /* the stepper (Robert, Oct 31, 6:18 PM): one bar, each part as wide as the time it takes (2 min, 30 sec, 1 min, 30 sec, 1 min);
+     Learn is cut into one notch per card, so every tap fills the next notch; one line above names the part you're in and the time left */
+  var PART_W = [2, 0.5, 1, 0.5, 1];
+  function partFill(p) {
     var x = X();
-    return '<div class="p5" role="navigation" aria-label="Lesson parts">' + PARTS.map(function (name, p) {
-      var st = S.ph > p ? "done" : S.ph === p ? "cur" : "", w = 0;
-      if (S.ph === p) {
-        if (p === 0) w = (S.idx + 1) / x.story.length * 100;
-        else if (p === 1 || p === 4) w = !S.d || S.d.stage === "intro" ? 8 : S.d.stage === "end" ? 100 : 30 + S.d.n * 30;
-        else w = S.play && S.play.finished ? (p === 3 && !(S.spot && S.spot.pick != null) ? 70 : 100) : Math.max(8, ((S.play ? S.play.i + 1 : 0) / (p === 2 ? x.hearLines.length : x.missLines.length)) * 60);
-      }
-      return '<button type="button" class="' + st + '" data-part="' + p + '" aria-label="' + name + (st === "done" ? ", done" : st === "cur" ? ", current part" : "") + '"><span class="seg"><i style="width:' + (st === "done" ? 100 : w).toFixed(0) + '%"></i></span><span class="nm">' + name + '</span></button>';
-    }).join("") + '</div>';
+    if (S.ph > p) return 1; if (S.ph < p) return 0;
+    if (p === 1 || p === 4) return !S.d || S.d.stage === "intro" ? 0.08 : S.d.stage === "end" || S.d.stage === "result" ? 1 : 0.3 + S.d.n * 0.3;
+    var n = p === 2 ? x.hearLines.length : x.missLines.length;
+    return S.play && S.play.finished ? (p === 3 && !(S.spot && S.spot.pick != null) ? 0.7 : 1) : Math.max(0.08, (S.play ? S.play.i + 1 : 0) / n * 0.6);
+  }
+  function stepper() {
+    var x = X(), N = x.story.length, left = 0;
+    PART_W.forEach(function (w, p) { left += p === 0 ? w * (S.ph > 0 ? 0 : 1 - (S.idx + 1) / N) : w * (1 - partFill(p)); });
+    if (S.ph >= 5) left = 0;
+    var mins = left < 0.75 ? (left > 0.05 ? "Under a minute left" : "Done") : "About " + Math.round(left) + " min left";
+    var label = S.ph >= 5 ? "Lesson done" : S.ph === 0 ? "Learn · " + (S.idx + 1) + " of " + N : PARTS[S.ph];
+    var segs = PART_W.map(function (w, p) {
+      var st = S.ph > p ? "done" : S.ph === p ? "cur" : "", inner;
+      if (p === 0) { inner = ""; for (var k = 0; k < N; k++) inner += '<i class="' + (S.ph > 0 || k < S.idx ? "f" : k === S.idx ? "f c" : "") + '"></i>'; inner = '<span class="ticks">' + inner + '</span>'; }
+      else inner = '<span class="seg"><i style="width:' + Math.round(partFill(p) * 100) + '%"></i></span>';
+      return '<button type="button" class="' + st + '" data-part="' + p + '" style="flex:' + w + '" aria-label="' + PARTS[p] + ", " + PART_MIN[p] + (st === "done" ? ", done" : st === "cur" ? ", current part" : "") + '">' + inner + '</button>';
+    }).join("");
+    return '<div class="pbar" role="navigation" aria-label="Lesson parts"><div class="pb-row"><b>' + label + '</b><span>' + mins + '</span></div><div class="pb-segs">' + segs + '</div></div>';
   }
   function shell(o) {
     var x = X();
@@ -1727,7 +1768,7 @@
       P.i = i; var ln = lines[i], cap = $("cap");
       if (cap) { cap.classList.toggle("you", ln.who === "m"); cap.innerHTML = '<span class="cap-who">' + (ln.who === "m" ? "Monica" : esc(x.voter.name)) + '</span><p>' + esc(ln.text) + '</p>'; }
       if (hear && ln.tick != null) { var ol = $("l-moves"); if (ol && ol.children.length <= ln.tick) { var g = document.querySelectorAll(".wghost li")[ln.tick]; if (g) { var li = g.cloneNode(true); ol.appendChild(li); } } }
-      var segI = document.querySelector(".p5 button.cur .seg i"); if (segI) segI.style.width = Math.max(8, (i + 1) / lines.length * 60) + "%";
+      var segI = document.querySelector(".pbar button.cur .seg i"); if (segI) segI.style.width = Math.max(8, (i + 1) / lines.length * 60) + "%";
       var next = function () { recTimers.push(setTimeout(function () { step(i + 1); }, FAST ? 10 : 350)); };
       if (ln.who === "v") { mouthTalk(true); say(ln.text, x.voter.kv, function () { mouthTalk(false); next(); }); }
       else say(ln.text, "af_heart", next);
