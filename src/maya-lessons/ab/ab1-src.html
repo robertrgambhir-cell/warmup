@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bri in the gap, two looks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --serif: "Newsreader", Georgia, serif;
+    --sans: "Figtree", system-ui, sans-serif;
+    --ink: #262320; --muted: #5b554d;
+    --green: #35b57c; --green-deep: #1b7a4d;
+    --red: #b3261e;
+    --page: #ece7df;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--sans); }
+  .wrap { min-height: 100svh; display: flex; gap: 48px; justify-content: center; align-items: flex-start; padding: 22px 16px 28px; flex-wrap: wrap; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 10px; width: min(402px, 100%); }
+  .pick { font: 700 22px/1 var(--sans); }
+  .phone { container-type: size; position: relative; width: 100%; height: clamp(520px, calc(100svh - 70px), 800px); border-radius: 30px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 18px 48px -24px rgba(40,30,10,.35); border: 1px solid rgba(0,0,0,.06); }
+  .tag { position: absolute; right: 12px; bottom: 6px; font: 600 11px/1 var(--sans); color: rgba(38,35,32,.45); z-index: 5; }
+  .sup { font: 700 .55em/0 var(--sans); vertical-align: .9em; margin-left: 1px; }
+
+  /* ---------- The shared picture: three sisters, two under umbrellas, Bri in the rain; one column per sister so each sits over her name ---------- */
+  .pic { flex: 1 1 auto; min-height: 0; max-height: 320px; display: flex; flex-direction: column; }
+  .sis { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: minmax(0, 1fr) auto auto auto; column-gap: 4px; text-align: center; }
+  .sis .c { display: grid; grid-row: span 4; grid-template-rows: subgrid; justify-items: center; }
+  .sis svg { width: 100%; height: 100%; min-height: 0; border-bottom: 2px solid rgba(38,35,32,.16); }
+  .sis b { display: block; margin-top: 6px; font: 700 16px/1.2 var(--sans); }
+  .sis span { display: block; white-space: nowrap; font: 500 clamp(12.5px, 1.9cqh, 14px)/1.3 var(--sans); color: var(--muted); }
+  .sis em { display: block; font: 600 13.5px/1.25 var(--sans); font-style: normal; color: var(--green-deep); margin-top: 2px; }
+  .sis .bri b, .sis .bri em { color: var(--red); }
+
+  /* ---------- A: the Oct 30 full-bleed story card ---------- */
+  .a { background: #F7E4BF; padding: 12px 20px 22px; }
+  .a .seg { display: flex; gap: 4px; }
+  .a .seg i { flex: 1; height: 3px; border-radius: 3px; background: var(--ink); opacity: .18; }
+  .a .seg i.full { opacity: .85; }
+  .a .seg i.cur { opacity: 1; background: linear-gradient(90deg, rgba(38,35,32,.85) 45%, rgba(38,35,32,.18) 45%); }
+  .a .top { display: flex; align-items: center; gap: 8px; margin: 10px 0 2px; font-size: 13.5px; }
+  .a .top img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--ink); }
+  .a .top span { opacity: .65; }
+  .a .x { margin-left: auto; border: 0; background: none; font: 600 18px/1 var(--sans); width: 34px; height: 34px; opacity: .75; color: var(--ink); }
+  .a .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(10px, 2.2cqh, 18px); }
+  .a h2 { margin: 0; font: 500 clamp(24px, 4.3cqh, 30px)/1.12 var(--serif); letter-spacing: -.015em; text-wrap: balance; }
+  .a .pic { background: rgba(255,255,255,.42); border-radius: 22px; padding: 10px 8px 12px; }
+  .a p { margin: 0; font: 400 clamp(15.5px, 2.35cqh, 17px)/1.45 var(--sans); }
+  .a .src { align-self: flex-start; border: 1.5px solid rgba(38,35,32,.25); background: transparent; border-radius: 99px; padding: 6px 12px; font: 600 13px/1 var(--sans); color: var(--ink); }
+  .a .next { border: 0; border-radius: 99px; height: 54px; background: var(--ink); color: #fff; font: 600 17px/54px var(--sans); flex: none; margin-top: 14px; }
+
+  /* ---------- B: Duolingo's lesson screen (Help Bea): white, thick bar, panel, chunky button ---------- */
+  .b { background: #fff; padding: 14px 18px 22px; }
+  .b .top { display: flex; align-items: center; gap: 14px; height: 34px; }
+  .b .x { border: 0; background: none; padding: 0; width: 26px; height: 26px; color: #afafaf; }
+  .b .bar { flex: 1; height: 16px; border-radius: 99px; background: #e5e5e5; overflow: hidden; }
+  .b .bar i { display: block; height: 100%; width: 22%; border-radius: 99px; background: var(--green); box-shadow: inset 0 -4px 0 rgba(0,0,0,.08), inset 0 4px 0 rgba(255,255,255,.25); }
+  .b .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(10px, 2.2cqh, 18px); }
+  .b h2 { margin: 0; font: 800 clamp(21px, 3.7cqh, 26px)/1.2 var(--sans); letter-spacing: -.01em; text-wrap: balance; color: #3c3c3c; }
+  .b .pic { border-radius: 18px; padding: 10px 8px 12px; background: #f4f6f8; }
+  .b p { margin: 0; font: 500 clamp(15.5px, 2.35cqh, 17px)/1.45 var(--sans); color: #4b4b4b; }
+  .b .src { align-self: flex-start; border: 2px solid #e5e5e5; border-bottom-width: 4px; background: #fff; border-radius: 12px; padding: 6px 12px; font: 700 13px/1 var(--sans); color: #777; }
+  .b .next { border: 0; border-radius: 16px; height: 54px; background: var(--green); color: #fff; font: 800 17px/50px var(--sans); box-shadow: 0 4px 0 var(--green-deep); flex: none; margin-top: 14px; }
+  .b .sis b { font-weight: 800; color: #3c3c3c; }
+  .b .sis .bri b { color: var(--red); }
+
+  .phone .next:focus-visible, .phone .src:focus-visible, .phone .x:focus-visible { outline: 3px solid #1F4C91; outline-offset: 2px; }
+  @media (max-width: 860px) { .wrap { gap: 28px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="col">
+    <div class="pick">A</div>
+    <div class="phone a">
+      <div class="seg"><i class="full"></i><i class="cur"></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="top"><img src="MAYA_PHOTO" alt=""><b>Maya Kaur</b><span>Health insurance</span><button class="x" type="button" aria-label="Close lesson">✕</button></div>
+      <div class="body">
+        <h2>Bri earns too much for Medicaid and too little to buy health insurance<span class="sup">1,2</span></h2>
+        <div class="pic">PICTURE</div>
+        <p>Imagine three Georgia sisters, each a mom of two. Bri, in the middle, has a job that doesn’t offer health insurance, and she can’t afford to buy it.</p>
+        <button class="src" type="button">Sources</button>
+      </div>
+      <button class="next" type="button">How many Georgians are like Bri</button>
+      <span class="tag">GA 2A</span>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="pick">B</div>
+    <div class="phone b">
+      <div class="top"><button class="x" type="button" aria-label="Close lesson"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></button><div class="bar"><i></i></div></div>
+      <div class="body">
+        <h2>Bri earns too much for Medicaid and too little to buy health insurance<span class="sup">1,2</span></h2>
+        <div class="pic">PICTURE</div>
+        <p>Imagine three Georgia sisters, each a mom of two. Bri, in the middle, has a job that doesn’t offer health insurance, and she can’t afford to buy it.</p>
+        <button class="src" type="button">Sources</button>
+      </div>
+      <button class="next" type="button">How many Georgians are like Bri</button>
+      <span class="tag">GA 2B</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
