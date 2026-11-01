@@ -1,4 +1,5 @@
 <title>Maya Kaur Lessons</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600;700;800&display=swap">
@@ -927,6 +928,43 @@
   .news .nw-d { font: 500 11.5px/1.2 var(--sans); opacity: .6; }
   .st-h.sm { font-size: 22px; }
   .usmap { grid-template-columns: repeat(12, 1fr); }
+
+  /* v11.3 (Robert, Oct 31, 7:00 PM): on a phone the app fills the screen; the desktop frame and fine print are for big screens only */
+  .hm-fine { display: none; }
+  @media (max-width: 520px) {
+    body { background: var(--p-bg); }
+    .wrap { padding: 0; gap: 0; }
+    .wrap > .fine { display: none; }
+    .phone { width: 100%; height: 100vh; height: 100dvh; border-radius: 0; border: 0; box-shadow: none; }
+    .story { padding-top: max(12px, env(safe-area-inset-top)); padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+    .hm-hero { padding-top: max(22px, calc(env(safe-area-inset-top) + 10px)); border-radius: 0 0 28px 28px; }
+    .hm-fine { display: block; margin: 0 24px max(16px, env(safe-area-inset-bottom)); font-size: 11px; line-height: 1.4; text-align: center; color: var(--p-kick); text-wrap: balance; }
+    .hm-pw { margin-bottom: 8px; }
+  }
+  /* short phone screens (Safari's bars leave about 660px): tighten type and visuals so no card scrolls */
+  @media (max-height: 760px) {
+    .story .st-body { gap: 10px; padding: 6px 0; }
+    .st-h { font-size: 25px; } .st-h.lg { font-size: 31px; } .st-h.sm { font-size: 20px; } .mya { font-size: 25px; } .cv-h { font-size: 38px; }
+    .st-p { font-size: 15.5px; line-height: 1.4; } .st-p.small { font-size: 13.5px; }
+    .st-icard { transform: scale(.82); margin: -14px 0; }
+    .bignum { padding: 10px 14px; } .bignum b { font-size: 36px; }
+    .cv-rm li { padding: 7px 0; } .cv-rm li .lo span { font-size: 13px; }
+    .m3 li { padding: 9px 12px; } .m3 li span { font-size: 12.5px; }
+    .tp .col { padding: 10px; } .tp .col span, .tp .base { font-size: 13px; } .tp .col b { font-size: 15px; }
+    .fk svg { max-height: 120px; } .fk .end b { font-size: 14.5px; }
+    .lk p { font-size: 17px; } .lk div { padding: 10px 12px; }
+    .duo .bars { height: 96px; } .story.go .duo .bars i { height: calc(var(--h) * .8); }
+    .news { padding: 9px 12px 8px; } .news .nw-h { font-size: 17px; }
+    .fl div { padding: 8px 12px; } .fl span { font-size: 14px; }
+    .ga-map svg { width: 104px; } .ga-map b { font-size: 36px; }
+    .sis3 .p { padding: 9px 6px 8px; } .sis3 .p svg { width: 28px; height: 34px; }
+    .vb .bar { max-height: 120px; } .story.go .vb .bar { height: calc(var(--h) * .8); }
+    .sk-duo .bar { max-height: 96px; }
+    .sk-kids svg { width: 30px; height: 36px; }
+    .st-src { font-size: 10.5px; }
+    .usmap { gap: 2px; }
+    .tp { gap: 6px; } .tp .note { font-size: 12.5px; }
+  }
 </style>
 <div class="wrap">
   <p class="fine">Demo campaign. Maya Kaur is fictional. Each lesson presents a real 2026 Democratic candidate’s public record as Maya’s; the real candidates are named at the end of the lesson. Not affiliated with, endorsed by or approved by any campaign.</p>
@@ -1473,7 +1511,7 @@
       '<div class="hm-hi"><div class="st-photo sm"><img src="' + MAYA_PHOTO + '" alt="Maya Kaur"></div><div><h2>Hi, I’m Maya.</h2><p>These are the five issues we’re hearing the most about from voters at the door.</p></div></div>' +
       '<i class="hm-blob a"></i><i class="hm-blob b"></i></div>' +
       '<div class="hm-path" style="height:' + H + 'px"><svg class="hm-line" viewBox="0 0 100 ' + H + '" preserveAspectRatio="none" aria-hidden="true"><path d="' + path + '" fill="none" stroke="#d9cfbf" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12" vector-effect="non-scaling-stroke"/></svg>' + nodes + '</div>' +
-      '<p class="pw-line hm-pw"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="#e6dfd3" stroke-width="10"/><path d="M24 5 A19 19 0 1 1 5 24" fill="none" stroke="#35b57c" stroke-width="10"/></svg>Powered by Warmup</p></div>';
+      '<p class="pw-line hm-pw"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="#e6dfd3" stroke-width="10"/><path d="M24 5 A19 19 0 1 1 5 24" fill="none" stroke="#35b57c" stroke-width="10"/></svg>Powered by Warmup</p><p class="hm-fine">Demo campaign. Maya Kaur is fictional; each lesson uses a real 2026 Democratic candidate’s public record, named at the end. Not affiliated with any campaign.</p></div>';
     foot("");
   }
 
