@@ -47,6 +47,7 @@ scoped += """
   .g12 .how .col span { font-size: clamp(14px, 2.6cqh, 18px); }
   .g12 .how .bar { height: clamp(24px, 5cqh, 40px); border-radius: 20px; }
   .g12 .how { gap: clamp(16px, 5cqh, 44px); }
+  .g12 .pic.plain { background: transparent; }
   .g12 .three { display: flex; flex-direction: column; gap: clamp(12px, 2.6cqh, 22px); }
   .g12 .three .k { display: flex; gap: 14px; align-items: center; }
   .g12 .three .k svg { width: clamp(52px, 10cqh, 76px); height: clamp(64px, 12.5cqh, 96px); flex: none; }
@@ -62,12 +63,12 @@ BRI_UMB = '<svg viewBox="0 0 110 184" aria-hidden="true">' + woman(55, "bri", 1)
 COVER = {"h": "Three foundational things we want you to know about health insurance",
          "pic": '<div class="three">'
                 f'<div class="k">{BRI_RAIN}<p>About 200,000 Georgia adults earn too much for Medicaid and too little to buy health insurance{sup(1)}</p></div>'
-                f'<div class="k">{BRI_UMB}<p>Maya will push to pass full Medicaid expansion so they qualify{sup(2)}</p></div>'
-                f'<div class="k">{TIMECARD}<p>Maya’s Republican opponent wants a plan like Georgia Pathways, tied to work hours{sup(3)}</p></div></div>',
+                f'<div class="k">{BRI_UMB}<p>Maya will push the legislature to let them qualify for Medicaid{sup(2)}</p></div>'
+                f'<div class="k">{TIMECARD}<p>Maya’s Republican opponent wants a smaller plan that requires work hours{sup(3)}</p></div></div>',
          "p": "", "btn": "Who Georgia’s Medicaid covers today", "fit": True,
          "src": [["Georgia Recorder via Cobb County Courier, Sept 2026", "https://cobbcountycourier.com/2026/09/is-jacksons-intelligent-medicaid-expansion-weak-tea-or-a-revolutionary-fix/"],
                  ["Maya’s health care plan (the CARE Plan)", "https://www.keishaforgovernor.com/klb-policy-careplan-1.pdf"],
-                 ["Atlanta News First, Sept 8, 2026: his health care plan", "https://www.atlantanewsfirst.com/2026/09/08/work-requirements-or-full-coverage-georgia-governor-hopefuls-roll-out-healthcare-proposals/"]]}
+                 ["Atlanta News First, Sept 8, 2026: her opponent’s health care plan", "https://www.atlantanewsfirst.com/2026/09/08/work-requirements-or-full-coverage-georgia-governor-hopefuls-roll-out-healthcare-proposals/"]]}
 BOOK = '<svg viewBox="0 0 24 24" fill="none" stroke="#1b7a4d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5A2.5 2.5 0 0 1 4 20.5z"/></svg>'
 DOOR = '<svg viewBox="0 0 24 24" fill="none" stroke="#2f5fa8" stroke-width="2" stroke-linejoin="round"><path d="M6 21V4h12v17"/><path d="M3.5 21h17"/><circle cx="15" cy="12.5" r="1" fill="#2f5fa8"/></svg>'
 HOW = {"h": "Each lesson is 5 minutes and has 2 parts: Learn and Practice",
@@ -75,7 +76,7 @@ HOW = {"h": "Each lesson is 5 minutes and has 2 parts: Learn and Practice",
               '<div class="cols"><div class="col l">' + BOOK + '<b>Learn</b><em>3 min</em><span>Quick screens on the issue</span></div>'
               '<div class="col p">' + DOOR + '<b>Practice</b><em>2 min</em><span>Say it out loud at a voter’s door</span></div></div>'
               '<div class="bar"><i class="l"></i><i class="p"></i></div></div>',
-       "p": "", "btn": "Start with Learn", "fit": True, "src": []}
+       "p": "", "btn": "Start with Learn", "fit": True, "plain": True, "src": []}
 
 ADDON = r"""
   /* ---------- v12 preview (Nov 1): Georgia's Learn in the look Robert picked, before the current practice ---------- */
@@ -85,7 +86,7 @@ ADDON = r"""
   var X12 = '<svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
   function g12Draw(s, seg, btnId) {
     $("body").innerHTML = '<div class="g12" id="g12"><div class="top"><button class="x" type="button" id="home" aria-label="Close lesson">' + X12 + '</button>' + seg + '</div>' +
-      '<div class="body" id="g12b"><h2>' + s.h + '</h2><div class="pic' + (s.fit ? ' fit' : '') + '">' + s.pic + '</div>' + (s.p ? '<p>' + s.p + '</p>' : '') +
+      '<div class="body" id="g12b"><h2>' + s.h + '</h2><div class="pic' + (s.fit ? ' fit' : '') + (s.plain ? ' plain' : '') + '">' + s.pic + '</div>' + (s.p ? '<p>' + s.p + '</p>' : '') +
       (s.src && s.src.length ? '<button class="src" type="button" id="g12src">Sources</button>' : '') + '</div>' +
       '<button class="next" type="button" id="' + btnId + '">' + s.btn + '</button>' +
       '<div class="sheet" id="g12sheet"><div class="card"><h3>Sources</h3><p class="note">Clickable links come at the end of the lesson</p><ol>' +
