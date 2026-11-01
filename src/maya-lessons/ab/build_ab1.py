@@ -40,7 +40,7 @@ pic = ('<div class="sis" role="img" aria-label="Three sisters stand in a row fro
        + cell("ana", "Ana", "$7,000 a year", "Medicaid", 1)
        + cell("bri", "Bri", "$14,000 a year", "No health insurance", 0, True)
        + cell("dee", "Dee", "$45,000 a year", "Insurance from work", -1) + '</div>')
-src = (here / "ab1-src.html").read_text()
+src = (here / (sys.argv[3] if len(sys.argv)>3 else "ab1-src.html")).read_text()
 out = src.replace("PICTURE", pic).replace("MAYA_PHOTO", photo)
 pathlib.Path(sys.argv[2]).write_text(out)
 print("wrote", sys.argv[2], len(out))
