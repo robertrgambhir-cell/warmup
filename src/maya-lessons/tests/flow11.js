@@ -36,6 +36,6 @@ const fake = () => { window.__say = "";
     await tap("#finish"); await shot(`L${L}-done`); await tap("#srcs"); const ns = await p.$$eval(".srclist li", (e) => e.length); await tap("#srcback"); await tap("#home");
     console.log(`L${L} cards=${c} overflow=[${over.join(" ")}] hearTicks=${ticks} result=${res}${warn ? " WARN" : ""} resultOverflow=${o2} sources=${ns}`);
   }
-  await tap("[data-lesson='0']"); await tap("[data-card='11']"); await tap("#stnext"); await tap("[data-part='3']"); await p.waitForTimeout(400); const t3 = await p.$(".spot-tiles") ? "spot" : "?"; await tap("[data-part='0']"); const t0 = await p.$("#story.tap") ? "learn" : "?";
+  await tap("[data-lesson='1']"); await tap("[data-card='8']"); await tap("#stnext"); await tap("[data-part='3']"); await p.waitForTimeout(400); const t3 = await p.$(".spot-tiles") ? "spot" : "?"; await tap("[data-part='0']"); const t0 = await p.$("#story.tap") ? "learn" : "?";
   console.log("part jump:", t3, t0); console.log("page errors:", errs.length ? errs : "none"); await b.close();
 })();
