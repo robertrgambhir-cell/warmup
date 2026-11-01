@@ -75,7 +75,34 @@
   }
   var NEXTB = function (label, id, cls) { return '<button class="st-next' + (cls ? " " + cls : "") + '" type="button" id="' + (id || "stnext") + '">' + esc(label) + ' <span aria-hidden="true">→</span></button>'; };
 
-  function render() {
+  /* screen numbers for review (Robert, Nov 1): every screen wears a small tag at the very bottom right, like "GA 4", so feedback can say "GA 4" with no screenshot.
+     Learn cards are 1 to N; the practice screens continue the count in the order a volunteer sees them. Add ?nonum to hide the tags. */
+  var NONUM = /[?&#]nonum\b/.test(location.search + location.hash);
+  function screenNum() {
+    if (S.lesson == null) return "Home";
+    var x = X(), code = x.id.toUpperCase(), N = x.story.length, d = S.d;
+    if (S.sources) return code + " Src";
+    if (S.how) return "How";
+    if (S.ph === 0) return code + " " + (S.idx + 1);
+    if (S.ph === 1 || S.ph === 4) {
+      var b = S.ph === 1 ? N : N + 6, st = d ? d.stage : "intro";
+      if (st === "intro") return code + " " + (b + 1);
+      if (st === "talk") return code + " " + (b + 2);
+      if (S.ph === 1) return code + " " + (b + 3);
+      return code + " " + (st === "result" ? b + 4 : b + 3);
+    }
+    if (S.ph === 2) return code + " " + (N + 4);
+    if (S.ph === 3) return code + " " + (S.spot && S.spot.pick != null ? N + 6 : N + 5);
+    return code + " " + (N + 11);
+  }
+  function stampNum() {
+    var el = $("snum"), ph = $("phone");
+    if (NONUM || !ph) { if (el) el.remove(); return; }
+    if (!el) { el = document.createElement("div"); el.id = "snum"; el.className = "snum"; el.setAttribute("aria-hidden", "true"); ph.appendChild(el); }
+    el.textContent = screenNum();
+  }
+  function render() { render0(); stampNum(); }
+  function render0() {
     $("prog").hidden = true; $("back").hidden = true;
     $("phone").classList.toggle("home-on", S.lesson == null);
     $("phone").classList.toggle("story-on", S.lesson != null);

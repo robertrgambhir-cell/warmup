@@ -607,3 +607,6 @@
   @keyframes chipIn { from { transform: scaleX(3.2); transform-origin: left center; opacity: .3; } to { transform: none; opacity: 1; } }
   @keyframes segIn { from { transform: translateX(14px); opacity: 0; } to { transform: none; opacity: 1; } }
   @media (prefers-reduced-motion: reduce) { .sb2.enter .lchip, .sb2.enter .pseg button { animation: none; } }
+
+  /* v11.10 (Robert, Nov 1): screen number tag at the very bottom right of every screen, for review ("GA 4"); ?nonum hides it */
+  .snum { position: absolute; right: 16px; bottom: 4px; z-index: 50; pointer-events: none; font: 700 10px/1 var(--sans); letter-spacing: .04em; color: #fff; background: rgba(20,20,30,.6); padding: 3px 7px; border-radius: 8px; }
