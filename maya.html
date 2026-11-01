@@ -965,6 +965,22 @@
     .usmap { gap: 2px; }
     .tp { gap: 6px; } .tp .note { font-size: 12.5px; }
   }
+
+  /* v11.4 (Robert, Oct 31, 7:06 PM): home fits one screen; the path takes the height left under the hero and its stops scale with it */
+  .phone.home-on .ph-body { overflow: hidden; }
+  .phone.home-on .ph-body > .hm { flex: 1 1 auto; height: 100%; min-height: 0; }
+  .hm { height: 100%; min-height: 0; }
+  .hm > .hm-path { flex: 1 1 auto; min-height: 0; height: auto; margin: 6px 16px 0; container-type: size; --nd: clamp(46px, 13.5cqh, 76px); }
+  .hm-path .nd-b { width: var(--nd); height: var(--nd); left: calc(var(--nd) / -2); top: calc(var(--nd) / -2); }
+  .hm-path .nd-b svg { width: calc(var(--nd) * .45); height: calc(var(--nd) * .45); }
+  .hm-path .nd-go { top: calc(var(--nd) / -2 - 34px); padding: 6px 10px; font-size: 11.5px; }
+  .hm-path .nd-t { top: -20px; }
+  .hm-path .nd.l .nd-t { left: calc(var(--nd) / 2 + 10px); }
+  .hm-path .nd.r .nd-t { right: calc(var(--nd) / 2 + 10px); }
+  .hm-path .nd-badge { width: 24px; height: 24px; }
+  .hm > .hm-pw { margin: 4px 0 6px; padding-top: 0; }
+  @media (max-width: 520px) { .hm-hero { gap: 14px; padding-bottom: 20px; } .hm-fine { margin-bottom: 10px; font-size: 10.5px; } }
+  @media (max-height: 700px) { .hm-hi .st-photo.sm { width: 76px; height: 76px; } .hm-hi h2 { font-size: 26px; } .hm-hi p { font-size: 14px; } }
 </style>
 <div class="wrap">
   <p class="fine">Demo campaign. Maya Kaur is fictional. Each lesson presents a real 2026 Democratic candidate’s public record as Maya’s; the real candidates are named at the end of the lesson. Not affiliated with, endorsed by or approved by any campaign.</p>
@@ -1496,13 +1512,14 @@
   /* ---------- home ---------- */
   function renderHome() {
     var b = $("body"), ndone = L.filter(function (_, k) { return S.done[k]; }).length, bobbed = false;
-    var XS = [30, 68, 32, 66, 38], ROW = 108, Y0 = 84, H = ROW * (L.length - 1) + Y0 + 72, path = "";
-    L.forEach(function (_, k) { var y = Y0 + k * ROW; if (k === 0) path += "M" + XS[0] + " " + y; else { var py = Y0 + (k - 1) * ROW; path += " C" + XS[k - 1] + " " + (py + 54) + " " + XS[k] + " " + (y - 54) + " " + XS[k] + " " + y; } });
+    /* the path fits whatever height is left under the hero (Robert, Oct 31, 7:06 PM: no scrolling): stops sit at percentages and size to the space */
+    var XS = [30, 68, 32, 66, 38], YS = [14, 32.5, 51, 69.5, 88], path = "";
+    L.forEach(function (_, k) { var y = YS[k]; if (k === 0) path += "M" + XS[0] + " " + y; else { var py = YS[k - 1]; path += " C" + XS[k - 1] + " " + (py + 9) + " " + XS[k] + " " + (y - 9) + " " + XS[k] + " " + y; } });
     var nodes = L.map(function (x, k) {
       var open = ALL || k === 0 || S.done[k - 1], done = S.done[k], cur = open && !done, left = XS[k] < 50, bob = cur && !bobbed;
       if (bob) bobbed = true;
-      var sub = done ? "Done · tap to redo" : open ? "5 minutes" : (k === 1 ? "Opens after your first lesson" : "Opens after lesson " + k);
-      return '<div class="nd' + (done ? " done" : cur ? " cur" : open ? "" : " locked") + (bob ? " bob" : "") + (left ? " l" : " r") + '" style="left:' + XS[k] + '%;top:' + (Y0 + k * ROW) + 'px;--c:' + ICONS[k][1] + '">' +
+      var sub = done ? "Done · tap to redo" : open ? "5 minutes" : "Opens after lesson " + k;
+      return '<div class="nd' + (done ? " done" : cur ? " cur" : open ? "" : " locked") + (bob ? " bob" : "") + (left ? " l" : " r") + '" style="left:' + XS[k] + '%;top:' + YS[k] + '%;--c:' + ICONS[k][1] + '">' +
         (bob ? '<span class="nd-go">' + (k === 0 && !ndone ? "Start here" : "Up next") + '</span>' : "") +
         '<button type="button" class="nd-b"' + (open ? ' data-lesson="' + k + '"' : ' disabled aria-disabled="true"') + ' aria-label="' + esc(x.issue) + '">' + ICONS[k][0] + (done ? '<i class="nd-badge ok">✓</i>' : !open ? '<i class="nd-badge">' + LOCK + '</i>' : "") + '</button>' +
         '<div class="nd-t"><b>' + esc(x.issue) + '</b><span>' + sub + '</span></div></div>';
@@ -1510,7 +1527,7 @@
     b.innerHTML = '<div class="hm"><div class="hm-hero"><div class="hm-top"><span class="camp-mark lite"><b>Maya Kaur</b></span><span class="hm-count"><svg viewBox="0 0 36 36" width="22" height="22"><circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="5"/><circle cx="18" cy="18" r="14" fill="none" stroke="#7ee0a8" stroke-width="5" stroke-linecap="round" stroke-dasharray="' + (88 * ndone / 5).toFixed(1) + ' 88" transform="rotate(-90 18 18)"/></svg>' + ndone + ' of 5 done</span></div>' +
       '<div class="hm-hi"><div class="st-photo sm"><img src="' + MAYA_PHOTO + '" alt="Maya Kaur"></div><div><h2>Hi, I’m Maya.</h2><p>These are the five issues we’re hearing the most about from voters at the door.</p></div></div>' +
       '<i class="hm-blob a"></i><i class="hm-blob b"></i></div>' +
-      '<div class="hm-path" style="height:' + H + 'px"><svg class="hm-line" viewBox="0 0 100 ' + H + '" preserveAspectRatio="none" aria-hidden="true"><path d="' + path + '" fill="none" stroke="#d9cfbf" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12" vector-effect="non-scaling-stroke"/></svg>' + nodes + '</div>' +
+      '<div class="hm-path"><svg class="hm-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="' + path + '" fill="none" stroke="#d9cfbf" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12" vector-effect="non-scaling-stroke"/></svg>' + nodes + '</div>' +
       '<p class="pw-line hm-pw"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="#e6dfd3" stroke-width="10"/><path d="M24 5 A19 19 0 1 1 5 24" fill="none" stroke="#35b57c" stroke-width="10"/></svg>Powered by Warmup</p><p class="hm-fine">Demo campaign. Maya Kaur is fictional; each lesson uses a real 2026 Democratic candidate’s public record, named at the end. Not affiliated with any campaign.</p></div>';
     foot("");
   }
