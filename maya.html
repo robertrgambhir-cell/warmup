@@ -981,6 +981,17 @@
   .hm > .hm-pw { margin: 4px 0 6px; padding-top: 0; }
   @media (max-width: 520px) { .hm-hero { gap: 14px; padding-bottom: 20px; } .hm-fine { margin-bottom: 10px; font-size: 10.5px; } }
   @media (max-height: 700px) { .hm-hi .st-photo.sm { width: 76px; height: 76px; } .hm-hi h2 { font-size: 26px; } .hm-hi p { font-size: 14px; } }
+
+  /* v11.5: inside the Warmup app's Learn tab (an overlay), the page fills the app's screen and home gets a back arrow */
+  html.embedded body { background: var(--p-bg); }
+  html.embedded .wrap { padding: 0; gap: 0; }
+  html.embedded .wrap > .fine { display: none; }
+  html.embedded .phone { width: 100%; height: 100vh; height: 100dvh; border-radius: 0; border: 0; box-shadow: none; }
+  html.embedded .hm-fine { display: block; margin: 0 24px 10px; font-size: 10.5px; line-height: 1.4; text-align: center; color: var(--p-kick); text-wrap: balance; }
+  .hm-top { gap: 10px; justify-content: flex-start; }
+  .hm-top .hm-count { margin-left: auto; }
+  .emb-back { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(255,255,255,.16); color: #fff; font: 600 22px/1 var(--sans); cursor: pointer; display: grid; place-items: center; padding: 0 2px 3px 0; }
+  .warnline a { color: inherit; font-weight: 700; }
 </style>
 <div class="wrap">
   <p class="fine">Demo campaign. Maya Kaur is fictional. Each lesson presents a real 2026 Democratic candidate’s public record as Maya’s; the real candidates are named at the end of the lesson. Not affiliated with, endorsed by or approved by any campaign.</p>
@@ -1418,6 +1429,8 @@
   window.__warmupLines = function () { var out = [], add = function (t, v) { out.push({ t: cleanSay(t), v: v }); }; L.forEach(function (x) { [x.voter.open, x.voter.follow, x.voter.bye].forEach(function (t) { add(t, x.voter.kv); }); x.hearLines.concat(x.missLines).forEach(function (h) { if (h.who === "m") add(h.text, "af_heart"); }); }); return out; };
   /* ---------- version 11 engine: Learn, then the warm-up's four parts, all at one voter's door ---------- */
   var S = { lesson: null, ph: 0, idx: 0, done: {}, sources: false, d: null, play: null, spot: null, res: null };
+  var EMB = (function () { try { return window.parent !== window; } catch (er) { return true; } })(); /* opened inside the Warmup app (Learn tab) */
+  if (EMB) document.documentElement.classList.add("embedded");
   var ALL = /[?&#]all\b/.test(location.search + location.hash), FAST = /[?&#]fast\b/.test(location.search + location.hash);
   var LOCK = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
   var MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>';
@@ -1524,7 +1537,7 @@
         '<button type="button" class="nd-b"' + (open ? ' data-lesson="' + k + '"' : ' disabled aria-disabled="true"') + ' aria-label="' + esc(x.issue) + '">' + ICONS[k][0] + (done ? '<i class="nd-badge ok">✓</i>' : !open ? '<i class="nd-badge">' + LOCK + '</i>' : "") + '</button>' +
         '<div class="nd-t"><b>' + esc(x.issue) + '</b><span>' + sub + '</span></div></div>';
     }).join("");
-    b.innerHTML = '<div class="hm"><div class="hm-hero"><div class="hm-top"><span class="camp-mark lite"><b>Maya Kaur</b></span><span class="hm-count"><svg viewBox="0 0 36 36" width="22" height="22"><circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="5"/><circle cx="18" cy="18" r="14" fill="none" stroke="#7ee0a8" stroke-width="5" stroke-linecap="round" stroke-dasharray="' + (88 * ndone / 5).toFixed(1) + ' 88" transform="rotate(-90 18 18)"/></svg>' + ndone + ' of 5 done</span></div>' +
+    b.innerHTML = '<div class="hm"><div class="hm-hero"><div class="hm-top">' + (EMB ? '<button class="emb-back" type="button" id="embback" aria-label="Back to Warmup">‹</button>' : '') + '<span class="camp-mark lite"><b>Maya Kaur</b></span><span class="hm-count"><svg viewBox="0 0 36 36" width="22" height="22"><circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="5"/><circle cx="18" cy="18" r="14" fill="none" stroke="#7ee0a8" stroke-width="5" stroke-linecap="round" stroke-dasharray="' + (88 * ndone / 5).toFixed(1) + ' 88" transform="rotate(-90 18 18)"/></svg>' + ndone + ' of 5 done</span></div>' +
       '<div class="hm-hi"><div class="st-photo sm"><img src="' + MAYA_PHOTO + '" alt="Maya Kaur"></div><div><h2>Hi, I’m Maya.</h2><p>These are the five issues we’re hearing the most about from voters at the door.</p></div></div>' +
       '<i class="hm-blob a"></i><i class="hm-blob b"></i></div>' +
       '<div class="hm-path"><svg class="hm-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="' + path + '" fill="none" stroke="#d9cfbf" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12" vector-effect="non-scaling-stroke"/></svg>' + nodes + '</div>' +
@@ -1631,6 +1644,7 @@
       case "redo": goPart(4); break;
       case "srcs": S.sources = true; render(); $("body").scrollTop = 0; break;
       case "srcback": S.sources = false; render(); break;
+      case "embback": stopAll(); try { window.parent.postMessage({ warmup: "issues-close" }, "*"); } catch (er) {} break;
     }
   });
   /* ---------- the door, drawn exactly as the warm-up lesson draws it (figure and homeScene copied from the warm-up app), with this section's own voters ---------- */
@@ -1748,7 +1762,7 @@
       body += '<div class="typed"><textarea id="said" rows="2" placeholder="Answer ' + esc(v.name) + '">' + esc(r.text || "") + '</textarea></div>';
       btns = '<button class="btn" type="button" id="typed">Send</button><p class="mic-note">' + (IN_CLAUDE ? "Inside claude.ai a page can’t open the microphone. Tap your keyboard’s mic to talk, or type." : "This browser can’t listen. Tap your keyboard’s mic to talk, or type.") + '</p>';
     } else {
-      if (r.error) body += '<p class="warnline">' + esc(r.error) + '</p>';
+      if (r.error) body += '<p class="warnline">' + esc(r.error) + (EMB ? ' <a href="' + esc(location.href) + '" target="_top">Open the lesson full screen</a>' : '') + '</p>';
       if (r.listening || r.text) body += '<div class="talk-live' + (r.listening ? " live" : "") + '" id="talk-live"><button class="tl-mic" type="button" id="again" aria-label="Start over"><span class="tl-pulse"></span><span class="tl-pulse p2"></span>' + MIC + '</button><div><span class="tl-wave" aria-hidden="true">' + "<i></i>".repeat(14) + '</span><p class="tl-said" id="tl-said" aria-live="polite">' + esc(r.text || "") + '</p><p class="tl-note" id="tl-note">' + (!r.listening && r.text ? "Got it. Tap Send it, or tap the mic to say it again." : "") + '</p></div></div>';
       btns = '<button class="mic-btn' + (r.listening ? " on" : "") + '" type="button" id="talk"><span class="mic-dot" aria-hidden="true">' + MIC + '</span><span>' + (r.listening ? "I’m done" : r.text ? "Send it" : "Tap to talk") + '</span></button>';
     }
