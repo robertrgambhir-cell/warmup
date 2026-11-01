@@ -64,13 +64,13 @@
   .count .lab b { font: 800 clamp(17px, 2.7cqh, 21px)/1.1 var(--sans); }
   .count .lab b.r { color: var(--red); }
   .count .lab span { font: 500 14px/1.2 var(--sans); color: var(--muted); }
-  .count .ppl { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px 9px; width: min(100%, 46cqh); }
+  .count .ppl { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 6px 9px; width: min(100%, 46cqh); }
   .count .ppl svg { width: 100%; height: auto; display: block; }
   .count small { font: 500 12.5px/1 var(--sans); color: var(--muted); }
 
   /* GA 4: 51 tiles, the 41 that accepted first */
   .states { display: flex; flex-direction: column; gap: 10px; }
-  .tiles { display: grid; grid-template-columns: repeat(9, 1fr); gap: 5px; width: min(100%, 52cqh); align-self: center; }
+  .tiles { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 5px; width: min(100%, 52cqh); align-self: center; }
   .tiles i { aspect-ratio: 1; border-radius: 6px; display: grid; place-items: center; font: 700 clamp(10px, 1.7cqh, 13px)/1 var(--sans); font-style: normal; color: #fff; background: var(--green); }
   .tiles i.n { background: #c9cdd3; color: #4b4b4b; }
   .tiles i.ga { background: #fff; color: var(--red); box-shadow: inset 0 0 0 2.5px var(--red); font-weight: 800; }
@@ -87,7 +87,7 @@
 
   /* GA 6: the clipping and the bars */
   .news { margin: 2px 4px; display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 12px; background: #fffdf8; border: 1px solid #e4ddcf; border-radius: 6px; box-shadow: 0 6px 16px -10px rgba(60,40,10,.35); transform: rotate(-1deg); text-decoration: none; color: #1d1c1a; }
-  .nw-o { font: 600 12.5px/1 var(--serif); font-style: italic; color: #5b554d; }
+  .nw-o { font: 600 12.5px/1 var(--serif); font-style: italic; color: #5b554d; text-transform: none; letter-spacing: 0; }
   .nw-h { font: 600 clamp(18px, 3.3cqh, 25px)/1.2 var(--serif); }
   .nw-d { font: 500 12px/1 var(--sans); color: #7a736a; }
   .bars { display: flex; flex-direction: column; gap: clamp(10px, 2.2cqh, 18px); margin-top: clamp(14px, 2.6cqh, 22px); }

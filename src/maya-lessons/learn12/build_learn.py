@@ -139,7 +139,8 @@ SCREENS = [
    "btn": "Practice it at a door", "src": [["Maya’s health care plan (the CARE Plan)", "https://www.keishaforgovernor.com/klb-policy-careplan-1.pdf"], ["GPB News, Oct 1, 2026: work rules either way", "https://www.gpb.org/news/2026/10/01/medicaid-work-requirements-are-here-stay-no-matter-who-wins-georgia-governors-race"]]},
 ]
 
-src = (here / "learn-src.html").read_text()
-out = src.replace("/*SCREENS*/[]", json.dumps(SCREENS, ensure_ascii=False))
-pathlib.Path(sys.argv[1]).write_text(out)
-print("wrote", sys.argv[1], len(out))
+if __name__ == "__main__":
+  src = (here / "learn-src.html").read_text()
+  out = src.replace("/*SCREENS*/[]", json.dumps(SCREENS, ensure_ascii=False))
+  pathlib.Path(sys.argv[1]).write_text(out)
+  print("wrote", sys.argv[1], len(out))
