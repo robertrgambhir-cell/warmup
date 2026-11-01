@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Health insurance brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Georgia's Learn part in the look Robert picked (A/B rounds 1 and 2, Nov 1): Duolingo's lesson screen,
+     the segmented story bar, no photo row. Rules: claude/campaign-demos/lesson-playbook.md. */
+  :root {
+    --sans: "Figtree", system-ui, sans-serif; --serif: "Newsreader", Georgia, serif;
+    --ink: #3c3c3c; --body: #4b4b4b; --muted: #5a5a5a; --line: #e5e5e5; --panel: #f4f6f8;
+    --green: #35b57c; --green-deep: #1b7a4d; --red: #b3261e; --page: #ece7df;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--page); font-family: var(--sans); color: var(--ink); }
+  .wrap { min-height: 100svh; display: flex; justify-content: center; align-items: center; padding: 16px; }
+  .phone { container-type: size; position: relative; width: min(402px, 100%); height: clamp(520px, calc(100svh - 32px), 800px); background: #fff; border-radius: 30px; overflow: hidden; display: flex; flex-direction: column; padding: 14px 18px 22px; box-shadow: 0 18px 48px -24px rgba(40,30,10,.35); border: 1px solid rgba(0,0,0,.06); }
+  @media (max-width: 500px) { .wrap { padding: 0; } .phone { width: 100%; height: 100svh; border-radius: 0; border: 0; padding: max(14px, env(safe-area-inset-top)) 18px max(22px, env(safe-area-inset-bottom)); } }
+  .tag { position: absolute; right: 12px; bottom: 6px; font: 600 11px/1 var(--sans); color: rgba(38,35,32,.45); }
+  .sup { font: 700 .55em/0 var(--sans); vertical-align: .9em; margin-left: 1px; }
+
+  .top { display: flex; align-items: center; gap: 14px; height: 26px; flex: none; }
+  .x { border: 0; background: none; padding: 0; width: 22px; height: 22px; color: #afafaf; cursor: pointer; font-family: inherit; }
+  .seg { display: flex; gap: 4px; flex: 1; }
+  .seg i { flex: 1; height: 5px; border-radius: 5px; background: var(--line); }
+  .seg i.full { background: var(--green); }
+  .seg i.cur { background: linear-gradient(90deg, var(--green) 45%, var(--line) 45%); }
+
+  .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-start; padding-top: clamp(10px, 2.4cqh, 20px); gap: clamp(10px, 2.2cqh, 18px); cursor: default; }
+  h2 { margin: 0; font: 800 clamp(20px, 3.5cqh, 25px)/1.2 var(--sans); letter-spacing: -.01em; text-wrap: balance; color: var(--ink); }
+  .body p { margin: 0; font: 500 clamp(15px, 2.3cqh, 17px)/1.45 var(--sans); color: var(--body); }
+  .pic { flex: 1 1 auto; min-height: min(190px, 25cqh); max-height: 390px; display: flex; flex-direction: column; justify-content: center; border-radius: 18px; padding: 12px 10px; background: var(--panel); }
+  .pic.fit { justify-content: space-evenly; max-height: none; padding: 14px; }
+  .src { align-self: flex-start; border: 2px solid var(--line); border-bottom-width: 4px; background: #fff; border-radius: 12px; padding: 6px 12px; font: 700 13px/1 var(--sans); color: var(--muted); cursor: pointer; }
+  .next { flex: none; margin-top: 14px; border: 0; border-radius: 16px; height: 54px; padding: 0 12px; white-space: nowrap; background: var(--green); color: #fff; font: 800 min(17px, 4.2cqw)/50px var(--sans); box-shadow: 0 4px 0 var(--green-deep); cursor: pointer; }
+  .next:active { transform: translateY(4px); box-shadow: none; }
+  .next:focus-visible, .src:focus-visible, .x:focus-visible { outline: 3px solid #1F4C91; outline-offset: 2px; }
+
+  /* svg text inside pictures */
+  svg .t { font: 600 12.5px var(--sans); fill: var(--muted); }
+  svg .t.g { fill: var(--green-deep); font-weight: 800; }
+  svg .t.m { font-size: 13.5px; fill: #6f7d8c; }
+  .pic > svg.wide { width: 100%; height: 100%; min-height: 0; }
+
+  /* three sisters (GA 2, GA 7): one column per person, each over her name */
+  .sis { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: minmax(0, 1fr) auto auto auto; column-gap: 4px; text-align: center; }
+  .sis .c { display: grid; grid-row: span 4; grid-template-rows: subgrid; justify-items: center; }
+  .sis svg { width: 100%; height: 100%; min-height: 0; border-bottom: 2px solid rgba(38,35,32,.16); }
+  .sis b { display: block; margin-top: 6px; font: 800 16px/1.2 var(--sans); color: var(--ink); }
+  .sis span { display: block; white-space: nowrap; font: 500 clamp(12.5px, 1.9cqh, 14px)/1.3 var(--sans); color: var(--muted); }
+  .sis em { display: block; font: 600 13.5px/1.25 var(--sans); font-style: normal; color: var(--green-deep); margin-top: 2px; }
+  .sis .bri b, .sis .bri em { color: var(--red); }
+  .sis .bri.now b { color: var(--ink); }
+  .sis .bri.now em { color: var(--green-deep); font-weight: 800; }
+
+  /* GA 3: people counted in figures */
+  .count { display: flex; flex-direction: column; gap: clamp(8px, 1.8cqh, 14px); }
+  .count .row { display: flex; flex-direction: column; gap: 6px; }
+  .count .lab { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .count .lab b { font: 800 clamp(17px, 2.7cqh, 21px)/1.1 var(--sans); }
+  .count .lab b.r { color: var(--red); }
+  .count .lab span { font: 500 14px/1.2 var(--sans); color: var(--muted); }
+  .count .ppl { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px 9px; width: min(100%, 46cqh); }
+  .count .ppl svg { width: 100%; height: auto; display: block; }
+  .count small { font: 500 12.5px/1 var(--sans); color: var(--muted); }
+
+  /* GA 4: 51 tiles, the 41 that accepted first */
+  .states { display: flex; flex-direction: column; gap: 10px; }
+  .tiles { display: grid; grid-template-columns: repeat(9, 1fr); gap: 5px; width: min(100%, 52cqh); align-self: center; }
+  .tiles i { aspect-ratio: 1; border-radius: 6px; display: grid; place-items: center; font: 700 clamp(10px, 1.7cqh, 13px)/1 var(--sans); font-style: normal; color: #fff; background: var(--green); }
+  .tiles i.n { background: #c9cdd3; color: #4b4b4b; }
+  .tiles i.ga { background: #fff; color: var(--red); box-shadow: inset 0 0 0 2.5px var(--red); font-weight: 800; }
+  .key { display: flex; gap: 16px; flex-wrap: wrap; font: 600 13px/1 var(--sans); color: var(--muted); }
+  .key span { display: inline-flex; align-items: center; gap: 6px; }
+  .key i { width: 12px; height: 12px; border-radius: 4px; background: var(--green); }
+  .key i.n { background: #c9cdd3; }
+
+  /* GA 5: the condition */
+  .cond { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+  .cond svg { width: 100%; flex: 1 1 auto; min-height: 0; }
+  .cond .caps { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: center; font: 600 13.5px/1.3 var(--sans); color: var(--muted); }
+  .cond .caps span:last-child { color: var(--green-deep); }
+
+  /* GA 6: the clipping and the bars */
+  .news { margin: 2px 4px; display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 12px; background: #fffdf8; border: 1px solid #e4ddcf; border-radius: 6px; box-shadow: 0 6px 16px -10px rgba(60,40,10,.35); transform: rotate(-1deg); text-decoration: none; color: #1d1c1a; }
+  .nw-o { font: 600 12.5px/1 var(--serif); font-style: italic; color: #5b554d; }
+  .nw-h { font: 600 clamp(18px, 3.3cqh, 25px)/1.2 var(--serif); }
+  .nw-d { font: 500 12px/1 var(--sans); color: #7a736a; }
+  .bars { display: flex; flex-direction: column; gap: clamp(10px, 2.2cqh, 18px); margin-top: clamp(14px, 2.6cqh, 22px); }
+  .bars .b { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; column-gap: 10px; row-gap: 4px; align-items: center; }
+  .bars .b span { grid-column: 1 / -1; font: 600 clamp(13.5px, 2cqh, 15px)/1.2 var(--sans); color: var(--muted); }
+  .bars .t { height: clamp(18px, 3.2cqh, 26px); border-radius: 13px; background: transparent; }
+  .bars .t i { display: block; height: 100%; border-radius: 13px; }
+  .bars .t i.exp { width: 100%; border: 2px dashed #a7a29a; }
+  .bars .t i.got { width: 18.5%; background: var(--green); }
+  .bars b { font: 800 clamp(17px, 2.9cqh, 22px)/1 var(--sans); min-width: 76px; text-align: right; }
+  .bars b.g { color: var(--green-deep); }
+
+  @container (max-height: 620px) {
+    .tiles { width: min(100%, 44cqh); gap: 4px; }
+    .news { padding: 10px 12px 9px; gap: 4px; }
+    .nw-h { font-size: 16.5px; }
+    .bars { margin-top: 8px; gap: 6px; }
+    .nw-d { display: none; }
+    .pic.fit { padding: 10px 12px; }
+  }
+
+  .count .lab { align-items: center; }
+  .bri-mini { width: 40px; height: 66px; flex: none; margin-right: 2px; }
+  .key i.ga { background: #fff; box-shadow: inset 0 0 0 2px var(--red); }
+  .sis svg, .sis .c svg { overflow: visible; }
+
+  /* sources sheet */
+  .sheet { position: absolute; inset: 0; background: rgba(0,0,0,.28); display: none; align-items: flex-end; z-index: 4; }
+  .sheet.on { display: flex; }
+  .sheet .card { width: 100%; background: #fff; border-radius: 22px 22px 0 0; padding: 18px 20px 28px; max-height: 80%; overflow: auto; }
+  .sheet h3 { margin: 0; font: 800 19px/1.2 var(--sans); }
+  .sheet .note { margin: 4px 0 12px; font: 500 13.5px/1.3 var(--sans); color: var(--muted); white-space: nowrap; }
+  .sheet ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font: 500 14.5px/1.35 var(--sans); color: var(--body); }
+  .sheet .close { margin-top: 16px; width: 100%; height: 46px; border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 14px; background: #fff; font: 800 15px/1 var(--sans); color: var(--ink); cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="phone" id="phone">
+    <div class="top"><button class="x" type="button" aria-label="Close lesson" id="restart"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></button><div class="seg" id="seg"></div></div>
+    <div class="body" id="body"></div>
+    <button class="next" type="button" id="next"></button>
+    <span class="tag" id="tag"></span>
+    <div class="sheet" id="sheet"><div class="card"><h3>Sources</h3><p class="note">Clickable links come at the end of the lesson</p><ol id="srclist"></ol><button class="close" type="button" id="closesrc">Back to the lesson</button></div></div>
+  </div>
+</div>
+<script>
+(function () {
+  var S = /*SCREENS*/[];
+  var NONUM = /[?&]nonum\b/.test(location.search);
+  var m = /[?&]n=(\d)/.exec(location.search), i = m ? Math.min(S.length, Math.max(1, +m[1])) - 1 : 0;
+  var $ = function (id) { return document.getElementById(id); };
+  function render() {
+    var s = S[i];
+    $("seg").innerHTML = S.map(function (_, k) { return '<i class="' + (k < i ? "full" : k === i ? "cur" : "") + '"></i>'; }).join("");
+    $("body").innerHTML = '<h2>' + s.h + '</h2><div class="pic' + (s.fit ? ' fit' : '') + '">' + s.pic + '</div>' + (s.p ? '<p>' + s.p + '</p>' : '') + '<button class="src" type="button" id="src">Sources</button>';
+    $("next").textContent = s.btn;
+    $("tag").textContent = NONUM ? "" : "GA " + (i + 1);
+    $("srclist").innerHTML = s.src.map(function (r) { return '<li>' + r[0] + '</li>'; }).join("");
+    $("sheet").classList.remove("on");
+    try { history.replaceState(null, "", "?n=" + (i + 1) + (NONUM ? "&nonum" : "")); } catch (e) {}
+  }
+  function go(d) { i = (i + d + S.length) % S.length; render(); }
+  $("next").addEventListener("click", function () { go(1); });
+  $("restart").addEventListener("click", function () { i = 0; render(); });
+  $("closesrc").addEventListener("click", function () { $("sheet").classList.remove("on"); });
+  $("body").addEventListener("click", function (e) {
+    if (e.target.closest("#src")) { $("sheet").classList.add("on"); return; }
+    var r = $("body").getBoundingClientRect();
+    if (e.clientX - r.left < r.width * 0.25 && i > 0) go(-1);
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(1); if (e.key === "ArrowLeft" && i > 0) go(-1); if (e.key === "Escape") $("sheet").classList.remove("on"); });
+  render();
+})();
+</script>
+</body>
+</html>
