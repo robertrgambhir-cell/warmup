@@ -134,8 +134,8 @@ def home_rows(ALL=True, mini=False):
                  f'<span class="hr-tx"><b>{name}</b><q>{q}</q>{minibar}</span>{st}</button>')
     return rows
 
-PARTS = ('<div class="parts" role="img" aria-label="This lesson: 3 minutes to learn, then 3 minutes of practice at a door.">'
-         '<div class="lab"><span>' + BOOK + 'Learn <small>3 min</small></span><span>' + DOOR + 'Practice <small>3 min</small></span></div></div>')
+PARTS = ('<div class="parts" role="img" aria-label="This lesson: 3 minutes to learn, then 3 minutes at the door.">'
+         '<div class="lab"><span>' + BOOK + 'Learn <small>3 min</small></span><span>' + DOOR + 'At the door <small>3 min</small></span></div></div>')
 TIMECARD = ('<svg viewBox="0 0 110 136" aria-hidden="true"><rect x="8" y="6" width="94" height="124" rx="12" fill="#fff" stroke="#c9ced6" stroke-width="4"/>'
             '<circle cx="55" cy="44" r="22" fill="#eef1f5" stroke="#8a94a3" stroke-width="4"/><path d="M55 30 V44 L65 50" stroke="#3c3c3c" stroke-width="5" fill="none" stroke-linecap="round"/>'
             + "".join(f'<rect x="22" y="{y}" width="14" height="14" rx="3" fill="{GREEN}"/><rect x="44" y="{y+4}" width="44" height="6" rx="3" fill="#d7dbe1"/>' for y in (80, 104)) + '</svg>')
