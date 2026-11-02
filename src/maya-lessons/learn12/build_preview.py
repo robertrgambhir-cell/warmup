@@ -155,7 +155,8 @@ ADDON = r"""
   /* ---------- v12 preview (Nov 1): the briefing home, then Georgia's Learn in the look Robert picked, before the current practice ---------- */
   var G12 = __G12__, HOME_HERO = __HERO__, HOME_Q = __QUOTES__, LOCK12 = __LOCK__;
   L[0].issue = "Health insurance";
-  L[0].story = G12.map(function (s) { return { g12: s, next: s.btn, src: s.src, html: function () { return ""; } }; });
+  /* each lesson rebuilt in the v12 Learn (Georgia first, then Texas, Ohio, Maine and Michigan as their words lists are approved) gets its new screens here */
+  L.forEach(function (x) { if (G12[x.id]) x.story = G12[x.id].map(function (s) { return { g12: s, next: s.btn, src: s.src, html: function () { return ""; } }; }); });
   S.seenHow = true; /* How option D: the lesson's two parts live on the cover, so there is no separate How screen */
   var X12 = '<svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
   /* grow or shrink everything (--k) to the largest size that fits, so every screen fills its height with no blank band and no scrolling */
@@ -203,7 +204,7 @@ ADDON = r"""
       '<div class="hm-list">' + rows + '</div></div></div>';
     foot(""); refit12();
   };
-  screenNum = function () { if (S.lesson === 0 && S.ph === 0 && !S.sources && !S.how) return S.idx === 0 ? "GA Cover" : "GA " + S.idx; return _screenNum(); };
+  screenNum = function () { if (S.lesson != null && S.ph === 0 && !S.sources && !S.how && X().story[0].g12) { var c = X().id.toUpperCase(); return S.idx === 0 ? c + " Cover" : c + " " + S.idx; } return _screenNum(); };
   document.addEventListener("click", function (e) {
     var t = e.target.closest("button");
     if (t && t.id === "g12src") { $("g12sheet").classList.add("on"); return; }
@@ -269,11 +270,18 @@ if __name__ == "__main__":
     tmp = here / "_base.html"
     subprocess.run([sys.executable, str(base / "build.py"), clips, str(tmp)], check=True, capture_output=True)
     html = tmp.read_text(); tmp.unlink()
-    G = [COVER] + SCREENS
+    # Georgia's Learn, plus each other lesson whose v12 Learn exists (learn12/lesson_<id>.py with COVER, SCREENS and THREE)
+    G, THREES = {"ga": [COVER] + SCREENS}, {"ga": THREE}
+    import importlib
+    for lid in ["tx", "oh", "me", "mi"]:
+        if (here / f"lesson_{lid}.py").exists():
+            mod = importlib.import_module(f"lesson_{lid}")
+            cov = dict(mod.COVER); cov.setdefault("after", PARTS); cov.setdefault("plain", True)
+            G[lid] = [cov] + mod.SCREENS; THREES[lid] = mod.THREE
     addon = (ADDON.replace("__G12__", json.dumps(G, ensure_ascii=False)).replace("__HERO__", json.dumps(hero(), ensure_ascii=False))
              .replace("__QUOTES__", json.dumps(QUOTES, ensure_ascii=False)).replace("__LOCK__", json.dumps(LOCK)))
     # Georgia's new Practice (A/B round 3, layout A): practice12.js and practice12.css
-    addon += (here / "practice12.js").read_text().replace("__THREE__", json.dumps(THREE, ensure_ascii=False))
+    addon += (here / "practice12.js").read_text().replace("__THREE__", json.dumps(THREES, ensure_ascii=False))
     scoped_all = scoped + "\n" + (here / "practice12.css").read_text()
     anchor = "\n  render();\n  if (IN_CLAUDE"
     assert anchor in html and "</style>" in html

@@ -94,7 +94,7 @@
     if (d.stage === "intro" && second) { knock(); return; }
     if (d.stage === "intro") {
       draw12({ h: "You’re at " + esc(v.name) + "’s door, and " + x.pr.who + " brings up " + x.pr.topic,
-        body: door12({ shut: true, cls: "intro" }) + '<p>You’ve already said you’re with Maya’s campaign. Answer out loud. The three things from the start of the lesson are what count.</p>' + (x.id === "ga" ? '<div class="pic plain">' + THREE12 + '</div>' : things12(null)),
+        body: door12({ shut: true, cls: "intro" }) + '<p>You’ve already said you’re with Maya’s campaign. Answer out loud. The three things from the start of the lesson are what count.</p>' + (THREE12[x.id] ? '<div class="pic plain">' + THREE12[x.id] + '</div>' : things12(null)),
         btns: '<button class="next" type="button" id="knock">Answer ' + esc(v.name) + '</button>' });
       return;
     }
