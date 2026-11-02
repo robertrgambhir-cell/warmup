@@ -161,12 +161,17 @@ ADDON = r"""
   /* grow or shrink everything (--k) to the largest size that fits, so every screen fills its height with no blank band and no scrolling */
   function fit12() {
     var g = $("g12"), b = $("g12b"); if (!g || !b) return;
-    var ok = function (k) { g.style.setProperty("--k", k); return b.lastElementChild.getBoundingClientRect().bottom <= b.getBoundingClientRect().bottom - 2; };
+    var ok = function (k) { g.style.setProperty("--k", k); return b.lastElementChild.getBoundingClientRect().bottom <= b.getBoundingClientRect().bottom - 2 && b.scrollHeight <= b.clientHeight + 1; };
     var lo = 0.6, hi = 1.5; if (ok(hi)) lo = hi; else for (var j = 0; j < 10; j++) { var m = (lo + hi) / 2; if (ok(m)) lo = m; else hi = m; }
+    /* layout at a size can depend on the size before it (wrapping), so re-check each candidate from the smallest size and step down until it truly fits */
+    var fresh = function (k) { g.style.setProperty("--k", 0.6); void b.offsetHeight; return ok(k); };
+    lo = Math.floor(lo * 1000) / 1000; /* round down: rounding up can tip a line onto a new row */
+    while (lo > 0.6 && !fresh(lo)) lo -= 0.02;
     g.style.setProperty("--k", lo.toFixed(3));
   }
   window.addEventListener("resize", fit12);
-  function refit12() { fit12(); requestAnimationFrame(fit12); setTimeout(fit12, 120); try { document.fonts.ready.then(fit12); } catch (e) {} }
+  function refit12() { fit12(); requestAnimationFrame(fit12); setTimeout(fit12, 120); setTimeout(fit12, 600); try { document.fonts.ready.then(fit12); } catch (e) {} }
+  try { document.fonts.addEventListener("loadingdone", function () { fit12(); }); } catch (e) {} /* a font that arrives late rewraps the header, so fit again */
   function g12Draw(s, seg, btnId) {
     var hasSrc = s.src && s.src.length;
     $("body").innerHTML = '<div class="g12" id="g12"><div class="top"><button class="x" type="button" id="home" aria-label="Close lesson">' + X12 + '</button>' + seg + '</div>' +
