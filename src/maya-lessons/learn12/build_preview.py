@@ -26,7 +26,7 @@ for line in css.splitlines():
 scoped = "\n".join(out_lines).replace(":root {", ".g12 {", 1)
 scoped += """
   .g12, .g12 * { box-sizing: border-box; }
-  .phone { height: clamp(520px, calc(100svh - 100px), 800px); }
+  @media (min-width: 501px) { .phone { height: clamp(520px, calc(100svh - 100px), 800px); } }
   .g12 { flex: 1; min-height: 0; height: 100%; position: relative; display: flex; flex-direction: column; background: #fff; padding: 14px 18px 26px; text-align: left; font-family: var(--sans); color: var(--ink); }
   .g12 h2 { font-family: var(--sans); }
   .g12 .news { width: auto; max-width: none; align-self: stretch; }
@@ -267,9 +267,12 @@ if __name__ == "__main__":
     G = [COVER] + SCREENS
     addon = (ADDON.replace("__G12__", json.dumps(G, ensure_ascii=False)).replace("__HERO__", json.dumps(hero(), ensure_ascii=False))
              .replace("__QUOTES__", json.dumps(QUOTES, ensure_ascii=False)).replace("__LOCK__", json.dumps(LOCK)))
+    # Georgia's new Practice (A/B round 3, layout A): practice12.js and practice12.css
+    addon += (here / "practice12.js").read_text().replace("__THREE__", json.dumps(THREE, ensure_ascii=False))
+    scoped_all = scoped + "\n" + (here / "practice12.css").read_text()
     anchor = "\n  render();\n  if (IN_CLAUDE"
     assert anchor in html and "</style>" in html
-    html = html.replace(anchor, addon + anchor, 1).replace("</style>", scoped + "\n</style>", 1)
+    html = html.replace(anchor, addon + anchor, 1).replace("</style>", scoped_all + "\n</style>", 1)
     pathlib.Path(out).write_text(html)
     pathlib.Path(opts).write_text(options_page(photo))
     print("wrote", out, len(html), opts)
