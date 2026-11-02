@@ -41,6 +41,15 @@
   var PR12 = { tx: { who: "he", topic: "school vouchers", brief: "school vouchers" }, oh: { who: "she", topic: "her electric bill", brief: "electric bills" },
     me: { who: "he", topic: "heating oil", brief: "heating oil" }, mi: { who: "she", topic: "tariffs", brief: "tariffs and auto jobs" } };
   L.forEach(function (x) { if (THINGS12[x.id]) { x.things = THINGS12[x.id]; x.pr = PR12[x.id]; } });
+  /* simpler planted mistakes for Ohio and Maine (Robert, Nov 1, 3:26 PM rule; approved with the words lists at 5:49 PM): a flat misstatement of Maya's position, not a technicality */
+  (function () {
+    var oh = L[2], me = L[3];
+    oh.missLines = [{ who: "v", text: oh.voter.open }, { who: "m", text: "Ohio bills are up more than half since 2019, mostly from data centers." }, { who: "m", text: "Maya wants to shut down data centers." }, { who: "v", text: oh.voter.follow }, { who: "m", text: "His bill leaves it up to each state." }];
+    oh.miss = { tiles: ["Bills are up, mostly from data centers", "Maya wants to shut down data centers", "His bill leaves it to each state"], wrong: 1, fix: "She doesn’t. She wants data centers to pay their full power costs." };
+    me.missLines = [{ who: "v", text: me.voter.open }, { who: "m", text: "Half of Maine heats with oil, and it’s about six dollars a gallon." }, { who: "m", text: "Maya wants to cut heating aid." }, { who: "v", text: me.voter.follow }, { who: "m", text: "She pushed for early heating aid and a release from the oil reserve." }];
+    me.miss = { tiles: ["Oil is about $6 a gallon", "Maya wants to cut heating aid", "Her opponent: early aid, a small reserve release"], wrong: 1, fix: "She doesn’t. She wants more heating aid." };
+    me.wrong = /(never voted to end|price cap|cap (heating )?oil|reserve will (lower|fix)|(collins|opponent|republican)('s| is)? (lying|a liar)|(maya|she)[^.]{0,20}(cut|end|slash)[^.]{0,10}(heating )?aid)/;
+  })();
   var MIC12 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>';
   var OK12 = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#35b57c"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var NO12 = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#e5e5e5"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#8a8a8a" stroke-width="2.6" stroke-linecap="round"/></svg>';
