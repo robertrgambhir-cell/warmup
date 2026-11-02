@@ -286,6 +286,7 @@ if __name__ == "__main__":
     anchor = "\n  render();\n  if (IN_CLAUDE"
     assert anchor in html and "</style>" in html
     html = html.replace(anchor, addon + anchor, 1).replace("</style>", scoped_all + "\n</style>", 1)
+    if "<meta charset" not in html[:2000]: html = '<meta charset="utf-8">\n' + html  # the file must say it is UTF-8, or curly apostrophes can show garbled
     pathlib.Path(out).write_text(html)
     pathlib.Path(opts).write_text(options_page(photo))
     print("wrote", out, len(html), opts)

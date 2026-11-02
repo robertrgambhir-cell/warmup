@@ -33,10 +33,10 @@
   /* the other four lessons (Nov 1, 5:04 PM sweep): Georgia's Practice design with their existing scripts; the three things said in full and in short */
   L[0].things = L[0].moves; L[0].pr = { who: "she", topic: "health insurance", brief: "health insurance" };
   var THINGS12 = {
-    tx: [["Texas sends $1 billion of tax money a year to private schools, mostly for kids already there", "$1 billion goes to private schools"], ["Maya will fight vouchers going nationwide: public money for public schools", "Maya: public money for public schools"], ["Her opponent backs vouchers and wants the Department of Education gone", "Her opponent backs vouchers"]],
-    oh: [["Ohio electric bills are up by more than half since 2019, mostly from data center demand", "Bills are up, mostly from data centers"], ["Maya will require data centers to pay their full power costs", "Maya: data centers pay their full costs"], ["Her opponent’s bill leaves it up to each state", "His bill leaves it to each state"]],
+    tx: [["Texas is spending $1 billion this year on private school vouchers, mostly for kids who weren’t in public school", "$1 billion this year for vouchers"], ["Maya will fight vouchers going nationwide: public money for public schools", "Maya: public money for public schools"], ["Her opponent backs vouchers and wants the Department of Education gone", "Her opponent backs vouchers"]],
+    oh: [["Ohio electric bills are up by more than half since 2019, and data centers are now the biggest driver", "Bills up; data centers the biggest driver"], ["Maya will require data centers to pay their full power costs", "Maya: data centers pay their full costs"], ["Her opponent’s bill leaves it up to each state", "His bill leaves it to each state"]],
     me: [["Half of Maine heats with oil, and it’s about $6 a gallon", "Oil is about $6 a gallon"], ["Maya wants to end the war driving prices and get more heating aid", "Maya: end the war, more heating aid"], ["Her opponent backed early aid and a small release from the oil reserve", "Her opponent: early aid, a small reserve release"]],
-    mi: [["Tariffs on Canada are costing Michigan auto jobs", "Tariffs are costing auto jobs"], ["Maya wants smart, targeted tariffs, with unions at the table", "Maya: smart tariffs, unions at the table"], ["Her opponent backed the tariffs and now wants the Canada fight ended, but keeps others", "Her opponent: end the Canada fight, keep others"]]
+    mi: [["Michigan lost about 4,000 auto parts jobs in a year, as tariffs on Canada climbed", "4,000 auto parts jobs lost in a year"], ["Maya wants smart, targeted tariffs, with unions at the table", "Maya: smart tariffs, unions at the table"], ["Her opponent backed the tariffs and now wants the Canada fight ended, but keeps others", "Her opponent: end the Canada fight, keep others"]]
   };
   var PR12 = { tx: { who: "he", topic: "school vouchers", brief: "school vouchers" }, oh: { who: "she", topic: "her electric bill", brief: "electric bills" },
     me: { who: "he", topic: "heating oil", brief: "heating oil" }, mi: { who: "she", topic: "tariffs", brief: "tariffs and auto jobs" } };
@@ -44,10 +44,19 @@
   /* simpler planted mistakes for Ohio and Maine (Robert, Nov 1, 3:26 PM rule; approved with the words lists at 5:49 PM): a flat misstatement of Maya's position, not a technicality */
   (function () {
     var oh = L[2], me = L[3];
-    oh.missLines = [{ who: "v", text: oh.voter.open }, { who: "m", text: "Ohio bills are up more than half since 2019, mostly from data centers." }, { who: "m", text: "Maya wants to shut down data centers." }, { who: "v", text: oh.voter.follow }, { who: "m", text: "His bill leaves it up to each state." }];
-    oh.miss = { tiles: ["Bills are up, mostly from data centers", "Maya wants to shut down data centers", "His bill leaves it to each state"], wrong: 1, fix: "She doesn’t. She wants data centers to pay their full power costs." };
+    oh.missLines = [{ who: "v", text: oh.voter.open }, { who: "m", text: "Ohio bills are up more than half since 2019, and data centers are the biggest driver." }, { who: "m", text: "Maya wants to shut down data centers." }, { who: "v", text: oh.voter.follow }, { who: "m", text: "His bill leaves it up to each state." }];
+    oh.miss = { tiles: ["Bills are up; data centers are the biggest driver", "Maya wants to shut down data centers", "His bill leaves it to each state"], wrong: 1, fix: "She doesn’t. She wants data centers to pay their full power costs." };
     me.missLines = [{ who: "v", text: me.voter.open }, { who: "m", text: "Half of Maine heats with oil, and it’s about six dollars a gallon." }, { who: "m", text: "Maya wants to cut heating aid." }, { who: "v", text: me.voter.follow }, { who: "m", text: "She pushed for early heating aid and a release from the oil reserve." }];
     me.miss = { tiles: ["Oil is about $6 a gallon", "Maya wants to cut heating aid", "Her opponent: early aid, a small reserve release"], wrong: 1, fix: "She doesn’t. She wants more heating aid." };
+    /* the reviewer's fact fixes (Nov 1): $1 billion is this year's budget, not every year's; data centers are the biggest driver of the grid's rising costs, not "the main reason" bills rose; Michigan's 4,000 jobs fell in the year to June 2026, not "since the tariffs began" */
+    var tx = L[1], mi = L[4];
+    tx.hearLines[1].text = "Texas is spending a billion dollars this year of tax money on private school vouchers, and 7 in 10 went to kids who weren’t in public school.";
+    tx.missLines[1].text = "Texas is spending a billion dollars this year on private school vouchers, mostly for kids who weren’t in public school.";
+    tx.miss.tiles[0] = "$1 billion this year, mostly for kids not in public school";
+    oh.hearLines[1].text = "Ohio bills are up more than half since 2019, and data centers are now the biggest driver of the grid’s rising costs.";
+    mi.hearLines[1].text = "Michigan lost about 4,000 auto parts jobs in a year as tariffs on Canada climbed, and parts cross that border back and forth.";
+    mi.missLines[1].text = "Michigan lost about 4,000 auto parts jobs in a year as tariffs on Canada climbed.";
+    [tx, oh, mi].forEach(function (x) { x.model = x.hearLines.filter(function (h) { return h.who === "m"; }).map(function (h) { return h.text; }).join(" "); });
     me.wrong = /(never voted to end|price cap|cap (heating )?oil|reserve will (lower|fix)|(collins|opponent|republican)('s| is)? (lying|a liar)|(maya|she)[^.]{0,20}(cut|end|slash)[^.]{0,10}(heating )?aid)/;
   })();
   var MIC12 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>';
