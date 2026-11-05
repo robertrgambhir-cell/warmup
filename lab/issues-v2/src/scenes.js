@@ -12,11 +12,13 @@
 
   /* ---------- cover: what you'll be able to do, the real race, the two parts ---------- */
   S.cover = {
-    html: function (sc) {
+    html: function (sc, ctx) {
+      /* screen counts, not minutes: nothing here has been timed with people yet */
+      var L = WU.app.lesson; sc.screens = [L.learn.length - 1, L.door.filter(function (d) { return d.type === "door"; }).length - 1];
       var g = sc.goals.map(function (x) { return '<div class="goal"><span class="ic">' + x.icon + "</span><p>" + x.t + "</p></div>"; }).join("");
       return '<div class="race">' + WU.icon.capitol.replace("<svg", '<svg width="16" height="16"') + "<b>" + esc(sc.race) + "</b><span>" + esc(sc.when) + "</span></div>" +
         "<h1>" + sc.h + '</h1><div class="goals">' + g + "</div>" +
-        '<div class="parts"><span class="l">' + WU.icon.book + "Learn <small>about " + sc.times[0] + ' min</small></span><span class="d">' + WU.icon.door + "At the door <small>about " + sc.times[1] + " min</small></span></div>" +
+        '<div class="parts"><span class="l">' + WU.icon.book + "Learn <small>" + sc.screens[0] + ' screens</small></span><span class="d">' + WU.icon.door + "At the door <small>today and tomorrow</small></span></div>" +
         '<p class="fine">' + sc.fine + "</p>";
     }
   };

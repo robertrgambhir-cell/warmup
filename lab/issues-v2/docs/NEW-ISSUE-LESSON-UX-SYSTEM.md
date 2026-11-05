@@ -35,7 +35,7 @@ Tokens (all in `lesson.css`, single light theme like the live app): ink `#3c3c3c
 
 | Scene | What's on it | Where | File |
 |---|---|---|---|
-| `cover` | Real race and date, header, three or four "you'll be able to" goals with small pictures, Learn and At the door times, the not-affiliated line | Every lesson | scenes.js |
+| `cover` | Real race and date, header, three "you'll be able to" goals with small pictures, the Learn and At the door line with screen counts (no minutes until lessons are timed with people), the not-affiliated line | Every lesson | scenes.js |
 | `ask` | The voter at their open door, their quote in Newsreader, a guess with three options; the answer arrives on a later screen | Every lesson | scenes.js |
 | `ruler` | The Rule model: income line with zones, the story's people, slider plus chips plus drag, a readout in words, optional switch between two sets of rules, task tracking | Rule lessons | models.js |
 | `border` | The Chain's first link: goods cross, the tariff tag appears, an arrow shows who pays, then three choices and a measured-share bar | Chain lessons about prices | models.js |
