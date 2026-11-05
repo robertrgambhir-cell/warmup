@@ -223,7 +223,7 @@ h1 { font-size: calc(27px * var(--k)); }
 .bub.me { background: var(--blue-soft); color: #1f3550; align-self: flex-end; border-bottom-right-radius: 5px; }
 .bub.c { background: var(--green-soft); color: #1d4a33; align-self: flex-end; border-bottom-right-radius: 5px; }
 .bub .pt { display: inline; border-radius: 4px; padding: 0 2px; }
-.bub .pt[data-n]::after { content: attr(data-n); font: 800 9px/1 var(--sans); vertical-align: .7em; margin-left: 2px; color: var(--green-deep); }
+.bub .pt[data-n]::after { content: attr(data-n); display: inline-grid; place-items: center; width: 15px; height: 15px; margin-left: 4px; border-radius: 50%; background: var(--green-deep); color: #fff; font: 800 9.5px/1 var(--sans); vertical-align: 1px; }
 .speak { display: flex; flex-direction: column; gap: 8px; }
 .mic { display: flex; align-items: center; gap: 12px; border: 2px solid var(--line); border-radius: 16px; padding: 8px 10px; background: #fff; min-height: 58px; }
 .mic button.m { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--green); color: #fff; display: grid; place-items: center; cursor: pointer; flex: none; box-shadow: 0 3px 0 var(--green-deep); }

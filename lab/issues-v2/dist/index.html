@@ -235,7 +235,7 @@ h1 { font-size: calc(27px * var(--k)); }
 .bub.me { background: var(--blue-soft); color: #1f3550; align-self: flex-end; border-bottom-right-radius: 5px; }
 .bub.c { background: var(--green-soft); color: #1d4a33; align-self: flex-end; border-bottom-right-radius: 5px; }
 .bub .pt { display: inline; border-radius: 4px; padding: 0 2px; }
-.bub .pt[data-n]::after { content: attr(data-n); font: 800 9px/1 var(--sans); vertical-align: .7em; margin-left: 2px; color: var(--green-deep); }
+.bub .pt[data-n]::after { content: attr(data-n); display: inline-grid; place-items: center; width: 15px; height: 15px; margin-left: 4px; border-radius: 50%; background: var(--green-deep); color: #fff; font: 800 9.5px/1 var(--sans); vertical-align: 1px; }
 .speak { display: flex; flex-direction: column; gap: 8px; }
 .mic { display: flex; align-items: center; gap: 12px; border: 2px solid var(--line); border-radius: 16px; padding: 8px 10px; background: #fff; min-height: 58px; }
 .mic button.m { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--green); color: #fff; display: grid; place-items: center; cursor: pointer; flex: none; box-shadow: 0 3px 0 var(--green-deep); }
@@ -1191,7 +1191,7 @@ h1 { font-size: calc(27px * var(--k)); }
     html: function (sc) {
       return "<h2>" + sc.h + '</h2><div class="bub v" style="max-width:100%"><small>' + esc(sc.name) + "</small>" + esc(WU.app.lesson.door[0].ask) + '</div><div class="thread grow" id="thread">' + sc.lines.map(function (l) {
         return '<div class="bub ' + (l.who === "v" ? "v" : "c") + '"><small>' + esc(l.who === "v" ? sc.name : "Canvasser") + "</small>" + l.t + "</div>";
-      }).join("") + '</div><div class="row2"><button class="ghost" type="button" id="play">' + (WU.speak.ok ? "Play it out loud" : "") + '</button><span class="small" style="font:600 12.5px var(--sans);color:var(--muted)">Numbers mark the key points.</span></div>';
+      }).join("") + '</div><div class="row2"><button class="ghost" type="button" id="play">' + (WU.speak.ok ? "Play it out loud" : "") + '</button><span class="small" style="font:600 12.5px var(--sans);color:var(--muted)">Green numbers mark the key points.</span></div>';
     },
     mount: function (sc) {
       var b = document.getElementById("play"); if (!WU.speak.ok) { b.hidden = true; return; }
@@ -1235,7 +1235,7 @@ h1 { font-size: calc(27px * var(--k)); }
       return '<div class="big-ok"><span class="ring">' + WU.icon.check + "</span><h2>" + sc.h + "</h2></div>" +
         '<div class="growth"><span class="h">Your two doors</span><span class="h">Key points</span><span class="h">Graded by</span>' + row("1st: " + sc.d1, g1) + row("2nd: " + sc.d2 + " (new situation)", g2) + "</div>" +
         '<div class="res">' + demo + "</div>" +
-        '<p class="say info"><b>Tomorrow, 20 seconds:</b> ' + sc.tomorrow + "</p>" +
+        '<p class="say info"><b>Tomorrow\u2019s first question:</b> ' + sc.tomorrow + "</p>" +
         '<details><summary style="font:800 14px var(--sans);cursor:pointer">Where this lesson came from</summary><p class="small" style="margin-top:6px">' + sc.origin + '</p><ol class="small" style="padding-left:20px;display:flex;flex-direction:column;gap:6px;margin:8px 0 0">' + src + "</ol></details>";
     },
     mount: function (sc, ctx) { ctx.ready(sc.btn || "Back to lessons"); ctx.onNext(function () { WU.go("home"); }); var d = ctx.body.querySelector("details"); if (d) d.addEventListener("toggle", WU.fit); }

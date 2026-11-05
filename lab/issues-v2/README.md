@@ -4,8 +4,8 @@ Two redesigned issue lessons on a new lesson system: **health insurance** (Georg
 
 **This is separate from the live app.** Nothing in `m-r4x8t2` (yourwarmup.com), the issue lessons at `maya.html` or the lesson machine changed. Deleting this folder removes the prototype.
 
-- Preview: https://robertrgambhir-cell.github.io/warmup/lab/issues-v2/ (speech works in iPhone Safari with Dictation on and in desktop Chrome; feedback is the labeled quick check)
-- Private preview on claude.ai (AI feedback by Claude; typing instead of the mic): the artifact link in the project notes
+- Private preview on claude.ai, live now: https://claude.ai/artifact/LEh87q4tmAKzjvSHRML6vg (AI feedback by Claude; typing, since the page can't use the mic)
+- Public preview with the mic, after this branch is merged to main: https://robertrgambhir-cell.github.io/warmup/lab/issues-v2/ (merging adds only this folder; feedback there is the labeled quick check)
 - Open one lesson: add `#health` or `#tariffs`; add `?fast` to skip voices
 
 ## Docs

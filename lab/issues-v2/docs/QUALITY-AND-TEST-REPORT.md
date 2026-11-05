@@ -7,7 +7,7 @@ Nov 5, 2026. What was built, what works, what was tested and how, and what still
 - **The lesson engine** (`src/`): shell, story bar, scale-to-fit, sources sheet, gating, routing; 15 scene types; the Rule model (income line with a switch) and the Chain models (border crossing, route with a cost bar); the feedback coach; speech in and out; one build to a single HTML file.
 - **Health insurance, Georgia** (Rule): 7 Learn screens, 7 At the door screens.
 - **Tariffs and auto jobs, Michigan** (Chain): 7 Learn screens, 7 At the door screens.
-- **Two previews:** a GitHub Pages copy (speech works; feedback is the labeled quick check) and a private claude.ai page (AI feedback by Claude; the microphone isn't allowed there, so it switches to typing).
+- **Previews:** a private claude.ai page, live (AI feedback by Claude; the microphone isn't allowed there, so it switches to typing), and a GitHub Pages copy that goes live when the `issues-v2` branch is merged (speech works; feedback is the labeled quick check). The branch adds only `lab/issues-v2/`.
 - **Six docs,** contact sheets of every old and new screen, and the tests below.
 
 ## What works, and how it was checked
