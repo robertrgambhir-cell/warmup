@@ -105,7 +105,7 @@
         h: "Both candidates for Senate back some tariffs. They split on the fight with Canada.",
         cands: [
           { side: "d", ini: "AE", name: "Abdul El-Sayed", short: "El-Sayed", role: "Democratic nominee",
-            plan: "Smart, targeted tariffs tied to Michigan jobs, with unions at the table" + s(12, 13),
+            plan: "Wants targeted tariffs tied to Michigan jobs, with unions at the table" + s(12, 13),
             quote: "\u201CI\u2019m not against tariffs per se. I\u2019m just against dumb tariffs.\u201D" + s(12), lines: [] },
           { side: "r", ini: "MR", name: "Mike Rogers", short: "Rogers", role: "Republican nominee",
             plan: "Has backed the tariffs. In October he called for an end to the Canada tariff fight" + s(14, 15),

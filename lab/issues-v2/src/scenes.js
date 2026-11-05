@@ -122,25 +122,27 @@
       return "<h2>" + sc.h + '</h2><div id="claim" class="grow" style="display:flex;flex-direction:column;gap:calc(12px * var(--k))"></div>';
     },
     mount: function (sc, ctx) {
-      var k = 0, box = document.getElementById("claim");
-      ctx.lock("Answer all " + sc.items.length + " to keep going");
+      var k = 0, box = document.getElementById("claim"), back = ctx.revisit;
       function one() {
+        ctx.lock("Answer claim " + (k + 1) + " of " + sc.items.length);
         var it = sc.items[k];
         box.innerHTML = '<p class="kick">Claim ' + (k + 1) + " of " + sc.items.length + '</p><p class="claim">\u201C' + it.t + '\u201D</p>' +
-          '<div class="tf" role="group" aria-label="Is this claim proven by evidence?"><button type="button" class="tfb k" data-a="k">' + WU.icon.check + "<span>" + sc.labels[0] + '</span></button><button type="button" class="tfb n" data-a="n">' + WU.icon.bang.replace("<svg", '<svg style="transform:rotate(180deg)"') + "<span>" + sc.labels[1] + '</span></button></div><div id="why"></div><div id="nx2"></div>';
+          '<div class="tf" role="group" aria-label="Is this claim proven by evidence?"><button type="button" class="tfb k" data-a="k">' + WU.icon.check + "<span>" + sc.labels[0] + '</span></button><button type="button" class="tfb n" data-a="n">' + '<b class="q" aria-hidden="true">?</b>' + "<span>" + sc.labels[1] + '</span></button></div><div id="why"></div>';
         box.querySelectorAll(".tfb").forEach(function (b) {
           b.onclick = function () {
             var a = b.getAttribute("data-a"), ok = a === it.a;
             b.classList.add(ok ? "right" : "wrong");
-            document.getElementById("why").innerHTML = '<p class="say ' + (ok ? "good" : "bad") + '"><b>' + (ok ? "Right. " : "Not quite. ") + "</b>" + it.why + "</p>";
+            var right = sc.labels[it.a === "k" ? 0 : 1];
+            document.getElementById("why").innerHTML = '<p class="say ' + (ok ? "good" : "bad") + '"><b>' + (ok ? "Right. " : "Not quite. ") + "</b>" + it.why + (ok ? "" : " Tap \u201C" + right + "\u201D to go on.") + "</p>";
             if (ok) {
               box.querySelectorAll(".tfb").forEach(function (x) { x.disabled = true; });
-              if (k < sc.items.length - 1) { document.getElementById("nx2").innerHTML = '<button class="ghost" type="button" id="nc" style="width:100%">Next claim</button>'; document.getElementById("nc").onclick = function () { k++; one(); }; }
-              else ctx.ready();
+              if (k < sc.items.length - 1) { ctx.onNext(function () { k++; ctx.onNext(WU.next); one(); }); ctx.ready("Next claim", true); }
+              else { ctx.onNext(WU.next); ctx.ready(); }
             }
             WU.fit();
           };
         });
+        if (back) box.querySelector('.tfb[data-a="' + it.a + '"]').click(); /* coming back: show the answer, nothing to redo */
         WU.fit();
       }
       one();
@@ -150,8 +152,9 @@
   /* ---------- choice: one candidate at a time, full width, same parts for both; then the difference ---------- */
   S.choice = {
     html: function (sc) {
-      var tabs = sc.cands.map(function (x, i) { return '<button type="button" role="tab" data-i="' + i + '" aria-selected="false"><span class="av ' + x.side + '" aria-hidden="true">' + x.ini + "</span><span><b>" + esc(x.short || x.name) + "</b><small>" + esc(x.role) + "</small></span></button>"; }).join("");
-      return "<h2>" + sc.h + '</h2><div class="ctabs" role="tablist" aria-label="The candidates">' + tabs + '</div><div class="cpanel" id="cpanel" role="tabpanel" aria-live="polite"></div><div id="cdiff"></div>' +
+      var order = sc.cands.map(function (x, i) { return i; }); if (Math.random() < 0.5) order.reverse(); /* neither side always first */
+      var tabs = order.map(function (i) { var x = sc.cands[i]; return '<button type="button" role="tab" data-i="' + i + '" aria-selected="false"><span class="av ' + x.side + '" aria-hidden="true">' + x.ini + "</span><span><b>" + esc(x.short || x.name) + "</b><small>" + esc(x.role) + "</small></span></button>"; }).join("");
+      return "<h2>" + sc.h + '</h2><div class="ctabs" role="tablist" aria-label="The candidates">' + tabs + '</div><div class="cpanel" id="cpanel" role="tabpanel" aria-live="polite"><p class="cempty">' + WU.icon.hand + '<span>Tap a candidate to see their plan</span></p></div><div id="cdiff"></div>' +
         (sc.office ? '<div class="office">' + WU.icon.capitol + "<span>" + sc.office + "</span></div>" : "");
     },
     mount: function (sc, ctx) {
@@ -174,7 +177,7 @@
         WU.fit();
       }
       ctx.body.querySelectorAll(".ctabs button").forEach(function (b) { b.onclick = function () { show(+b.getAttribute("data-i")); }; });
-      show(0);
+      if (ctx.revisit) { sc.cands.forEach(function (c, i) { seen[i] = true; }); show(+ctx.body.querySelector(".ctabs button").getAttribute("data-i")); }
     }
   };
 

@@ -15,8 +15,8 @@ The shared mobile experience for every issue lesson, whatever its format. Built 
 
 - **Frame.** Full screen on a phone (safe-area padding on all sides). On a laptop the lesson sits in a 402-pixel phone frame, as tall as the window allows up to 874 pixels, on the warm page color. [Kept]
 - **Top.** Close ✕, then the segmented story bar: one segment per screen, full or empty. At the switch to the door, the Learn bar folds into a green "✓ Learn" chip and the door's segments turn blue. [Kept]
-- **The story bar is navigation.** Tap any screen you've reached to go back to it; tap "✓ Learn" from the door to return to Learn. Screens you've finished stay finished, so going back never locks the button again. Each segment has a 26-pixel tap target around its 5-pixel bar. [New, after Robert's Nov 5 review]
-- **Body.** A flex column that scales to fit. One variable, `--k`, multiplies every font size, gap and picture height; the engine picks the largest value from 1.12 down to 0.74 that fits with no scrolling. On very short screens the body scrolls rather than clip, and the test suite reports every screen that does. [Kept and extended]
+- **The story bar is navigation.** Tap any screen you've reached to go back to it; tap "✓ Learn" from the door to return to Learn. Screens you've finished stay finished, so going back never locks the button again. Each segment has a 44-pixel tap target around its 5-pixel bar. [New, after Robert's Nov 5 review]
+- **Body.** A flex column that scales to fit. One variable, `--k`, multiplies every font size, gap and picture height; the engine picks the largest value from 1.12 down to 0.82 that fits with no scrolling. On very short screens the body scrolls rather than clip, and the test suite reports every screen that does. [Kept and extended]
 - **Bottom.** Sources (small, left) and the main button (the rest of the row). The main button wraps to two lines, never truncates. [Kept]
 - **Screen tag.** Bottom right, small gray ("GA2 3", "MI2 D2"). GA2 and MI2 mark version 2 so they never collide with the live tags. [Kept]
 
@@ -65,6 +65,11 @@ A Flow lesson needs one more model scene (`flow`: sources, destinations, a movab
 - **State is kept per lesson** while the page is open, so Back and Try again don't lose work.
 - **Never a two-column text grid on a phone.** Two columns of sentences at 180 pixels each read as a wall. Compare people or options one at a time (tabs), then state the difference in one sentence. [New, after Robert's Nov 5 review]
 - **One question on screen at a time.** A list of claims with buttons beside each one asks the learner to hold several decisions at once; show one claim, answer it, then the next. [New, after Robert's Nov 5 review]
+- **Neither candidate goes first.** The choice screen opens with no card showing ("Tap a candidate to see their plan"), and the tab order is random on each visit, so neither side always reads as the reply. Both cards use the same parts in the same voice: a plan in the candidate's own name for it, then the same three rows, each with a fact of the same kind. [New, after the Nov 5 review]
+- **One button moves you forward.** Steps inside a screen ("Next claim") use the main button, never a second button above it. A wrong answer says what to tap next. [New, after the Nov 5 review]
+- **A screen is finished when its task is done,** not when you press Next. Going back to it shows it finished (answers shown, the difference showing) and never asks you to redo it. [New, after the Nov 5 review]
+- **Text never shrinks below 82%.** On a screen too short for that (an iPhone SE, a short laptop window) the body scrolls, a fade at the bottom says there's more, and new feedback scrolls into view. [Changed, after the Nov 5 review; was 74%]
+- **Story bar taps are 44 pixels tall,** around a 5-pixel bar. [New]
 - **Labels never get cut off.** If a label doesn't fit its shape, it moves next to the shape. The walk test fails any clipped main button; check drawn labels by eye. [New, after Robert's Nov 5 review]
 - **Example answers** are always labeled "Example answer, not yours," and their results say so.
 

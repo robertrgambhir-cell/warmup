@@ -108,22 +108,22 @@
               { t: "Help buying a plan", ok: false, why: "Under $37,700 she’d qualify for Medicaid instead." }
             ], after: function (box) { box.querySelector("#qa").insertAdjacentHTML("beforebegin", miniRuler(20000, "expand")()); } }
         ], btn: "Where the candidates for governor stand" },
-      { type: "choice", src: [3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14],
+      { type: "choice", src: [3, 4, 5, 6, 9, 10, 11, 12, 13, 14],
         h: "Both candidates for governor say they\u2019d cover people like Bri. They differ on how.",
         cands: [
           { side: "d", ini: "KB", name: "Keisha Lance Bottoms", short: "Bottoms", role: "Democratic nominee",
-            plan: "Full Medicaid expansion, in her CARE Plan" + s(10),
+            plan: "Full Medicaid expansion, part of her CARE Plan" + s(10),
             lines: [
               { l: "For Bri", t: "She\u2019d qualify. The limit for a family of three would be about $37,700." + s(4) },
               { l: "Work reporting", t: "A 2025 federal law requires it for most adults from 2027. Parents of young kids can be exempt." + s(12, 14) },
-              { l: "So far", t: "40 states and DC have full expansion." + s(5) }
+              { l: "So far", t: "40 states and DC have full expansion. Georgia doesn\u2019t." + s(5) }
             ] },
           { side: "r", ini: "RJ", name: "Rick Jackson", short: "Jackson", role: "Republican nominee",
-            plan: "What he calls \u201Cintelligent Medicaid expansion\u201D: coverage tied to work, like Georgia Pathways" + s(11),
+            plan: "\u201CIntelligent Medicaid expansion\u201D: coverage tied to work, like Georgia Pathways" + s(11),
             lines: [
-              { l: "For Bri", t: "He says his plan would close the coverage gap, with coverage tied to work. He hasn\u2019t said what the income limit would be." + s(6) },
+              { l: "For Bri", t: "He says his plan would close the coverage gap, with coverage tied to work. His income limit isn\u2019t public yet." + s(6) },
               { l: "Work reporting", t: "The center of the plan, as in Pathways (80 hours a month)." + s(3, 11) },
-              { l: "So far", t: "Pathways has 18,527 people enrolled after three years. The state expected 100,000 in year one." + s(8, 9) }
+              { l: "So far", t: "Georgia Pathways, which also ties coverage to work, has 18,527 people enrolled after three years." + s(9) }
             ] }
         ],
         diff: "Bottoms would use the standard expansion 40 states use. Jackson would tie coverage to reporting work, like Pathways.",

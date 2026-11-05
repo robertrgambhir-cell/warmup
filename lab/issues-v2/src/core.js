@@ -60,7 +60,7 @@
   /* ---------- scale to fit: one variable sets every size, the largest that fits with no scrolling ---------- */
   function fit() {
     if (!body) return;
-    var k = 1.12, min = 0.74;
+    var k = 1.12, min = 0.82; /* below 0.82 text gets too small to read; scroll instead */
     if (body.dataset.fallback) { body.classList.remove("scroll"); delete body.dataset.fallback; }
     if (body.classList.contains("scroll")) { scr.style.setProperty("--k", 1); app.k = 1; return; }
     scr.style.setProperty("--k", k);
@@ -70,7 +70,7 @@
     /* last resort on very short screens: scroll rather than clip (the walk test reports every screen that does this) */
     if (body.scrollHeight > body.clientHeight + 1) { body.classList.add("scroll"); body.dataset.fallback = "1"; }
   }
-  WU.fit = function () { requestAnimationFrame(fit); };
+  WU.fit = function () { requestAnimationFrame(function () { fit(); /* on a screen too short to fit, bring new feedback into view */ if (body.dataset.fallback && Date.now() - (app.shownAt || 0) > 400 && body.scrollTo) body.scrollTo({ top: body.scrollHeight, behavior: "smooth" }); }); };
 
   /* ---------- sources sheet: numbered for this lesson; links on the last screen ---------- */
   function openSources() {
@@ -131,7 +131,7 @@
     nextBtn.className = "next" + (app.part === "door" ? " blue" : "");
     var ctx = {
       L: L, sc: sc, st: app.st, body: body,
-      ready: function (label) { nextBtn.removeAttribute("aria-disabled"); if (label) nextBtn.textContent = label; else nextBtn.textContent = sc.btn || "Continue"; WU.fit(); },
+      ready: function (label, more) { /* more: a step inside the screen, not the end of it */ if (!more) { app.passed = app.passed || {}; app.passed[app.part] = Math.max(app.passed[app.part] == null ? -1 : app.passed[app.part], app.i); } nextBtn.removeAttribute("aria-disabled"); if (label) nextBtn.textContent = label; else nextBtn.textContent = sc.btn || "Continue"; WU.fit(); },
       revisit: app.passed && app.i <= (app.passed[app.part] == null ? -1 : app.passed[app.part]),
       lock: function (instr) { if (app.passed && app.i <= (app.passed[app.part] == null ? -1 : app.passed[app.part])) return; /* a screen you already finished never locks again */ nextBtn.setAttribute("aria-disabled", "true"); nextBtn.textContent = instr; },
       label: function (t) { nextBtn.textContent = t; },
@@ -145,6 +145,7 @@
     nextBtn.removeAttribute("aria-disabled");
     nextBtn.textContent = sc.btn || "Continue";
     if (draw.mount) draw.mount(sc, ctx);
+    app.shownAt = Date.now();
     fit();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
     var h = body.querySelector("h1,h2"); if (h) { h.setAttribute("tabindex", "-1"); if (!WU.firstPaint) h.focus({ preventScroll: true }); }

@@ -90,3 +90,20 @@ A separate agent that didn't build the lessons reviewed them (walked both at 136
 ## Robert's Nov 5 review
 
 Four screens read as confusing and the story bar didn't go back. Fixed: candidate tabs replace the two-column grids, the sort shows one claim at a time, the border bar's labels fit, and the story bar navigates. Rules added to the UX system (never a two-column text grid on a phone; one question on screen at a time; labels never cut off; the story bar is navigation). After the changes: 43 checks at each of six sizes (375x667, 390x844, 402x874, 430x932, 1366x700, 1440x820), 0 page errors, 0 layout problems; 18 of 18 coach tests pass. The walk test now covers going back through the story bar.
+
+### Second independent review of the reworked screens
+
+A separate agent tested the reworked screens by touch at 375x667 and 390x844. It found the border screen clear and the story bar working, and raised eight issues. All eight are fixed:
+
+| # | Finding | What changed |
+|---|---|---|
+| 1 | Going back to a finished choice or sort screen locked it again and started it over | A screen counts as finished when its task is done; going back shows it finished. The walk test now visits every Learn screen again through the story bar and fails if one locks |
+| 2 | Georgia cards unequal: her plan's own name and a reassuring fact; his "What he calls…" and a disappointing comparison | Both plans named in the candidate's own words; both "So far" rows state the same kind of fact (where the approach stands now); the first-year forecast comparison is off this screen |
+| 3 | El-Sayed's heading used his own sales word ("Smart") | Now "Wants targeted tariffs…", matching Rogers's descriptive heading |
+| 4 | The Democrat always first, so the Republican reads as the reply | No card opens until tapped; tab order is random each visit |
+| 5 | Sort: a wrong answer gave no next step; two competing buttons; the "Not proven" icon looked like an "i" | Wrong answers say what to tap; "Next claim" is the main button; the icon is a "?" |
+| 6 | Text shrank to 76% at 375x667 | Floor raised to 82%; short screens scroll with a fade, and feedback scrolls into view |
+| 7 | Story bar targets too small | 44 pixels tall |
+| 8 | "Now tap Rogers" showed on a finished screen | Fixed by 1 |
+
+After these fixes: 0 page errors and 0 layout problems at six sizes; 18 of 18 coach tests pass. On 375x667, seven of 43 screens now scroll by 25 to 56 pixels (the home list, both guess screens, both Georgia ruler screens, the Georgia choice, the jobs chart); on 1366x700, one does (the first ruler, 27 pixels). None scroll at 390x844 or larger.

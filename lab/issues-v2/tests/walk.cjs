@@ -33,7 +33,7 @@ const TYPE = {
   const layout = () => p.evaluate(() => {
     const out = [], body = document.getElementById("body"), phone = document.getElementById("phone").getBoundingClientRect();
     if (!body.classList.contains("scroll") && body.scrollHeight > body.clientHeight + 2) out.push(`body overflows ${body.scrollHeight - body.clientHeight}px at k=${WU.app.k}`);
-    if (body.dataset.fallback) out.push(`too tall even at the smallest size: scrolls ${body.scrollHeight - body.clientHeight}px`);
+    /* scrolling below the smallest readable size is allowed on short screens; counted separately */
     if (document.documentElement.scrollWidth > innerWidth + 1) out.push("page scrolls sideways");
     for (const el of document.querySelectorAll("#scr *")) {
       const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
@@ -43,7 +43,7 @@ const TYPE = {
     const nx = document.getElementById("next"); if (nx.scrollWidth > nx.clientWidth + 1) out.push("main button label cut off");
     return [...new Set(out)].slice(0, 5);
   });
-  const shot = async (name) => { await p.waitForTimeout(250); const t = await tag(); n++; const file = `${String(n).padStart(2, "0")}-${name}.png`; await p.screenshot({ path: path.join(SHOTS, file) }); const lay = await layout(); const k = await p.evaluate(() => WU.app.k); const words = await p.evaluate(() => document.getElementById("body").innerText.split(/\s+/).filter(Boolean).length); log.push({ file, tag: t, k, lay, words }); };
+  const shot = async (name) => { await p.waitForTimeout(250); const t = await tag(); n++; const file = `${String(n).padStart(2, "0")}-${name}.png`; await p.screenshot({ path: path.join(SHOTS, file) }); const lay = await layout(); const sc = await p.evaluate(() => document.getElementById("body").dataset.fallback ? document.getElementById("body").scrollHeight - document.getElementById("body").clientHeight : 0); const k = await p.evaluate(() => WU.app.k); const words = await p.evaluate(() => document.getElementById("body").innerText.split(/\s+/).filter(Boolean).length); log.push({ file, tag: t, k, lay, words, scrolls: sc }); };
   const next = async () => { await p.click("#next"); await p.waitForTimeout(150); };
   const locked = () => p.evaluate(() => document.getElementById("next").getAttribute("aria-disabled") === "true");
   const solveOpts = async (scope) => { // click options until the right one shows (wrong first when there is one)
@@ -65,8 +65,8 @@ const TYPE = {
       }
       else if (type === "apply") { await shot(`${id}-L${i}-apply-start`); const m = await p.evaluate(() => WU.app.lesson.learn[WU.app.i].cases.length); for (let c = 0; c < m; c++) { await solveOpts("#case"); if (c < m - 1) { await p.click("#nx"); await p.waitForTimeout(80); } } }
       else if (type === "bars") { if (await p.$(".opt")) { await shot(`${id}-L${i}-bars-start`); await solveOpts("#body"); } }
-      else if (type === "sort") { await shot(`${id}-L${i}-sort-start`); const ans = await p.evaluate(() => WU.app.lesson.learn[WU.app.i].items.map((x) => x.a)); for (let j = 0; j < ans.length; j++) { const wrong = ans[j] === "k" ? "n" : "k"; if (j === 1) await p.click(`.tfb[data-a="${wrong}"]`); await p.click(`.tfb[data-a="${ans[j]}"]`); if (j < ans.length - 1) await p.click("#nc"); } }
-      else if (type === "choice") { await shot(`${id}-L${i}-choice-start`); await p.click('.ctabs button[data-i="1"]'); }
+      else if (type === "sort") { await shot(`${id}-L${i}-sort-start`); const ans = await p.evaluate(() => WU.app.lesson.learn[WU.app.i].items.map((x) => x.a)); for (let j = 0; j < ans.length; j++) { const wrong = ans[j] === "k" ? "n" : "k"; if (j === 1) await p.click(`.tfb[data-a="${wrong}"]`); await p.click(`.tfb[data-a="${ans[j]}"]`); if (j < ans.length - 1) { if (await locked()) log.push({ file: `${id}-L${i}-sort`, problem: "Next claim not offered on the main button" }); await next(); if (!(await locked())) log.push({ file: `${id}-L${i}-sort`, problem: "claim " + (j + 2) + " can be skipped" }); } } }
+      else if (type === "choice") { await shot(`${id}-L${i}-choice-start`); await p.click('.ctabs button[data-i="0"]'); if (!(await locked())) log.push({ file: `${id}-L${i}-choice`, problem: "unlocked after one candidate" }); await p.click('.ctabs button[data-i="1"]'); }
       else if (type === "border") { await shot(`${id}-L${i}-border-start`); await p.click("#send"); await p.waitForTimeout(1400); }
       else if (type === "route") { await shot(`${id}-L${i}-route-start`); while (await p.$("#adv")) { await p.click("#adv"); await p.waitForTimeout(60); } }
       if (await locked()) log.push({ file: `${id}-L${i}`, problem: "button still locked after the interaction" });
@@ -78,8 +78,9 @@ const TYPE = {
       await p.click('#seg button.sg[data-i="2"]'); await p.waitForTimeout(150);
       const back = await tag(); if (!/ 2$/.test(back)) log.push({ file: id + "-stepper", problem: "tapping the story bar did not go back (got " + back + ")" });
       if (await locked()) log.push({ file: id + "-stepper", problem: "a finished screen locked again on the way back" });
-      await p.click('#seg button.sg[data-i="' + (L.length - 1) + '"]'); await p.waitForTimeout(150);
-      if (await locked()) log.push({ file: id + "-stepper", problem: "the last Learn screen locked again" });
+      for (let j = 3; j < L.length; j++) { await p.click('#seg button.sg[data-i="' + j + '"]'); await p.waitForTimeout(120);
+        if (await locked()) log.push({ file: id + "-stepper", problem: "Learn screen " + j + " (" + L[j] + ") locked again on the way back" });
+        if (L[j] === "choice" && (await p.$(".cdiff, #cdiff .do"))) log.push({ file: id + "-stepper", problem: "the choice screen asks to tap again" }); }
       await next(); }
     const D = await p.evaluate(() => WU.app.lesson.door.map((s) => s.type));
     for (let i = 0; i < D.length; i++) {
@@ -96,7 +97,7 @@ const TYPE = {
   }
   fs.writeFileSync(path.join(SHOTS, "log.json"), JSON.stringify({ size: [W, H], errs, log }, null, 1));
   const bad = log.filter((x) => (x.lay && x.lay.length) || x.problem);
-  console.log(`${W}x${H}: ${log.length} entries, page errors ${errs.length}, layout problems ${bad.length}`);
+  const scr = log.filter((x) => x.scrolls); console.log(`${W}x${H}: ${log.length} entries, page errors ${errs.length}, layout problems ${bad.length}, screens that scroll ${scr.length}` + (scr.length ? " (" + scr.map((x) => x.tag + " " + x.scrolls + "px").join(", ") + ")" : ""));
   bad.forEach((x) => console.log("  ", x.file, x.tag || "", JSON.stringify(x.lay || x.problem)));
   errs.slice(0, 5).forEach((e) => console.log("   error:", e));
   await b.close();
