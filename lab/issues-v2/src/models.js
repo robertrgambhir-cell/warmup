@@ -19,7 +19,10 @@
     zs.forEach(function (z) {
       var a = X(from), b = X(Math.min(z.to, R.max));
       out += '<rect x="' + a + '" y="' + top + '" width="' + Math.max(0, b - a) + '" height="' + bh + '" fill="' + FILL[z.c] + '"/>';
-      if (!mini) { var nm = (b - a) > z.name.length * 7.4 + 14 ? z.name : ((b - a) > (z.short || "").length * 7.4 + 10 ? z.short : ""); if (nm) out += '<text class="zone-t" x="' + (a + b) / 2 + '" y="' + (top + bh / 2 + 4.5) + '" text-anchor="middle" fill="' + INK[z.c] + '" stroke="' + FILL[z.c] + '" stroke-width="4" paint-order="stroke">' + esc(nm) + "</text>"; }
+      if (!mini) { var mx0 = X(v), nm = (b - a) > z.name.length * 7.4 + 14 ? z.name : ((b - a) > (z.short || "").length * 7.4 + 10 ? z.short : ""), cx = (a + b) / 2;
+        /* keep the zone's name clear of the marker: move it to the roomier side, or shorten it */
+        if (nm && Math.abs(cx - mx0) < nm.length * 3.7 + 12) { var L = mx0 - a, Rr = b - mx0; cx = L > Rr ? (a + mx0) / 2 - 4 : (mx0 + b) / 2 + 4; var room = Math.max(L, Rr) - 16; if (room < nm.length * 7.4) nm = room >= (z.short || "").length * 7.4 ? z.short : ""; }
+        if (nm) out += '<text class="zone-t" x="' + cx + '" y="' + (top + bh / 2 + 4.5) + '" text-anchor="middle" fill="' + INK[z.c] + '" stroke="' + FILL[z.c] + '" stroke-width="4" paint-order="stroke">' + esc(nm) + "</text>"; }
       from = z.to;
     });
     out += "</g>";
@@ -38,7 +41,7 @@
       var art = typeof p.art === "function" ? p.art(world) : p.art, x = X(p.v), near = Math.abs(p.v - v) <= 600;
       ppl += nest(art, x - 21, 0, 42, 70) + '<text class="nm" x="' + x + '" y="' + (top - 6) + '" text-anchor="middle"' + (near ? ' style="fill:#2f5fa8"' : "") + ">" + esc(p.name) + "</text>";
     });
-    var mx = X(v), mk = '<g class="handle" pointer-events="none"><path d="M' + mx + " " + (top - 5) + " V" + (top + bh + 5) + '" stroke="#262320" stroke-width="3" stroke-linecap="round"/><circle cx="' + mx + '" cy="' + (top + bh + (mini ? 0 : 1)) + '" r="' + (mini ? 6 : 8) + '" fill="#fff" stroke="#262320" stroke-width="3"/></g>';
+    var mx = X(v), mk = '<g class="handle" pointer-events="none"><path d="M' + mx + " " + (top - 5) + " V" + (top + bh + 5) + '" stroke="#262320" stroke-width="3" stroke-linecap="round"/><circle cx="' + mx + '" cy="' + (top + bh / 2) + '" r="' + (mini ? 5 : 7) + '" fill="#fff" stroke="#262320" stroke-width="3"/></g>';
     var H = ly + 6;
     return '<svg viewBox="0 0 ' + W + " " + H + '" aria-hidden="true">' + ppl + out + lab + mk + "</svg>";
   }
@@ -48,7 +51,7 @@
     var R = sc.ruler;
     return '<div class="ruler">' + (sc.toggle ? '<div class="toggle" role="group" aria-label="Which rules">' + sc.toggle.map(function (t, i) { return '<button type="button" data-w="' + t.w + '" aria-pressed="' + (i === 0) + '">' + t.t + "</button>"; }).join("") + "</div>" : "") +
       '<div class="pic plain" id="rsvg"></div>' +
-      '<label class="sr" for="rng">Yearly income for ' + esc(R.family) + '</label><input id="rng" type="range" min="0" max="' + R.max + '" step="250" value="' + sc.start + '">' +
+      '<label class="sr" for="rng">Yearly income for ' + esc(R.family) + '</label><input id="rng" type="range" aria-label="Yearly income" min="0" max="' + R.max + '" step="250" value="' + sc.start + '">' +
       '<div class="who-row">' + (R.people || []).map(function (p) { return '<button type="button" data-v="' + p.v + '" aria-pressed="false">' + esc(p.name) + " · " + WU.money(p.v) + "</button>"; }).join("") + "</div>" +
       '<div class="readout" id="read" aria-live="polite"></div></div>';
   }
@@ -124,11 +127,12 @@
         '<rect x="0" y="0" width="150" height="150" rx="12" fill="#f1ebe1"/><rect x="210" y="0" width="150" height="150" rx="12" fill="#e8eef6"/>' +
         '<text x="12" y="20" style="font:800 11px var(--sans);letter-spacing:.06em;fill:#7a6a55">CANADA</text><text x="348" y="142" text-anchor="end" style="font:800 11px var(--sans);letter-spacing:.06em;fill:#4b6a8c">US · MICHIGAN</text>' +
         '<path d="M180 6 V144" stroke="#9aa3ad" stroke-width="3" stroke-dasharray="7 7"/>' +
-        '<g transform="translate(160 18)"><rect width="40" height="34" rx="5" fill="#fff" stroke="#9aa3ad" stroke-width="2"/><text x="20" y="15" text-anchor="middle" style="font:800 7.5px var(--sans);fill:#545b63">US</text><text x="20" y="25" text-anchor="middle" style="font:800 7.5px var(--sans);fill:#545b63">CUSTOMS</text></g>' +
+        '<g transform="translate(155 16)"><rect width="50" height="36" rx="5" fill="#fff" stroke="#9aa3ad" stroke-width="2"/><text x="25" y="16" text-anchor="middle" style="font:800 8px var(--sans);fill:#545b63">US</text><text x="25" y="27" text-anchor="middle" style="font:800 8px var(--sans);fill:#545b63">CUSTOMS</text></g>' +
+        '<g transform="translate(62 52)"><rect x="-34" y="0" width="68" height="34" rx="4" fill="#fff" stroke="#b9a88f" stroke-width="2"/><path d="M-26 0 V-16 H-16 V0 M10 0 V-22 H20 V0" fill="#d9cdb9" stroke="#b9a88f" stroke-width="2"/><text x="0" y="15" text-anchor="middle" style="font:800 8.5px var(--sans);fill:#7a6a55">STEEL MILL</text><text x="0" y="26" text-anchor="middle" style="font:700 8px var(--sans);fill:#7a6a55">Ontario</text></g>' +
         '<g transform="translate(306 104)"><rect x="-40" y="-24" width="80" height="40" rx="6" fill="#fff" stroke="#9aa3ad" stroke-width="2"/><path d="M-40 -24 L0 -40 L40 -24" fill="#dfe6ef" stroke="#9aa3ad" stroke-width="2"/><text x="0" y="0" text-anchor="middle" style="font:800 9px var(--sans);fill:#2f5fa8">MICHIGAN</text><text x="0" y="11" text-anchor="middle" style="font:800 9px var(--sans);fill:#2f5fa8">PARTS MAKER</text></g>' +
         '<g id="coil" transform="translate(70 108)" style="transition:transform .9s cubic-bezier(.4,.1,.2,1)">' + COIL + '<text y="32" text-anchor="middle" style="font:700 10px var(--sans);fill:#545b63">steel</text></g>' +
         '<g id="tagg" opacity="0" style="transition:opacity .4s .7s"><path d="M196 70 h66 l8 9 -8 9 h-66 z" fill="#b3261e"/><text x="231" y="83" text-anchor="middle" style="font:800 11px var(--sans);fill:#fff">' + esc(sc.rate) + '</text></g>' +
-        '<g id="pay" opacity="0" style="transition:opacity .4s 1.1s"><path d="M306 60 C306 38 262 34 204 34" stroke="#1b7a4d" stroke-width="2.5" fill="none" stroke-dasharray="4 4"/><path d="M209 29 L203 34 L209 39" stroke="#1b7a4d" stroke-width="2.5" fill="none"/><text x="266" y="24" text-anchor="middle" style="font:800 10.5px var(--sans);fill:#1b7a4d">pays the tariff</text></g>' +
+        '<g id="pay" opacity="0" style="transition:opacity .4s 1.1s"><path d="M306 60 C306 38 262 34 207 34" stroke="#1b7a4d" stroke-width="2.5" fill="none" stroke-dasharray="4 4"/><path d="M212 29 L206 34 L212 39" stroke="#1b7a4d" stroke-width="2.5" fill="none"/><text x="266" y="24" text-anchor="middle" style="font:800 10.5px var(--sans);fill:#1b7a4d">pays the tariff</text></g>' +
         "</svg></div>" +
         '<div id="bnext"><button class="ghost" type="button" id="send" style="width:100%">Send the steel across the border</button></div><div id="bout"></div>';
     },
@@ -146,6 +150,7 @@
         var opts = sc.next ? '<div class="nexts">' + sc.next.map(function (n) { return '<div><span class="ni">' + NEXT_ICON[n.i] + "</span><b>" + n.t + "</b></div>"; }).join("") + "</div>" : "";
         document.getElementById("bout").innerHTML = '<div style="display:flex;flex-direction:column;gap:12px">' + guess + "<p>" + sc.p + "</p>" + opts + bar + "</div>";
         ctx.st["sent_" + sc.key] = true;
+        var bo = document.getElementById("bout"); bo.setAttribute("tabindex", "-1"); if (!ctx.st["sentFocus_" + sc.key]) { ctx.st["sentFocus_" + sc.key] = true; bo.focus({ preventScroll: true }); }
         ctx.ready(); WU.fit();
       }
       send.onclick = go;
@@ -165,7 +170,7 @@
     html: function (sc) {
       return "<h2>" + sc.h + '</h2><div class="pic route" style="padding:6px 4px 2px"><svg id="rsv" viewBox="0 0 360 236" role="img" aria-label="' + esc(sc.alt) + '"></svg></div>' +
         '<div id="rtx" aria-live="polite"></div>' +
-        '<div class="cost" aria-hidden="true"><div class="key"><span>Cost of the part so far:</span><span><i style="background:#c9ced6"></i>work</span><span><i style="background:var(--red)"></i>tariff</span><span><i style="background:var(--amber-fill)"></i>may apply</span></div><div class="bar" id="stk"></div></div>' +
+        '<div class="cost" aria-hidden="true"><div class="key"><span>Cost so far (not to scale):</span><span><i style="background:#c9ced6"></i>work</span><span><i style="background:var(--red)"></i>tariff</span><span><i style="background:var(--amber-fill)"></i>may apply</span></div><div class="bar" id="stk"></div></div>' +
         '<div id="rbtn"></div>';
     },
     mount: function (sc, ctx) {
@@ -193,8 +198,8 @@
         });
         document.getElementById("rsv").innerHTML = s;
         var parts = [["w", 3]];
-        for (var j = 0; j < k; j++) { var tx2 = sc.cross[j].tax; if (tx2) parts.push([tx2 === true ? "t" : "m", tx2 === true ? 2 : 1.4]); parts.push(["w", 2]); }
-        var tot = 3 + 2 * sc.cross.length + 2 * 2 + 1.4 * 2;
+        for (var j = 0; j < k; j++) { var tx2 = sc.cross[j].tax; if (tx2) parts.push([tx2 === true ? "t" : "m", 1]); parts.push(["w", 3]); }
+        var tot = 3 + 3 * sc.cross.length + sc.cross.filter(function (c) { return c.tax; }).length;
         document.getElementById("stk").innerHTML = parts.map(function (q) { return '<i class="' + q[0] + '" style="width:' + (q[1] / tot * 100) + '%"></i>'; }).join("");
         var t = k === 0 ? "<p>" + sc.start + "</p>" : '<p class="kick" style="margin-bottom:4px">Crossing ' + k + " of " + sc.cross.length + "</p><p>" + sc.cross[k - 1].text + "</p>";
         document.getElementById("rtx").innerHTML = t + (k === sc.cross.length ? '<p class="small" style="margin-top:8px">' + sc.end + "</p>" : "");

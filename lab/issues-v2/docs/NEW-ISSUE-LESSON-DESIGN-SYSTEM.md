@@ -78,8 +78,7 @@ A lesson uses one format for its core. It may borrow one piece of another format
   2. The line: one household type, two or three zones, the people from the story placed on it. The learner must visit every zone.
   3. Change one condition (a different law, a different household size) and watch the zones move.
   4. Use it: one or two new households, one with a changed condition.
-  5. What we know so far about the existing program (an evidence screen, often with a clipping).
-  6. The choice.
+  5. The choice, with a "so far" row for each side's track record (a separate evidence screen only when it covers both sides on like terms).
 - **Visuals.** The income line (zones in green, red and blue; edges labeled with the only numbers to remember), the story's people as figures on the line, a two-state switch, a readout that says the zone in words.
 - **Assessment.** Classify new cases; the door's second voter has a different household, so the canvasser has to use the line, not the script.
 - **Limits.** Real eligibility has many conditions (age, immigration status, assets, disability). The line shows one household type and one variable; the lesson must say so and point voters to the official checker. Never let a canvasser promise eligibility.
@@ -135,7 +134,7 @@ Every lesson runs the same six beats, so the app feels like one product even whe
 
 **What stays from Warmup's philosophy:** five-minute-ish daily sessions, plain language, spacing, retrieval, spoken practice, a chance to fix mistakes, a briefing tone and a clear sense of accomplishment. **What changes:** the learner does something on most Learn screens, the second try tests transfer and moves to the next day, and feedback quotes the learner's own words.
 
-**The honest time picture.** With the same reading-speed model, the new lessons estimate at about 8 minutes for day 1 (Learn plus the first door) and about 2 minutes for tomorrow's door. The live lessons estimate at about 7.2 to 7.6 minutes. Five minutes isn't reachable with two spoken answers and a real explanation unless the second door moves to the next day (done) and Learn drops to four screens. That's the trade-off to test with people. [Estimate; see QUALITY-AND-TEST-REPORT.md]
+**The honest time picture.** With the same reading-speed model, the new lessons estimate at about 7.4 to 8.2 minutes for day 1 (Learn plus the first door) and about 2.5 minutes for tomorrow's door. The live lessons estimate at about 7.2 to 7.6 minutes. Five minutes isn't reachable with two spoken answers and a real explanation unless the second door moves to the next day (done) and Learn drops to four screens. That's the trade-off to test with people. [Estimate; see QUALITY-AND-TEST-REPORT.md]
 
 ---
 

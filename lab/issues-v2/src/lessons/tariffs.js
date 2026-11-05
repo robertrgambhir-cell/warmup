@@ -7,19 +7,19 @@
 (function () {
   "use strict";
   var WU = window.WU, s = WU.sup;
-  var CANADA_PAYS = { re: /canada (pays|is paying|will pay|paid|pays for)/i, why: "Canada doesn’t pay the US tariff. The US company bringing the goods in pays it." };
-  var CAUSED_ALL = { re: /(tariffs?|they) (caused|cost us|killed|wiped out|destroyed|took) (all )?(of )?(those |the |our |4,?000 )?(\w+ )?jobs/i, why: "The job numbers don’t prove tariffs caused the losses. Say tariffs may be one reason." };
-  var ANTI_ALL = { re: /(el.?sayed|the democrat)[^.]{0,20}(opposes|is against|wants to (end|get rid of)) (all )?tariffs/i, why: "El-Sayed isn’t against all tariffs, only what he calls dumb ones." };
+  var CANADA_PAYS = { re: /canad\w*( \w+){0,2} (pays|is paying|will pay|paid|pays for)\b/i, why: "Canada doesn’t pay the US tariff. The US company bringing the goods in pays it.", cancels: ["who", "who2"] };
+  var CAUSED_ALL = { re: /(tariffs?|they) (caused|cost us|killed|wiped out|destroyed|took) (all )?(of )?(those |the |our |4,?000 )?(\w+ )?jobs/i, why: "The job numbers don’t prove tariffs caused the losses. Say tariffs may be one reason.", cancels: ["honest"] };
+  var ANTI_ALL = { re: /(el.?sayed|the democrat)[^.]{0,20}(opposes|is against|wants to (end|get rid of)) (all )?tariffs/i, why: "El-Sayed isn’t against all tariffs, only what he calls dumb ones.", cancels: ["eld"] };
   var FACTS = [
     "A tariff is a tax on imported goods, paid to US Customs by the US company bringing the goods into the country.",
     "That company can pass the cost on in higher prices, take a smaller profit or switch suppliers. New York Fed economists found about 90% of the cost of 2025's tariffs fell on US businesses and consumers.",
-    "Steel and aluminum from Canada are taxed at 50%. Parts that meet the USMCA trade deal's rules skip some other US tariffs. Canada has its own counter-tariffs on some US goods.",
+    "Steel and aluminum from Canada are taxed at 50%. Parts that meet the US-Mexico-Canada trade deal's rules skip some other US tariffs. Canada has its own tariffs on some US goods.",
     "Auto parts can cross the US-Canada border several times before a car is finished (NBC News followed one part that crossed four times), so tariffs can apply more than once.",
     "Michigan had about 4,000 fewer auto parts manufacturing jobs in June 2026 than in June 2025 (113,600 to 109,600, about 3.5%). Vehicle manufacturing added about 500 jobs over the same period.",
     "The job numbers show timing, not cause. Other forces, such as shifts in electric vehicle plans and pressure on suppliers, also affect auto jobs. A 2025 University of Michigan forecast estimated tariffs would cost Michigan about 3,300 auto jobs and called the estimate very uncertain.",
-    "Abdul El-Sayed (2026 Democratic nominee, Michigan U.S. Senate): \"I'm not against tariffs per se. I'm just against dumb tariffs.\" He wants smart, targeted tariffs tied to Michigan jobs, with unions at the table. The UAW endorsed him in June 2026.",
-    "Mike Rogers (2026 Republican nominee): backed the tariffs in September 2026; in October said \"Canada is not our enemy\" and called to end the Canada tariff fight, while saying \"there are tariffs that have helped.\"",
-    "Presidents imposed these tariffs using powers Congress has delegated. A senator votes on trade laws and can vote to limit those powers but can't set tariffs alone.",
+    "Abdul El-Sayed (2026 Democratic nominee, Michigan U.S. Senate): \"I'm not against tariffs per se. I'm just against dumb tariffs.\" He wants smart, targeted tariffs tied to Michigan jobs, with unions at the table. ",
+    "Mike Rogers (2026 Republican nominee): has backed the tariffs; in October 2026 said \"Canada is not our enemy\" and called to end the Canada tariff fight, while saying \"there are tariffs that have helped.\"",
+    "Presidents set these tariffs using powers Congress has delegated; in February 2026 the Supreme Court struck down tariffs based on emergency powers (IEEPA). A senator votes on trade laws and can vote to limit those powers but can't set tariffs alone.",
     "Canvassers explain the mechanism and the evidence; they don't claim certainty the evidence doesn't support."
   ];
   var ICON_BORDER = '<svg viewBox="0 0 52 52" aria-hidden="true"><path d="M26 6 V46" stroke="#9aa3ad" stroke-width="3" stroke-dasharray="5 5"/><path d="M28 30 h14 l5 5 -5 5 h-14 z" fill="#b3261e"/><circle cx="14" cy="22" r="8" fill="#8d98a6"/><circle cx="14" cy="22" r="3.5" fill="#6f7b88"/></svg>';
@@ -46,7 +46,7 @@
       { t: "Newsweek: Rogers’s September statement backing the tariffs", u: "https://www.newsweek.com/mike-rogers-turns-on-trumps-tariffs-what-michigan-republican-said-before-12538135" },
       { t: "Reuters via GV Wire, Oct 7, 2026: Rogers’s ad calling to end the Canada tariff fight", u: "https://gvwire.com/2026/10/07/michigan-republican-rogers-calls-for-end-to-canada-tariff-fight-breaking-with-trump-again/" },
       { t: "UAW statement, Aug 25, 2026: tariffs aimed at low-wage countries, no escalation with Canada", u: "https://uaw.org/uaw-president-shawn-fain-on-u-s-trade-escalation-with-canada/" },
-      { t: "Michigan Public, June 5, 2026: the UAW endorses El-Sayed", u: "https://www.michiganpublic.org/politics-government/2026-06-05/uaw-backs-el-sayed-over-other-democrats-running-for-us-senate" },
+      { t: "Fortune, Feb 20, 2026: the Supreme Court strikes down the tariffs based on emergency powers (IEEPA), 6 to 3", u: "https://fortune.com/2026/02/20/supreme-court-slaps-down-175-billion-worth-of-trump-tariffs-as-unconstitutional/" },
       { t: "Congressional Research Service, R48435: Congressional and presidential authority to impose import tariffs", u: "https://www.everycrsreport.com/reports/R48435.html" }
     ],
     learn: [
@@ -75,8 +75,8 @@
         stops: [{ t: "Steel made", c: "ca", icon: "coil" }, { t: "Stamped into a part", c: "us", icon: "part" }, { t: "Welded into a bigger piece", c: "ca", icon: "frame" }, { t: "More parts added", c: "us", icon: "plus" }, { t: "Into a finished car", c: "ca", icon: "car" }],
         cross: [
           { tax: true, tag: "50%", text: "Into Michigan. The US tariff on steel from Canada applies: 50%, paid by the Michigan plant bringing it in." + s(3) },
-          { tax: true, tag: "Canada\u2019s tariff", text: "Into Ontario. Canada’s own counter-tariffs can apply to some US goods, paid by the Canadian company bringing it in." + s(4) },
-          { tax: "maybe", tag: "Maybe", text: "Into Michigan again. Parts that meet the USMCA trade deal’s rules skip some US tariffs, but the steel and aluminum in them are taxed either way." + s(3) },
+          { tax: "maybe", tag: "Maybe", text: "Into Ontario. Canada’s own tariffs on some US goods can apply here, paid by the Canadian company bringing the part in." + s(4) },
+          { tax: "maybe", tag: "Maybe", text: "Into Michigan again. Parts that meet the US-Mexico-Canada trade deal’s rules skip some US tariffs, but steel and aluminum are taxed either way." + s(3) },
           { tax: "maybe", tag: "Maybe", text: "Into Ontario again. Whether a tariff applies depends on the part and the trade rules. Each crossing is another chance for one." }
         ],
         start: "Follow one part from Canadian steel to a finished car, and watch its cost.",
@@ -84,7 +84,7 @@
         note: "An example route. Real parts take many routes; NBC News followed one that crossed four times." + s(6) + " The cost column is an illustration, not real prices.",
         btn: "What happened to Michigan’s auto parts jobs" },
       { type: "bars", src: [7, 8, 9, 10],
-        h: "Michigan had about 4,000 fewer auto parts jobs in June 2026 than a year before" + s(7),
+        h: "Michigan had about 4,000 fewer auto parts jobs in a year. The numbers show when, not why." + s(7),
         bars: [{ lab: "Michigan auto parts jobs, June 2025", v: 113600, txt: "113,600" + s(7), c: "#8a8f96" }, { lab: "Michigan auto parts jobs, June 2026", v: 109600, txt: "109,600" + s(7), c: "#b3261e" }],
         alt: "Two bars drawn to scale: 113,600 Michigan auto parts jobs in June 2025 and 109,600 in June 2026, a drop of about 3.5%.",
         p: "That’s a 3.5% drop. Over the same year, vehicle assembly jobs rose by about 500." + s(8),
@@ -95,23 +95,23 @@
             { t: "No. Tariffs can’t affect jobs.", ok: false, why: "They can. Tariffs raise costs for companies that buy steel and parts from abroad. The question is how much, and the job numbers alone can’t answer it." }
           ] },
         btn: "Sort what’s shown from what isn’t" },
-      { type: "sort", src: [1, 8, 11], h: "Some tariff claims are shown by evidence. Others aren’t, at least not yet.",
+      { type: "sort", src: [1, 8], h: "Some tariff claims are shown by evidence. Others aren’t, at least not yet.",
         p: "Sort each claim. Getting this right is what makes you trustworthy.", labels: ["Shown by evidence", "Not shown"],
         items: [
           { t: "US companies pay the tariff when goods cross into the US.", a: "k", why: "That’s how tariffs are collected: the company bringing goods in pays US Customs." },
           { t: "Most of the cost of 2025’s tariffs stayed with US businesses and shoppers.", a: "k", why: "New York Fed economists measured it: about 90%." + s(1) },
           { t: "Tariffs caused all 4,000 lost auto parts jobs.", a: "n", why: "Jobs fell while tariffs rose, but other forces moved jobs too. Nobody has measured the tariffs’ share." },
-          { t: "Tariffs have already brought back more Michigan auto jobs than they cost.", a: "n", why: "Not so far: parts jobs fell about 4,000 and vehicle jobs rose about 500. Announced plant moves haven’t added jobs yet." + s(8, 11) }
+          { t: "Tariffs have already brought back more Michigan auto jobs than they cost.", a: "n", why: "Not shown: no one has measured how many jobs tariffs added or cost. Parts jobs fell about 4,000 and vehicle jobs rose about 500, but that’s timing, not cause." + s(8) }
         ], btn: "Where the candidates for Senate stand" },
       { type: "compare", src: [12, 13, 14, 15, 16, 17, 18],
         h: "Both candidates for Senate back some tariffs. They differ on which ones, and on Canada.",
         cands: [{ side: "d", ini: "AE", name: "Abdul El-Sayed", role: "Democratic nominee" }, { side: "r", ini: "MR", name: "Mike Rogers", role: "Republican nominee" }],
         rows: [
           { l: "In their words", d: "<q>I’m not against tariffs per se. I’m just against dumb tariffs.</q>" + s(12), r: "<q>Canada is not our enemy,</q> but <q>there are tariffs that have helped.</q>" + s(12) },
-          { l: "On these tariffs", d: "Smart, targeted tariffs tied to Michigan jobs, with unions at the table" + s(12, 13), r: "Backed them in September; in October called to end the Canada tariff fight" + s(14, 15) }
+          { l: "On these tariffs", d: "Smart, targeted tariffs tied to Michigan jobs, with unions at the table" + s(12, 13), r: "Has backed the tariffs; in October called to end the Canada tariff fight" + s(14, 15) }
         ],
-        office: "Presidents imposed these tariffs using powers Congress has given the office. A senator votes on trade laws and can vote to limit those powers, but can’t set tariffs alone." + s(18),
-        p: "The autoworkers’ union backs tariffs on low-wage countries, not a fight with Canada, and endorsed El-Sayed." + s(16, 17),
+        office: "Presidents set these tariffs using powers Congress gave the office, and in February 2026 the Supreme Court struck down the ones based on emergency powers. A senator votes on trade laws and can vote to limit those powers, but can’t set tariffs alone." + s(17, 18),
+        p: "The autoworkers’ union backs tariffs on low-wage countries, not a fight with Canada." + s(16),
         btn: "Practice it at a door" }
     ],
     door: [
@@ -123,14 +123,15 @@
           ask: "These tariffs on Canada are hitting our plant. Who actually pays for them, and what would the candidates for Senate do?",
           facts: FACTS,
           items: [
-            { id: "who", label: "Explained who pays", all: [/(compan(y|ies)|business(es)?|importer|plant|we pay|you pay|americans pay|paid (here|in the us)|higher prices|prices|90|ninety)/i], ai: "Explains that the US company bringing goods in pays the tariff at the border, and that most of the cost stays with US businesses and shoppers (for example through higher prices). Saying Canada pays is wrong.", tip: "Say who pays: the US company bringing goods in, and much of it ends up in prices." },
+            { id: "who", label: "Explained who pays", all: [/(compan(y|ies)|business(es)?|importer|plant|we pay|you pay|americans pay|paid (here|in the us))/i, /(pay|paid|price|cost)/i], ai: "Explains that the US company bringing goods in pays the tariff at the border, and that most of the cost stays with US businesses and shoppers (for example through higher prices). Saying Canada pays is wrong.", tip: "Say who pays: the US company bringing goods in, and much of it ends up in prices." },
             { id: "chain", label: "Explained why autos get hit hard", all: [/(cross(es|ing)?|back and forth|four times|more than once|again and again|supply chain|multiple times|twice)/i], ai: "Explains that auto parts cross the US-Canada border several times, so tariffs can apply more than once and costs pile up.", tip: "Add why autos get hit hard: parts cross the border back and forth, so tariffs can hit more than once." },
-            { id: "honest", label: "Was careful about the job numbers", all: [/(4,?000|four thousand|jobs)/i, /(may|might|could|one reason|part of|not the only|hard to (say|know|tell)|can'?t (say|prove|tell)|other (reasons|things|factors)|doesn'?t prove|not proven|likely)/i], ai: "Mentions jobs AND shows caution: Michigan had about 4,000 fewer auto parts jobs in a year, and the numbers alone don't prove how much tariffs caused (tariffs may be one reason). Credit only if both are present.", tip: "Mention the jobs carefully: about 4,000 fewer auto parts jobs, and tariffs may be one reason." },
-            { id: "sides", label: "Said where both candidates stand, fairly", all: [/(el.?sayed|democrat|dumb|targeted|smart tariffs)/i, /(rogers|republican|he backed|backed (them|the tariffs)|not our enemy|end the (canada )?(fight|tariff))/i], ai: "States El-Sayed's position (not against all tariffs, against 'dumb' ones; targeted tariffs tied to Michigan jobs, unions at the table) AND Rogers's (backed the tariffs; now wants the Canada fight ended while keeping others he says helped).", tip: "Give both sides: El-Sayed wants targeted tariffs, not “dumb” ones; Rogers backed them and now wants the Canada fight ended." }
+            { id: "honest", label: "Was careful about the job numbers", not: [/(caused|killed|destroyed|wiped out)/i], all: [/(4,?000|four thousand|jobs)/i, /(may|might|could|one reason|part of|not the only|hard to (say|know|tell)|can'?t (say|prove|tell)|other (reasons|things|factors)|doesn'?t prove|not proven|likely)/i], ai: "Mentions jobs AND shows caution: Michigan had about 4,000 fewer auto parts jobs in a year, and the numbers alone don't prove how much tariffs caused (tariffs may be one reason). Credit only if both are present.", tip: "Mention the jobs carefully: about 4,000 fewer auto parts jobs, and tariffs may be one reason." },
+            { id: "eld", label: "Said where El-Sayed stands", all: [/(el.?sayed|democrat)/i, /(dumb|targeted|smart|not against|unions)/i], ai: "States El-Sayed's position in a way that matches his words: not against tariffs as such, against 'dumb' ones; wants targeted tariffs tied to Michigan jobs, with unions at the table.", tip: "Give El-Sayed\u2019s view: targeted tariffs, not \u201Cdumb\u201D ones, with unions at the table." },
+            { id: "rog", label: "Said where Rogers stands, fairly", all: [/(rogers|republican)/i, /(backed|support|not our enemy|end the (canada )?(fight|tariff)|canada fight|helped)/i], not: [/(scam|hates?|liar|lying)/i], ai: "States Rogers's position fairly: he has backed the tariffs, and in October called to end the Canada tariff fight while saying some tariffs have helped.", tip: "Give Rogers\u2019s view: he backed the tariffs and now wants the Canada fight ended." }
           ],
           flags: [CANADA_PAYS, CAUSED_ALL, ANTI_ALL]
         } },
-      { type: "result", attempt: 1, allH: "All four. That’s a complete, careful answer.", btn: "Hear a strong answer" },
+      { type: "result", attempt: 1, allH: "All five. That’s a complete, careful answer.", btn: "Hear a strong answer" },
       { type: "hear", name: "Samira", voice: "f", h: "A strong answer to Samira, with each key point marked",
         lines: [
           { who: "c", t: '<span class="pt" data-n="1">The US company bringing goods in pays the tariff, like a plant buying Canadian steel, and most of it ends up in higher prices here.</span> <span class="pt" data-n="2">Car parts cross the border back and forth, so tariffs can hit the same part more than once.</span>' },
@@ -149,11 +150,11 @@
           ask: "I run a hardware store in Lansing. A lot of my tools and lumber come from suppliers in Canada. If tariffs go up on that stuff, does that hurt me or help me?",
           facts: FACTS.concat(["For Ray: the tariff is paid at the border by whoever imports the goods into the US, Ray himself if he imports directly or his US supplier, who will likely charge him more. He may then raise prices, take a smaller profit or switch suppliers; the overall effect depends on details."]),
           items: [
-            { id: "who2", label: "Said who pays first", all: [/(supplier|importer|whoever brings|bring(s|ing)? (it|them|the goods|that stuff|stuff) in|at the border|(you|he|they)( would|'d| will)? pay(s)? (the|that|a) (tariff|tax))/i], ai: "Explains that the tariff is paid at the border by whoever imports the goods into the US: Ray if he imports directly, or his US supplier, who will likely charge him more.", tip: "Start with who pays: Ray, or the US supplier bringing the goods in, pays the tariff at the border." },
+            { id: "who2", label: "Said who pays first", all: [/(your (us |american )?supplier|importer|whoever brings|bring(s|ing)? (it|them|the goods|that stuff|stuff) in|at the border|(you|he|they)( would|'d| will)? pay(s)? (the|that|a) (tariff|tax))/i], not: [/canad\w*( \w+){0,2} (pays|paid)/i], ai: "Explains that the tariff is paid at the border by whoever imports the goods into the US: Ray if he imports directly, or his US supplier, who will likely charge him more.", tip: "Start with who pays: Ray, or the US supplier bringing the goods in, pays the tariff at the border." },
             { id: "options2", label: "Named what can happen next", all: [/(raise|higher|pass (it|that|the cost)|prices?|profit|margin|eat|absorb|switch|other suppliers?|somewhere else|elsewhere|american.made|us.made)/i], ai: "Names at least one realistic response: Ray pays more and raises prices, takes a smaller profit, or switches to other suppliers.", tip: "Say what he can do: raise prices, take a smaller profit or find other suppliers." },
             { id: "honest2", label: "Was honest about the uncertainty", all: [/(depend|might|may|could|not sure|hard to say|probably|likely)/i], ai: "Says the effect depends on details (how much he can pass on, competitors, other suppliers) instead of promising it will only hurt or only help.", tip: "Be honest: “It depends on whether you can pass the cost on or switch suppliers.”" }
           ],
-          flags: [CANADA_PAYS, { re: /(definitely|guarantee|for sure)[^.]{0,20}(help|hurt)/i, why: "Nobody can promise that. It depends on his costs and his options." }]
+          flags: [CANADA_PAYS, { re: /(definitely|guarantee\w*|for sure|certainly)[^.]{0,40}(help|hurt)|(help|hurt)\w*[^.]{0,40}(definitely|for sure|guarantee\w*|certainly)/i, why: "Nobody can promise that. It depends on his costs and his options.", cancels: ["honest2"] }]
         } },
       { type: "result", attempt: 2, allH: "You traced a tariff through a new business. That’s the skill.", btn: "Finish the lesson" },
       { type: "done", scroll: true, h: "You can explain tariffs and auto jobs", d1: "Samira", d2: "Ray",
@@ -161,7 +162,7 @@
           { t: "Say where a tariff is charged and who pays it first", any: true, from: [[1, "who"], [2, "who2"]], tip: "The US company bringing goods in pays at the border." },
           { t: "Explain why parts that cross back and forth cost more", from: [[1, "chain"]], tip: "Parts cross the border several times, so tariffs can hit more than once." },
           { t: "Be honest about what the job numbers show", from: [[1, "honest"]], tip: "About 4,000 fewer parts jobs; tariffs may be one reason, not proven." },
-          { t: "Say fairly where both candidates stand", from: [[1, "sides"]], tip: "El-Sayed: targeted tariffs, not dumb ones. Rogers: backed them, now wants the Canada fight ended." }
+          { t: "Say fairly where both candidates stand", from: [[1, "eld"], [1, "rog"]], tip: "El-Sayed: targeted tariffs, not dumb ones. Rogers: backed them, now wants the Canada fight ended." }
         ],
         tomorrow: "We’ll ask you who pays a US tariff, and why auto parts can get hit more than once.",
         origin: "A real 2026 race: Abdul El-Sayed (Democrat) and Mike Rogers (Republican) for U.S. Senate in Michigan. Their positions come from their own statements and news coverage during the campaign, which ended on Election Day, Nov 3, 2026. Built by Warmup from public sources; not affiliated with or approved by either campaign. Samira, Ray and the Grand Rapids furniture maker are made-up examples.",

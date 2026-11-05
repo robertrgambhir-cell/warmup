@@ -104,7 +104,7 @@
     var mode = r.mode === "ai" ? '<span class="mode ai">AI feedback · Claude</span>' : '<span class="mode qc">Quick check · phrase matching, not AI</span>';
     var items = r.items.map(function (it) {
       return '<div class="ri ' + (it.met ? "ok" : "no") + '"><span class="m">' + (it.met ? WU.icon.check : WU.icon.dash) + "</span><span><b>" + esc(it.label) + "</b>" +
-        (it.met ? "<span>You said: <q>" + esc(it.quote) + "</q></span>" : "<span>" + (it.dropped ? "Not credited: the coach\u2019s quote wasn\u2019t in your answer." : "Not heard yet.") + "</span>") + "</span></div>";
+        (it.met ? "<span>You said: <q>" + esc(it.quote) + "</q></span>" : "<span>" + (it.cancelled ? "Not credited: another line in your answer contradicts it." : it.dropped ? "Not credited: the coach\u2019s quote wasn\u2019t in your answer." : "Not heard yet.") + "</span>") + "</span></div>";
     }).join("");
     var flags = r.flags.map(function (f) { return '<div class="ri flag"><span class="m">' + WU.icon.bang + "</span><span><b>Check this</b><span><q>" + esc(f.quote) + "</q> " + esc(f.why) + "</span></span></div>"; }).join("");
     return '<div class="row2">' + mode + '<span class="small" style="font:700 13px var(--sans);color:var(--muted)">' + r.score + " of " + r.of + "</span></div>" +
@@ -178,7 +178,9 @@
         return '<div class="ri ' + (shown ? "ok" : "no") + '"><span class="m">' + (shown ? WU.icon.check : WU.icon.dash) + "</span><span><b>" + c.t + "</b><span>" + (shown ? "You showed this at the door." : "Not shown yet at the door. " + c.tip) + "</span></span></div>";
       }).join("");
       var src = L.sources.map(function (s, i) { return '<li value="' + (i + 1) + '"><a href="' + esc(s.u) + '" target="_blank" rel="noopener">' + esc(s.t) + "</a></li>"; }).join("");
-      return '<div class="big-ok"><span class="ring">' + WU.icon.check + "</span><h2>" + sc.h + "</h2></div>" +
+      var nShown = sc.can.filter(function (c) { var t = function (f) { var g = ctx.st["grade" + f[0]]; return !!g && !ctx.st["example" + f[0]] && g.items.some(function (it) { return it.id === f[1] && it.met; }); }; return c.any ? c.from.some(t) : c.from.every(t); }).length;
+      var all = nShown === sc.can.length;
+      return '<div class="big-ok">' + (all ? '<span class="ring">' + WU.icon.check + "</span>" : "") + "<h2>" + (all ? sc.h : "Lesson done. You showed " + nShown + " of " + sc.can.length + " at the door") + "</h2></div>" +
         '<div class="growth"><span class="h">Your two doors</span><span class="h">Key points</span><span class="h">Graded by</span>' + row("1st: " + sc.d1, g1) + row("2nd: " + sc.d2 + " (new situation)", g2) + "</div>" +
         '<div class="res">' + demo + "</div>" +
         '<p class="say info"><b>Tomorrow\u2019s first question:</b> ' + sc.tomorrow + "</p>" +

@@ -26,12 +26,19 @@
   }
   function rx(s) { return s instanceof RegExp ? s : new RegExp(s, "i"); }
 
+  /* A point is credited only when one sentence carries every pattern (so the name and the position are said
+     together), no "not" pattern matches that sentence, the answer is long enough, and no misstatement flag
+     cancels it. Quick check is still phrase matching; these rules only make it harder to fool. */
   function quick(rubric, text) {
+    var words = String(text || "").split(/\s+/).filter(Boolean).length;
+    var flags = (rubric.flags || []).filter(function (f) { return rx(f.re).test(text); }).map(function (f) { return { quote: around(text, rx(f.re)), why: f.why, cancels: f.cancels || [] }; });
+    var cancelled = {}; flags.forEach(function (f) { f.cancels.forEach(function (id) { cancelled[id] = true; }); });
     var items = rubric.items.map(function (it) {
-      var all = (it.all || []).map(rx), hit = all.every(function (r) { return r.test(text); });
-      return { id: it.id, label: it.label, tip: it.tip, met: hit, quote: hit ? evidence(text, all) : "" };
+      var all = (it.all || []).map(rx), nots = (it.not || []).map(rx);
+      var ss = sentences(text).filter(function (x) { return all.every(function (r) { return r.test(x); }) && !nots.some(function (r) { return r.test(x); }); }).sort(function (a, b) { return a.length - b.length; });
+      var hit = ss.length > 0 && words >= (it.minWords || 6) && !cancelled[it.id];
+      return { id: it.id, label: it.label, tip: it.tip, met: hit, quote: hit ? (ss[0].split(" ").length <= 30 ? ss[0] : around(ss[0], all[0])) : "", cancelled: !!cancelled[it.id] && ss.length > 0 };
     });
-    var flags = (rubric.flags || []).filter(function (f) { return rx(f.re).test(text); }).map(function (f) { return { quote: around(text, rx(f.re)), why: f.why }; });
     return { mode: "quick", items: items, flags: flags };
   }
 
@@ -59,6 +66,7 @@
       ' "flags":[{"quote":"exact words","why":"one plain sentence on what is inaccurate or unfair"}],',
       ' "strength":"one sentence naming something specific they did well, quoting a few of their words",',
       ' "next":"one sentence: the single most useful thing to add or fix next time, in words they could say"}',
+      "A point that the canvasser contradicts elsewhere in the answer is not met. If a misstatement contradicts a point, mark that point not met.",
       "Write like a friendly field organizer: plain words, complete sentences, no em dashes."
     ].join("\n");
   }
@@ -84,6 +92,12 @@
       return { id: it.id, label: it.label, tip: it.tip, met: ok, quote: ok ? q : "", dropped: !!got.met && !ok };
     });
     var flags = (out.flags || []).filter(function (f) { return f && f.quote && T.indexOf(norm(f.quote)) >= 0; }).map(function (f) { return { quote: f.quote, why: String(f.why || "") }; });
+    /* the lesson's own misstatement patterns still apply under AI grading, and still cancel the point they contradict */
+    var q = quick(rubric, text);
+    q.flags.forEach(function (f) {
+      if (!flags.some(function (g) { return norm(g.quote) === norm(f.quote); })) flags.push({ quote: f.quote, why: f.why });
+      f.cancels.forEach(function (id) { items.forEach(function (it) { if (it.id === id && it.met) { it.met = false; it.cancelled = true; } }); });
+    });
     return { mode: "ai", items: items, flags: flags, strength: String(out.strength || ""), next: String(out.next || "") };
   }
 

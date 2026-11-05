@@ -13,13 +13,20 @@ const CASES = [
   ["health", 1, "says he's against Medicaid", "Bottoms wants to expand Medicaid. Jackson is against Medicaid.", ["dem"], true],
   ["health", 1, "doesn't know", "I'm not sure, I think they both care about it.", [], false],
   ["health", 1, "right ideas, other words", "Georgia only covers very poor parents, and if you make a bit more you get nothing until you reach the poverty level. Bottoms would open Medicaid up to about thirty eight thousand for a family like yours. Jackson would only cover people who log their work every month.", ["gap"], false],
+  ["health", 1, "both oppose expansion", "Jackson opposed expansion. Bottoms also opposes expansion.", [], true],
+  ["health", 1, "calls Pathways a scam", "Bottoms wants to expand Medicaid. Jackson's Pathways plan is a scam.", ["dem"], true],
+  ["health", 1, "200,000 jobs", "Medicaid expansion would cost 200,000 jobs.", [], false],
+  ["health", 1, "two words", "Let me know.", [], false],
   ["health", 2, "the example answer", door("health", 2).example, ["today", "expand", "hedge"], false],
   ["health", 2, "puts Rosa in the gap", "You're in the gap, so you can't get anything. Bottoms would expand Medicaid so you'd qualify.", ["expand"], true],
-  ["tariffs", 1, "the example answer", door("tariffs", 1).example, ["who", "chain", "honest", "sides"], false],
-  ["tariffs", 1, "says Canada pays", "Canada pays these tariffs, so it's their problem. El-Sayed wants smart tariffs and Rogers backed them.", ["sides"], true],
+  ["health", 2, "Obamacare is bad", "Obamacare is bad, honestly, and nobody can help you with that.", [], false],
+  ["tariffs", 1, "the example answer", door("tariffs", 1).example, ["who", "chain", "honest", "eld", "rog"], false],
+  ["tariffs", 1, "says Canada pays", "Canada pays these tariffs. Prices go up for everyone. El-Sayed and Rogers both like them.", [], true],
   ["tariffs", 1, "blames all the jobs", "The tariffs killed 4,000 jobs. Companies pay them and prices go up.", ["who"], true],
   ["tariffs", 2, "the example answer", door("tariffs", 2).example, ["who2", "options2", "honest2"], false],
-  ["tariffs", 2, "promises it helps", "It will definitely help you, Ray, because Canadian stuff gets more expensive.", [], true]
+  ["tariffs", 2, "promises it helps", "It will definitely help you, Ray, because Canadian stuff gets more expensive.", [], true],
+  ["tariffs", 2, "Canadian supplier pays", "The Canadian supplier pays the tariff at the border, so it might not hurt you.", ["honest2"], true],
+  ["tariffs", 2, "helps for sure", "It helps you for sure, because you'd pay less than the big stores.", [], true]
 ];
 let fail = 0; const rows = [];
 for (const [id, n, label, text, want, flag] of CASES) {

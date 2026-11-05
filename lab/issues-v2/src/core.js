@@ -169,7 +169,7 @@
   WU.boot = function () {
     shell();
     route();
-    window.addEventListener("hashchange", function () { var h = (location.hash || "").replace("#", ""); if (!app.lesson || h.indexOf(app.lesson.id) !== 0) route(); });
+    window.addEventListener("hashchange", route);
   };
   function route() {
     var h = (location.hash || "").replace("#", "");

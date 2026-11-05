@@ -91,7 +91,7 @@ h1 { font-size: calc(27px * var(--k)); }
 .linkish { border: 0; background: none; color: var(--blue); font: 700 13.5px/1.3 var(--sans); padding: 6px 2px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
 /* screen tag (Robert reviews by number) */
-.tag { position: absolute; right: 24px; bottom: calc(2px + env(safe-area-inset-bottom, 0px)); font: 700 9.5px/1 var(--sans); color: #b8bcc2; letter-spacing: .04em; pointer-events: none; }
+.tag { position: absolute; right: 30px; bottom: calc(3px + env(safe-area-inset-bottom, 0px)); font: 700 9.5px/1 var(--sans); color: #b8bcc2; letter-spacing: .04em; pointer-events: none; }
 
 /* sources sheet */
 .sheet { position: absolute; inset: 0; background: rgba(0,0,0,.28); display: none; align-items: flex-end; z-index: 9; }
@@ -121,8 +121,8 @@ h1 { font-size: calc(27px * var(--k)); }
 .goal .ic { width: calc(52px * var(--k)); height: calc(52px * var(--k)); border-radius: 14px; background: var(--panel); display: grid; place-items: center; }
 .goal .ic svg { width: 78%; height: 78%; }
 .goal p { font: 600 calc(15.5px * var(--k))/1.35 var(--sans) !important; color: var(--ink) !important; }
-.parts { display: flex; gap: 18px; font: 800 calc(14px * var(--k))/1.2 var(--sans); }
-.parts span { display: inline-flex; align-items: center; gap: 7px; }
+.parts { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 800 calc(14px * var(--k))/1.2 var(--sans); }
+.parts span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
 .parts .l { color: var(--green-deep); } .parts .d { color: var(--blue); }
 .parts svg { width: 20px; height: 20px; }
 .parts small { font-weight: 600; color: var(--muted); }
@@ -248,7 +248,8 @@ h1 { font-size: calc(27px * var(--k)); }
 .mode { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px; border-radius: 12px; font: 800 11px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase; }
 .mode.ai { background: #ece6fb; color: #4b2c99; }
 .mode.qc { background: #eef0f2; color: #545b63; }
-.res { display: flex; flex-direction: column; gap: calc(8px * var(--k)); }
+.res { display: flex; flex-direction: column; gap: calc(9px * var(--k)); margin-top: 4px; }
+#rbody { display: flex; flex-direction: column; gap: calc(10px * var(--k)); }
 .ri { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; }
 .ri .m { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; }
 .ri .m svg { width: 15px; height: 15px; }
@@ -294,6 +295,7 @@ h1 { font-size: calc(27px * var(--k)); }
 .sitem .chosen { align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 12px; font: 800 12px/1 var(--sans); }
 .sitem .chosen.k { background: var(--green-soft); color: var(--green-deep); } .sitem .chosen.n { background: var(--amber-soft); color: #7a4d06; }
 .sitem.ok { gap: 6px; }
+@media (min-width: 560px) and (max-height: 760px) { .stage { padding: 6px 16px; } }
 
 </style>
 </head>
@@ -472,7 +474,7 @@ h1 { font-size: calc(27px * var(--k)); }
   WU.boot = function () {
     shell();
     route();
-    window.addEventListener("hashchange", function () { var h = (location.hash || "").replace("#", ""); if (!app.lesson || h.indexOf(app.lesson.id) !== 0) route(); });
+    window.addEventListener("hashchange", route);
   };
   function route() {
     var h = (location.hash || "").replace("#", "");
@@ -746,7 +748,10 @@ h1 { font-size: calc(27px * var(--k)); }
     zs.forEach(function (z) {
       var a = X(from), b = X(Math.min(z.to, R.max));
       out += '<rect x="' + a + '" y="' + top + '" width="' + Math.max(0, b - a) + '" height="' + bh + '" fill="' + FILL[z.c] + '"/>';
-      if (!mini) { var nm = (b - a) > z.name.length * 7.4 + 14 ? z.name : ((b - a) > (z.short || "").length * 7.4 + 10 ? z.short : ""); if (nm) out += '<text class="zone-t" x="' + (a + b) / 2 + '" y="' + (top + bh / 2 + 4.5) + '" text-anchor="middle" fill="' + INK[z.c] + '" stroke="' + FILL[z.c] + '" stroke-width="4" paint-order="stroke">' + esc(nm) + "</text>"; }
+      if (!mini) { var mx0 = X(v), nm = (b - a) > z.name.length * 7.4 + 14 ? z.name : ((b - a) > (z.short || "").length * 7.4 + 10 ? z.short : ""), cx = (a + b) / 2;
+        /* keep the zone's name clear of the marker: move it to the roomier side, or shorten it */
+        if (nm && Math.abs(cx - mx0) < nm.length * 3.7 + 12) { var L = mx0 - a, Rr = b - mx0; cx = L > Rr ? (a + mx0) / 2 - 4 : (mx0 + b) / 2 + 4; var room = Math.max(L, Rr) - 16; if (room < nm.length * 7.4) nm = room >= (z.short || "").length * 7.4 ? z.short : ""; }
+        if (nm) out += '<text class="zone-t" x="' + cx + '" y="' + (top + bh / 2 + 4.5) + '" text-anchor="middle" fill="' + INK[z.c] + '" stroke="' + FILL[z.c] + '" stroke-width="4" paint-order="stroke">' + esc(nm) + "</text>"; }
       from = z.to;
     });
     out += "</g>";
@@ -765,7 +770,7 @@ h1 { font-size: calc(27px * var(--k)); }
       var art = typeof p.art === "function" ? p.art(world) : p.art, x = X(p.v), near = Math.abs(p.v - v) <= 600;
       ppl += nest(art, x - 21, 0, 42, 70) + '<text class="nm" x="' + x + '" y="' + (top - 6) + '" text-anchor="middle"' + (near ? ' style="fill:#2f5fa8"' : "") + ">" + esc(p.name) + "</text>";
     });
-    var mx = X(v), mk = '<g class="handle" pointer-events="none"><path d="M' + mx + " " + (top - 5) + " V" + (top + bh + 5) + '" stroke="#262320" stroke-width="3" stroke-linecap="round"/><circle cx="' + mx + '" cy="' + (top + bh + (mini ? 0 : 1)) + '" r="' + (mini ? 6 : 8) + '" fill="#fff" stroke="#262320" stroke-width="3"/></g>';
+    var mx = X(v), mk = '<g class="handle" pointer-events="none"><path d="M' + mx + " " + (top - 5) + " V" + (top + bh + 5) + '" stroke="#262320" stroke-width="3" stroke-linecap="round"/><circle cx="' + mx + '" cy="' + (top + bh / 2) + '" r="' + (mini ? 5 : 7) + '" fill="#fff" stroke="#262320" stroke-width="3"/></g>';
     var H = ly + 6;
     return '<svg viewBox="0 0 ' + W + " " + H + '" aria-hidden="true">' + ppl + out + lab + mk + "</svg>";
   }
@@ -775,7 +780,7 @@ h1 { font-size: calc(27px * var(--k)); }
     var R = sc.ruler;
     return '<div class="ruler">' + (sc.toggle ? '<div class="toggle" role="group" aria-label="Which rules">' + sc.toggle.map(function (t, i) { return '<button type="button" data-w="' + t.w + '" aria-pressed="' + (i === 0) + '">' + t.t + "</button>"; }).join("") + "</div>" : "") +
       '<div class="pic plain" id="rsvg"></div>' +
-      '<label class="sr" for="rng">Yearly income for ' + esc(R.family) + '</label><input id="rng" type="range" min="0" max="' + R.max + '" step="250" value="' + sc.start + '">' +
+      '<label class="sr" for="rng">Yearly income for ' + esc(R.family) + '</label><input id="rng" type="range" aria-label="Yearly income" min="0" max="' + R.max + '" step="250" value="' + sc.start + '">' +
       '<div class="who-row">' + (R.people || []).map(function (p) { return '<button type="button" data-v="' + p.v + '" aria-pressed="false">' + esc(p.name) + " · " + WU.money(p.v) + "</button>"; }).join("") + "</div>" +
       '<div class="readout" id="read" aria-live="polite"></div></div>';
   }
@@ -851,11 +856,12 @@ h1 { font-size: calc(27px * var(--k)); }
         '<rect x="0" y="0" width="150" height="150" rx="12" fill="#f1ebe1"/><rect x="210" y="0" width="150" height="150" rx="12" fill="#e8eef6"/>' +
         '<text x="12" y="20" style="font:800 11px var(--sans);letter-spacing:.06em;fill:#7a6a55">CANADA</text><text x="348" y="142" text-anchor="end" style="font:800 11px var(--sans);letter-spacing:.06em;fill:#4b6a8c">US · MICHIGAN</text>' +
         '<path d="M180 6 V144" stroke="#9aa3ad" stroke-width="3" stroke-dasharray="7 7"/>' +
-        '<g transform="translate(160 18)"><rect width="40" height="34" rx="5" fill="#fff" stroke="#9aa3ad" stroke-width="2"/><text x="20" y="15" text-anchor="middle" style="font:800 7.5px var(--sans);fill:#545b63">US</text><text x="20" y="25" text-anchor="middle" style="font:800 7.5px var(--sans);fill:#545b63">CUSTOMS</text></g>' +
+        '<g transform="translate(155 16)"><rect width="50" height="36" rx="5" fill="#fff" stroke="#9aa3ad" stroke-width="2"/><text x="25" y="16" text-anchor="middle" style="font:800 8px var(--sans);fill:#545b63">US</text><text x="25" y="27" text-anchor="middle" style="font:800 8px var(--sans);fill:#545b63">CUSTOMS</text></g>' +
+        '<g transform="translate(62 52)"><rect x="-34" y="0" width="68" height="34" rx="4" fill="#fff" stroke="#b9a88f" stroke-width="2"/><path d="M-26 0 V-16 H-16 V0 M10 0 V-22 H20 V0" fill="#d9cdb9" stroke="#b9a88f" stroke-width="2"/><text x="0" y="15" text-anchor="middle" style="font:800 8.5px var(--sans);fill:#7a6a55">STEEL MILL</text><text x="0" y="26" text-anchor="middle" style="font:700 8px var(--sans);fill:#7a6a55">Ontario</text></g>' +
         '<g transform="translate(306 104)"><rect x="-40" y="-24" width="80" height="40" rx="6" fill="#fff" stroke="#9aa3ad" stroke-width="2"/><path d="M-40 -24 L0 -40 L40 -24" fill="#dfe6ef" stroke="#9aa3ad" stroke-width="2"/><text x="0" y="0" text-anchor="middle" style="font:800 9px var(--sans);fill:#2f5fa8">MICHIGAN</text><text x="0" y="11" text-anchor="middle" style="font:800 9px var(--sans);fill:#2f5fa8">PARTS MAKER</text></g>' +
         '<g id="coil" transform="translate(70 108)" style="transition:transform .9s cubic-bezier(.4,.1,.2,1)">' + COIL + '<text y="32" text-anchor="middle" style="font:700 10px var(--sans);fill:#545b63">steel</text></g>' +
         '<g id="tagg" opacity="0" style="transition:opacity .4s .7s"><path d="M196 70 h66 l8 9 -8 9 h-66 z" fill="#b3261e"/><text x="231" y="83" text-anchor="middle" style="font:800 11px var(--sans);fill:#fff">' + esc(sc.rate) + '</text></g>' +
-        '<g id="pay" opacity="0" style="transition:opacity .4s 1.1s"><path d="M306 60 C306 38 262 34 204 34" stroke="#1b7a4d" stroke-width="2.5" fill="none" stroke-dasharray="4 4"/><path d="M209 29 L203 34 L209 39" stroke="#1b7a4d" stroke-width="2.5" fill="none"/><text x="266" y="24" text-anchor="middle" style="font:800 10.5px var(--sans);fill:#1b7a4d">pays the tariff</text></g>' +
+        '<g id="pay" opacity="0" style="transition:opacity .4s 1.1s"><path d="M306 60 C306 38 262 34 207 34" stroke="#1b7a4d" stroke-width="2.5" fill="none" stroke-dasharray="4 4"/><path d="M212 29 L206 34 L212 39" stroke="#1b7a4d" stroke-width="2.5" fill="none"/><text x="266" y="24" text-anchor="middle" style="font:800 10.5px var(--sans);fill:#1b7a4d">pays the tariff</text></g>' +
         "</svg></div>" +
         '<div id="bnext"><button class="ghost" type="button" id="send" style="width:100%">Send the steel across the border</button></div><div id="bout"></div>';
     },
@@ -873,6 +879,7 @@ h1 { font-size: calc(27px * var(--k)); }
         var opts = sc.next ? '<div class="nexts">' + sc.next.map(function (n) { return '<div><span class="ni">' + NEXT_ICON[n.i] + "</span><b>" + n.t + "</b></div>"; }).join("") + "</div>" : "";
         document.getElementById("bout").innerHTML = '<div style="display:flex;flex-direction:column;gap:12px">' + guess + "<p>" + sc.p + "</p>" + opts + bar + "</div>";
         ctx.st["sent_" + sc.key] = true;
+        var bo = document.getElementById("bout"); bo.setAttribute("tabindex", "-1"); if (!ctx.st["sentFocus_" + sc.key]) { ctx.st["sentFocus_" + sc.key] = true; bo.focus({ preventScroll: true }); }
         ctx.ready(); WU.fit();
       }
       send.onclick = go;
@@ -892,7 +899,7 @@ h1 { font-size: calc(27px * var(--k)); }
     html: function (sc) {
       return "<h2>" + sc.h + '</h2><div class="pic route" style="padding:6px 4px 2px"><svg id="rsv" viewBox="0 0 360 236" role="img" aria-label="' + esc(sc.alt) + '"></svg></div>' +
         '<div id="rtx" aria-live="polite"></div>' +
-        '<div class="cost" aria-hidden="true"><div class="key"><span>Cost of the part so far:</span><span><i style="background:#c9ced6"></i>work</span><span><i style="background:var(--red)"></i>tariff</span><span><i style="background:var(--amber-fill)"></i>may apply</span></div><div class="bar" id="stk"></div></div>' +
+        '<div class="cost" aria-hidden="true"><div class="key"><span>Cost so far (not to scale):</span><span><i style="background:#c9ced6"></i>work</span><span><i style="background:var(--red)"></i>tariff</span><span><i style="background:var(--amber-fill)"></i>may apply</span></div><div class="bar" id="stk"></div></div>' +
         '<div id="rbtn"></div>';
     },
     mount: function (sc, ctx) {
@@ -920,8 +927,8 @@ h1 { font-size: calc(27px * var(--k)); }
         });
         document.getElementById("rsv").innerHTML = s;
         var parts = [["w", 3]];
-        for (var j = 0; j < k; j++) { var tx2 = sc.cross[j].tax; if (tx2) parts.push([tx2 === true ? "t" : "m", tx2 === true ? 2 : 1.4]); parts.push(["w", 2]); }
-        var tot = 3 + 2 * sc.cross.length + 2 * 2 + 1.4 * 2;
+        for (var j = 0; j < k; j++) { var tx2 = sc.cross[j].tax; if (tx2) parts.push([tx2 === true ? "t" : "m", 1]); parts.push(["w", 3]); }
+        var tot = 3 + 3 * sc.cross.length + sc.cross.filter(function (c) { return c.tax; }).length;
         document.getElementById("stk").innerHTML = parts.map(function (q) { return '<i class="' + q[0] + '" style="width:' + (q[1] / tot * 100) + '%"></i>'; }).join("");
         var t = k === 0 ? "<p>" + sc.start + "</p>" : '<p class="kick" style="margin-bottom:4px">Crossing ' + k + " of " + sc.cross.length + "</p><p>" + sc.cross[k - 1].text + "</p>";
         document.getElementById("rtx").innerHTML = t + (k === sc.cross.length ? '<p class="small" style="margin-top:8px">' + sc.end + "</p>" : "");
@@ -965,12 +972,19 @@ h1 { font-size: calc(27px * var(--k)); }
   }
   function rx(s) { return s instanceof RegExp ? s : new RegExp(s, "i"); }
 
+  /* A point is credited only when one sentence carries every pattern (so the name and the position are said
+     together), no "not" pattern matches that sentence, the answer is long enough, and no misstatement flag
+     cancels it. Quick check is still phrase matching; these rules only make it harder to fool. */
   function quick(rubric, text) {
+    var words = String(text || "").split(/\s+/).filter(Boolean).length;
+    var flags = (rubric.flags || []).filter(function (f) { return rx(f.re).test(text); }).map(function (f) { return { quote: around(text, rx(f.re)), why: f.why, cancels: f.cancels || [] }; });
+    var cancelled = {}; flags.forEach(function (f) { f.cancels.forEach(function (id) { cancelled[id] = true; }); });
     var items = rubric.items.map(function (it) {
-      var all = (it.all || []).map(rx), hit = all.every(function (r) { return r.test(text); });
-      return { id: it.id, label: it.label, tip: it.tip, met: hit, quote: hit ? evidence(text, all) : "" };
+      var all = (it.all || []).map(rx), nots = (it.not || []).map(rx);
+      var ss = sentences(text).filter(function (x) { return all.every(function (r) { return r.test(x); }) && !nots.some(function (r) { return r.test(x); }); }).sort(function (a, b) { return a.length - b.length; });
+      var hit = ss.length > 0 && words >= (it.minWords || 6) && !cancelled[it.id];
+      return { id: it.id, label: it.label, tip: it.tip, met: hit, quote: hit ? (ss[0].split(" ").length <= 30 ? ss[0] : around(ss[0], all[0])) : "", cancelled: !!cancelled[it.id] && ss.length > 0 };
     });
-    var flags = (rubric.flags || []).filter(function (f) { return rx(f.re).test(text); }).map(function (f) { return { quote: around(text, rx(f.re)), why: f.why }; });
     return { mode: "quick", items: items, flags: flags };
   }
 
@@ -998,6 +1012,7 @@ h1 { font-size: calc(27px * var(--k)); }
       ' "flags":[{"quote":"exact words","why":"one plain sentence on what is inaccurate or unfair"}],',
       ' "strength":"one sentence naming something specific they did well, quoting a few of their words",',
       ' "next":"one sentence: the single most useful thing to add or fix next time, in words they could say"}',
+      "A point that the canvasser contradicts elsewhere in the answer is not met. If a misstatement contradicts a point, mark that point not met.",
       "Write like a friendly field organizer: plain words, complete sentences, no em dashes."
     ].join("\n");
   }
@@ -1023,6 +1038,12 @@ h1 { font-size: calc(27px * var(--k)); }
       return { id: it.id, label: it.label, tip: it.tip, met: ok, quote: ok ? q : "", dropped: !!got.met && !ok };
     });
     var flags = (out.flags || []).filter(function (f) { return f && f.quote && T.indexOf(norm(f.quote)) >= 0; }).map(function (f) { return { quote: f.quote, why: String(f.why || "") }; });
+    /* the lesson's own misstatement patterns still apply under AI grading, and still cancel the point they contradict */
+    var q = quick(rubric, text);
+    q.flags.forEach(function (f) {
+      if (!flags.some(function (g) { return norm(g.quote) === norm(f.quote); })) flags.push({ quote: f.quote, why: f.why });
+      f.cancels.forEach(function (id) { items.forEach(function (it) { if (it.id === id && it.met) { it.met = false; it.cancelled = true; } }); });
+    });
     return { mode: "ai", items: items, flags: flags, strength: String(out.strength || ""), next: String(out.next || "") };
   }
 
@@ -1158,7 +1179,7 @@ h1 { font-size: calc(27px * var(--k)); }
     var mode = r.mode === "ai" ? '<span class="mode ai">AI feedback · Claude</span>' : '<span class="mode qc">Quick check · phrase matching, not AI</span>';
     var items = r.items.map(function (it) {
       return '<div class="ri ' + (it.met ? "ok" : "no") + '"><span class="m">' + (it.met ? WU.icon.check : WU.icon.dash) + "</span><span><b>" + esc(it.label) + "</b>" +
-        (it.met ? "<span>You said: <q>" + esc(it.quote) + "</q></span>" : "<span>" + (it.dropped ? "Not credited: the coach\u2019s quote wasn\u2019t in your answer." : "Not heard yet.") + "</span>") + "</span></div>";
+        (it.met ? "<span>You said: <q>" + esc(it.quote) + "</q></span>" : "<span>" + (it.cancelled ? "Not credited: another line in your answer contradicts it." : it.dropped ? "Not credited: the coach\u2019s quote wasn\u2019t in your answer." : "Not heard yet.") + "</span>") + "</span></div>";
     }).join("");
     var flags = r.flags.map(function (f) { return '<div class="ri flag"><span class="m">' + WU.icon.bang + "</span><span><b>Check this</b><span><q>" + esc(f.quote) + "</q> " + esc(f.why) + "</span></span></div>"; }).join("");
     return '<div class="row2">' + mode + '<span class="small" style="font:700 13px var(--sans);color:var(--muted)">' + r.score + " of " + r.of + "</span></div>" +
@@ -1232,7 +1253,9 @@ h1 { font-size: calc(27px * var(--k)); }
         return '<div class="ri ' + (shown ? "ok" : "no") + '"><span class="m">' + (shown ? WU.icon.check : WU.icon.dash) + "</span><span><b>" + c.t + "</b><span>" + (shown ? "You showed this at the door." : "Not shown yet at the door. " + c.tip) + "</span></span></div>";
       }).join("");
       var src = L.sources.map(function (s, i) { return '<li value="' + (i + 1) + '"><a href="' + esc(s.u) + '" target="_blank" rel="noopener">' + esc(s.t) + "</a></li>"; }).join("");
-      return '<div class="big-ok"><span class="ring">' + WU.icon.check + "</span><h2>" + sc.h + "</h2></div>" +
+      var nShown = sc.can.filter(function (c) { var t = function (f) { var g = ctx.st["grade" + f[0]]; return !!g && !ctx.st["example" + f[0]] && g.items.some(function (it) { return it.id === f[1] && it.met; }); }; return c.any ? c.from.some(t) : c.from.every(t); }).length;
+      var all = nShown === sc.can.length;
+      return '<div class="big-ok">' + (all ? '<span class="ring">' + WU.icon.check + "</span>" : "") + "<h2>" + (all ? sc.h : "Lesson done. You showed " + nShown + " of " + sc.can.length + " at the door") + "</h2></div>" +
         '<div class="growth"><span class="h">Your two doors</span><span class="h">Key points</span><span class="h">Graded by</span>' + row("1st: " + sc.d1, g1) + row("2nd: " + sc.d2 + " (new situation)", g2) + "</div>" +
         '<div class="res">' + demo + "</div>" +
         '<p class="say info"><b>Tomorrow\u2019s first question:</b> ' + sc.tomorrow + "</p>" +
@@ -1297,11 +1320,12 @@ WU.home = [
 (function () {
   "use strict";
   var WU = window.WU, s = WU.sup;
-  var GAP = /(too much|too little|gap|7,?900|8,?000|seven thousand|eight thousand|poverty line|27,?3|help (buying|paying|with)|in between|in the middle|200,?000|two hundred thousand|fall(s)? through|left out)/i;
-  var REP = /(pathways|work(ing)? (hours|requirement|rules?)|report(ing)? (\w+ )?hours|80 hours|eighty hours|intelligent|tied to work|smaller plan)/i;
-  var LISTEN = /(sorry|that'?s (hard|tough|rough|frustrating|a lot)|tough spot|hard spot|not alone|i hear you|i understand|makes sense|does that help|any questions|what do you think|would you like|i can help|let me (know|help))/i;
-  var AGAINST = { re: /(jackson|republican|he)[^.]{0,25}(is against|opposes|hates|wants to (cut|end|get rid of))[^.]{0,8}medicaid/i, why: "Jackson isn’t against Medicaid. He wants a smaller plan tied to reporting work hours, like Georgia Pathways." };
-  var NOWORK = { re: /(bottoms|her plan|democrat)[^.]{0,40}(no|without|doesn'?t (need|require|have)|won'?t (need|require|have))[^.]{0,12}work (requirement|hours|rules?)/i, why: "Under a 2025 federal law, adults covered through expansion report work hours too, under either plan." };
+  var GAP = /(too much|too little|gap|7,?900|8,?000|seven thousand|eight thousand|poverty line|27,?3|help (buying|paying for|with) (a )?(plan|insurance)|in between|in the middle|(200,?000|two hundred thousand) (georgians|adults|people)|fall(s)? through|left out)/i;
+  var REP = /(pathways|work(ing)? (hours|requirement|rules?)|report(ing)? (\w+ )?(work|hours)|80 hours|eighty hours|intelligent|tied to work)/i;
+  var LISTEN = /(sorry|that'?s (hard|tough|rough|frustrating|a lot)|tough spot|hard spot|not alone|i hear you|i understand|makes sense|does that help|any questions|what do you think)/i;
+  var AGAINST = { re: /(jackson|republican|he)[^.]{0,25}(is against|opposes|hates|wants to (cut|end|get rid of))[^.]{0,8}medicaid/i, why: "Jackson isn’t against Medicaid. He wants coverage tied to reporting work, like Georgia Pathways.", cancels: ["rep"] };
+  var SCORN = { re: /(pathways|jackson|his plan)[^.]{0,30}(scam|joke|fraud|garbage)|hates? (pathways|medicaid)/i, why: "Describe his plan in his terms. Leave the judgment to the voter.", cancels: ["rep"] };
+  var DEMOPP = { re: /(bottoms|democrat|keisha)[^.]{0,30}(oppos|against|reject)\w*[^.]{0,15}expan/i, why: "Bottoms supports full Medicaid expansion.", cancels: ["dem"] };
   var FACTS = [
     "Georgia's regular Medicaid covers a parent in a family of three only below about $7,900 a year ($662 a month).",
     "Help buying a marketplace plan on HealthCare.gov starts at the poverty line: $27,320 a year for a family of three in 2026 ($15,960 for one person).",
@@ -1309,8 +1333,8 @@ WU.home = [
     "About 200,000 Georgia adults are in this gap. Most work, often as cashiers, cooks or home health aides.",
     "Full Medicaid expansion covers adults up to 138% of the poverty line, about $37,700 a year for a family of three. 40 states and DC have it. The federal government pays 90% of the cost.",
     "Keisha Lance Bottoms, the 2026 Democratic nominee for Georgia governor, proposes full Medicaid expansion (her CARE Plan) and says she'd make it her top priority with the legislature.",
-    "Rick Jackson, the 2026 Republican nominee, proposes what he calls 'intelligent Medicaid expansion': coverage tied to work, modeled on Georgia Pathways. He is not against Medicaid.",
-    "Under a 2025 federal law, adults covered through expansion must report work hours too, so work reporting applies under either plan.",
+    "Rick Jackson, the 2026 Republican nominee, proposes what he calls 'intelligent Medicaid expansion': coverage tied to work, like Georgia Pathways. He has pledged to close the coverage gap but hasn't published an income limit. He is not against Medicaid.",
+    "Under a 2025 federal law, most adults covered through expansion must report work hours, starting by January 2027; parents of children 13 and under are among those who can be exempt.",
     "Pathways: the state expected about 100,000 enrollees in its first year; 18,527 were enrolled as of June 30, 2026. A federal audit found it spent about twice as much running the program as on health care.",
     "A governor can't expand Medicaid alone: Georgia law requires the legislature's approval.",
     "Canvassers explain the rules; they don't promise a specific person will qualify."
@@ -1332,7 +1356,7 @@ WU.home = [
       { name: "Ana", v: 7000, art: WU.art.ana, read: { today: ["Ana gets Medicaid", "At $7,000 she’s just under Georgia’s limit of about $7,900." + s(1)], expand: ["Ana gets Medicaid", "She still qualifies, with room to spare."] } },
       { name: "Bri", v: 14000, art: function (w) { return w === "expand" ? WU.art.briUmb : WU.art.briRain; },
         read: { today: ["Bri is in the gap", "Her only way in is Georgia Pathways, if she reports 80 hours a month." + s(3)], expand: ["Bri qualifies for Medicaid", "At $14,000 she’s well under the expanded limit, about $37,700." + s(4)] } },
-      { name: "Dee", v: 45000, art: WU.art.dee, read: { today: ["Dee gets insurance through work", "Like most Georgians, Dee gets health insurance through her job."], expand: ["Dee gets insurance through work", "Expansion doesn’t change anything for Dee."] } }
+      { name: "Dee", v: 45000, art: WU.art.dee, read: { today: ["Dee gets insurance through work", "Like most Georgians. Without it, at $45,000 she could get help buying a plan."], expand: ["Dee gets insurance through work", "Expansion doesn’t change anything for Dee."] } }
     ]
   };
   var miniRuler = function (v, w) { return function () { return '<div class="ruler" style="opacity:.98">' + WU.rulerSVG(R, w, v, { mini: true }) + "</div>"; }; };
@@ -1350,16 +1374,14 @@ WU.home = [
       { t: "HealthCare.gov, Medicaid expansion: adults up to 138% of the poverty line; the federal government pays 90%. 138% of $27,320 is about $37,700 (our math)", u: "https://www.healthcare.gov/medicaid-chip/medicaid-expansion-and-you/" },
       { t: "KFF, which states accepted Medicaid expansion (40 states and DC)", u: "https://www.kff.org/status-of-state-medicaid-expansion-decisions/" },
       { t: "Georgia Recorder via Cobb County Courier, Sept 2026: about 200,000 Georgia adults in the gap", u: "https://cobbcountycourier.com/2026/09/is-jacksons-intelligent-medicaid-expansion-weak-tea-or-a-revolutionary-fix/" },
-      { t: "US Census QuickFacts, Savannah (about 148,000 people)", u: "https://www.census.gov/quickfacts/savannahcitygeorgia" },
       { t: "Georgetown Center for Children and Families, Georgia’s low-wage uninsured workers", u: "https://ccf.georgetown.edu/2021/04/28/a-profile-of-georgias-low-wage-uninsured-workers/" },
-      { t: "KFF Health News, March 2024 (the clipping; also in The Atlanta Journal-Constitution)", u: "https://kffhealthnews.org/news/article/georgia-medicaid-work-requirements-experiment-high-cost-low-enrollment/" },
       { t: "Capitol Beat, June 2023: the state’s first-year estimate of about 100,000", u: "https://capitol-beat.org/2023/06/limited-georgia-medicaid-expansion-launches-this-weekend/" },
       { t: "GBPI: 18,527 enrolled as of June 30, 2026", u: "https://gbpi.org/pathways-to-coverage-three-years/" },
-      { t: "GAO report via WABE, Sept 2025: about twice as much spent running the program as on health care", u: "https://www.wabe.org/report-georgia-pathways-spending-twice-as-much-on-admin-costs-compared-to-health-care/" },
       { t: "Bottoms campaign: the CARE Plan", u: "https://www.keishaforgovernor.com/klb-policy-careplan-1.pdf" },
       { t: "Atlanta News First, Sept 8, 2026: both candidates’ health care plans", u: "https://www.atlantanewsfirst.com/2026/09/08/work-requirements-or-full-coverage-georgia-governor-hopefuls-roll-out-healthcare-proposals/" },
       { t: "GPB News, Oct 1, 2026: Medicaid work requirements stay no matter who wins", u: "https://www.gpb.org/news/2026/10/01/medicaid-work-requirements-are-here-stay-no-matter-who-wins-georgia-governors-race" },
-      { t: "Official Code of Georgia § 49-4-142.2: expansion needs the General Assembly’s approval (via Justia)", u: "https://law.justia.com/codes/georgia/2022/title-49/chapter-4/article-7/section-49-4-142-2/" }
+      { t: "Official Code of Georgia § 49-4-142.2: expansion needs the General Assembly’s approval (via Justia)", u: "https://law.justia.com/codes/georgia/2022/title-49/chapter-4/article-7/section-49-4-142-2/" },
+      { t: "American Academy of Pediatrics, the 2025 law\u2019s Medicaid work rules: states start by January 2027; parents of children 13 and under can be exempt", u: "https://www.aap.org/en/patient-care/national-center-for-a-system-of-services-for-children-and-youth-with-special-health-care-needs/medicaid-work-requirements-and-caregiver-exemptions/" }
     ],
     learn: [
       { type: "cover", race: "Georgia governor · 2026", when: "Election Day was Nov 3", h: "Three things you’ll be able to explain about health insurance in Georgia",
@@ -1373,10 +1395,10 @@ WU.home = [
         q: "Your guess: can Bri, who earns $14,000 a year, get Georgia’s regular Medicaid?",
         opts: ["Yes, $14,000 is low enough", "No, $14,000 is too much for it", "I’m not sure"],
         after: "Hold that guess. The next screen shows where Bri lands.", btn: "See where Bri lands" },
-      { type: "ruler", task: "zones", start: 14000, ruler: R, src: [1, 2, 3, 6, 8],
-        h: "Georgia’s Medicaid stops at $7,900 a year for a parent of two. Help buying a plan starts at $27,320.",
-        p: "Three sisters, each a mom of two. Drag the line or tap a sister.",
-        reveal: { key: "p1", right: 1, opts: ["Yes, $14,000 is low enough", "No, $14,000 is too much for it", "I’m not sure"], yes: "She’s in the gap, with about 200,000 Georgia adults, most of them working." + s(6, 8), no: "At $14,000 she’s in the gap, with about 200,000 Georgia adults, most of them working." + s(6, 8), none: "At $14,000 Bri is in the gap, with about 200,000 Georgia adults, most of them working." + s(6, 8) },
+      { type: "ruler", task: "zones", start: 14000, ruler: R, src: [1, 2, 3, 6, 7],
+        h: "In Georgia, a parent of two loses Medicaid at $7,900 a year. Help buying a plan starts at $27,320.",
+        p: "Three sisters, each a mom of two (a family of three). Drag the line or tap a sister. The line is for the parent; kids qualify at higher incomes." + s(3),
+        reveal: { key: "p1", right: 1, opts: ["Yes, $14,000 is low enough", "No, $14,000 is too much for it", "I’m not sure"], yes: "She’s in the gap, with about 200,000 Georgia adults, most of them working." + s(6, 7), no: "At $14,000 she’s in the gap, with about 200,000 Georgia adults, most of them working." + s(6, 7), none: "At $14,000 Bri is in the gap, with about 200,000 Georgia adults, most of them working." + s(6, 7) },
         btn: "Change one rule and watch Bri" },
       { type: "ruler", task: "flip", start: 14000, ruler: R, src: [4, 5],
         toggle: [{ w: "today", t: "Georgia today" }, { w: "expand", t: "With full expansion" }],
@@ -1399,49 +1421,44 @@ WU.home = [
               { t: "Nothing, she’d still be in the gap", ok: false, why: "Expansion closes the gap for families up to about $37,700." },
               { t: "Help buying a plan", ok: false, why: "Under $37,700 she’d qualify for Medicaid instead." }
             ], after: function (box) { box.querySelector("#qa").insertAdjacentHTML("beforebegin", miniRuler(20000, "expand")()); } }
-        ], btn: "What Georgia’s work-tied program has done" },
-      { type: "bars", src: [9, 10, 11, 12], clipFirst: true,
-        h: "Georgia Pathways, the state’s work-tied program, has enrolled fewer than 1 in 5 of the people the state expected",
-        clip: { o: "KFF Health News", h: "Georgia’s Medicaid work requirements costing taxpayers millions despite low enrollment", d: "March 2024" + s(9) },
-        bars: [{ lab: "The state expected in year one", v: 100000, txt: "100,000" + s(10), dash: true }, { lab: "Enrolled after three years (June 2026)", v: 18527, txt: "18,527" + s(11), c: "#1b7a4d" }],
-        alt: "The state expected about 100,000 people in Georgia Pathways in its first year. Three years in, 18,527 are enrolled.",
-        p: "A federal audit found it spent twice as much on running the program as on care." + s(12), btn: "Where the candidates for governor stand" },
-      { type: "compare", src: [3, 4, 5, 13, 14, 15, 16],
-        h: "Both candidates for governor have a plan. The big difference is how many people like Bri would qualify.",
+        ], btn: "Where the candidates for governor stand" },
+      { type: "compare", src: [3, 4, 5, 8, 9, 10, 11, 12, 13, 14],
+        h: "Both candidates for governor say they\u2019d cover people like Bri. They differ on how.",
         cands: [{ side: "d", ini: "KB", name: "Keisha Lance Bottoms", role: "Democratic nominee" }, { side: "r", ini: "RJ", name: "Rick Jackson", role: "Republican nominee" }],
         rows: [
-          { l: "The plan", d: "Full Medicaid expansion, in her CARE Plan, as in 40 states and DC" + s(13, 5), r: "What he calls <q>intelligent Medicaid expansion</q>, modeled on Georgia Pathways" + s(14) },
-          { l: "Work reporting", d: "Yes. A 2025 federal law requires it for expansion either way" + s(15), r: "Yes. Reporting work hours is the center of the plan" + s(14) },
-          { l: "Who could qualify", d: "Adults up to about $37,700 a year in a family of three" + s(4), r: "Pathways today: adults up to $27,320 for three who report 80 hours a month" + s(3) }
+          { l: "The plan", d: "Full Medicaid expansion, in her CARE Plan" + s(10), r: "What he calls <q>intelligent Medicaid expansion</q>: coverage tied to work, like Georgia Pathways" + s(11) },
+          { l: "Who could qualify", d: "Adults up to about $37,700 a year in a family of three" + s(4), r: "He hasn\u2019t set a limit. Pathways covers adults up to $27,320 for three who report 80 hours a month" + s(6, 3) },
+          { l: "Reporting work", d: "Most adults, from 2027, under a 2025 federal law; parents of kids 13 and under can be exempt" + s(12, 14), r: "The center of the plan, as in Pathways" + s(11) },
+          { l: "So far", d: "40 states and DC use it; the federal government pays 90%" + s(4, 5), r: "Pathways, three years in: 18,527 enrolled; the state\u2019s first-year estimate was 100,000" + s(8, 9) }
         ],
-        office: "A governor can’t expand Medicaid alone. Georgia law requires the legislature to approve it." + s(16), btn: "Practice it at a door" }
+        office: "A governor can\u2019t expand Medicaid alone. Georgia law requires the legislature to approve it." + s(13), btn: "Practice it at a door" }
     ],
     door: [
       { type: "door", attempt: 1, voter: "bri", name: "Bri", voice: "f", who: "Bri at her front door",
         intro: "Bri brings up health insurance. Answer out loud in about 30 seconds, accurately and fairly.",
         ask: "My job doesn’t offer health insurance, and I can’t afford a plan. Why can’t I get Medicaid, and what would the candidates for governor do about it?",
-        example: "That's a tough spot, and you're not alone. About 200,000 Georgians earn too much for regular Medicaid but too little to get help buying a plan. Bottoms wants full Medicaid expansion, so people like you would qualify. Jackson wants a smaller plan tied to reporting work hours, like Georgia Pathways.",
+        example: "That's a tough spot, and you're not alone. About 200,000 Georgians earn too much for regular Medicaid but too little to get help buying a plan. Bottoms wants full Medicaid expansion, so people like you would qualify. Jackson wants what he calls intelligent Medicaid expansion, tied to reporting work hours, like Georgia Pathways.",
         rubric: {
           ask: "My job doesn't offer health insurance, and I can't afford a plan. Why can't I get Medicaid, and what would the candidates for governor do about it?",
           facts: FACTS,
           items: [
             { id: "gap", label: "Explained why Bri is stuck", all: [GAP], ai: "Explains why she can't get Medicaid: she earns too much for Georgia's regular Medicaid (about $7,900 for a family of three) but too little for help buying a plan (which starts at the poverty line, $27,320), or names the roughly 200,000 Georgians in that gap.", tip: "Say why she’s stuck: too much for Medicaid, too little for help buying a plan." },
-            { id: "dem", label: "Said where Bottoms stands", all: [/(bottoms|democrat|she |her plan)/i, /expan/i], ai: "States that the Democratic nominee (Bottoms) wants full Medicaid expansion, so adults like Bri would qualify.", tip: "Say Bottoms wants full Medicaid expansion, so people like Bri would qualify." },
-            { id: "rep", label: "Said where Jackson stands, fairly", all: [/(jackson|republican|he |his |other)/i, REP], ai: "States that the Republican nominee (Jackson) wants a smaller, work-tied plan like Georgia Pathways (coverage if you report work hours), without calling him anti-Medicaid.", tip: "Say Jackson wants a smaller plan tied to reporting work hours, like Georgia Pathways." },
-            { id: "listen", label: "Spoke to Bri, not just the issue", all: [LISTEN], ai: "Acknowledges Bri's own situation or feelings, or checks in with her (a question, an offer to help), rather than only reciting policy.", tip: "Start with Bri (“That’s a tough spot”) or end with a check-in (“Does that help?”)." }
+            { id: "dem", label: "Said where Bottoms stands", all: [/(bottoms|democrat|keisha)/i, /expan/i], not: [/(oppos|against|reject|block|won'?t)\w*[^.]{0,20}expan/i], ai: "States that the Democratic nominee (Bottoms) wants full Medicaid expansion, so adults like Bri would qualify.", tip: "Say Bottoms wants full Medicaid expansion, so people like Bri would qualify." },
+            { id: "rep", label: "Said where Jackson stands, fairly", all: [/(jackson|republican)/i, REP], not: [/(scam|joke|hates?|against medicaid|doesn'?t care)/i], ai: "States that the Republican nominee (Jackson) wants coverage tied to reporting work, like Georgia Pathways (what he calls intelligent Medicaid expansion), without calling him anti-Medicaid or mocking the plan.", tip: "Say Jackson wants coverage tied to reporting work hours, like Georgia Pathways." },
+            { id: "listen", label: "Spoke to Bri, not just the issue", all: [LISTEN], minWords: 20, ai: "Acknowledges Bri's own situation or feelings, or checks in with her (a question, an offer to help), rather than only reciting policy.", tip: "Start with Bri (“That’s a tough spot”) or end with a check-in (“Does that help?”)." }
           ],
-          flags: [AGAINST, NOWORK]
+          flags: [AGAINST, SCORN, DEMOPP]
         } },
       { type: "result", attempt: 1, allH: "All four. That’s a complete, fair answer.", btn: "Hear a strong answer" },
       { type: "hear", name: "Bri", voice: "f", h: "A strong answer to Bri, with each key point marked",
         lines: [
           { who: "c", t: '<span class="pt" data-n="4">That\u2019s a tough spot, and you\u2019re not alone.</span> <span class="pt" data-n="1">Georgia\u2019s Medicaid stops at about $7,900 for a mom of two, and help buying a plan starts at about $27,300. About 200,000 Georgians are stuck in between.</span>' },
-          { who: "c", t: '<span class="pt" data-n="2">Bottoms wants full Medicaid expansion, so people in your spot would qualify.</span> <span class="pt" data-n="3">Jackson wants a smaller plan tied to reporting work hours, like Georgia Pathways.</span>' },
-          { who: "c", t: 'Either way you\u2019d report work hours under a new federal law. The difference is how many people like you get covered. <span class="pt" data-n="4">Does that help?</span>' }
+          { who: "c", t: '<span class="pt" data-n="2">Bottoms wants full Medicaid expansion, so people in your spot would qualify.</span> <span class="pt" data-n="3">Jackson wants what he calls intelligent Medicaid expansion, tied to reporting work hours, like Georgia Pathways.</span>' },
+          { who: "c", t: 'The difference is how: full expansion, as in 40 states, or coverage built around reporting work. <span class="pt" data-n="4">Does that help?</span>' }
         ], btn: "Spot the mistake in another answer" },
       { type: "catch", name: "Bri", h: "This canvasser gets one thing wrong. Tap it.", ask: "What would the candidates for governor do about health insurance?",
         lines: ["About 200,000 Georgians earn too much for Medicaid and too little for help buying a plan.", "Bottoms wants full Medicaid expansion, so people like you would qualify.", "Jackson is against Medicaid."], wrong: 2,
-        why: "Jackson isn’t against Medicaid. He wants a smaller plan tied to reporting work hours, like Georgia Pathways. Getting the other side right is how voters learn to trust you.",
+        why: "Jackson isn’t against Medicaid. He wants coverage tied to reporting work, like Georgia Pathways. Getting the other side right is how voters learn to trust you.",
         notIt: "That line is accurate. Look for the one that misstates a candidate’s position.", btn: "Try tomorrow’s door now" },
       { type: "door", attempt: 2, voter: "rosa", name: "Rosa", voice: "f", who: "Rosa at her front door",
         intro: "Tomorrow’s warmup (try it now in this preview): a different family. Use the income line, not a memorized answer.",
@@ -1451,18 +1468,18 @@ WU.home = [
           ask: "My husband and I make about $30,000 a year, and we have one son. Neither job offers insurance. Would either plan change anything for us?",
           facts: FACTS.concat(["A family of three earning about $30,000 is above the poverty line ($27,320), so today it can get help buying a marketplace plan. It would be under the expanded Medicaid limit (about $37,700). Whether Jackson's plan would cover them is not known from public sources, so a canvasser shouldn't claim either way."]),
           items: [
-            { id: "today", label: "Placed Rosa’s family under today’s rules", all: [/(help (buying|paying|with)|healthcare\.gov|health care \.?gov|marketplace|exchange|subsid|tax credit|obamacare|affordable care act|above the (poverty|line))/i], ai: "Says that today, at about $30,000 for a family of three, they are above the poverty line ($27,320), so they can get help buying a plan on HealthCare.gov (the marketplace). Saying they are in the gap or get Medicaid today is wrong.", tip: "Say what they can get today: at $30,000 they’re above $27,320, so they can get help buying a plan on HealthCare.gov." },
+            { id: "today", label: "Placed Rosa’s family under today’s rules", all: [/(help (buying|paying for|with) (a )?(plan|insurance)|healthcare\.gov|health care \.?gov|marketplace|subsid|tax credit|above the (poverty|line))/i], ai: "Says that today, at about $30,000 for a family of three, they are above the poverty line ($27,320), so they can get help buying a plan on HealthCare.gov (the marketplace). Saying they are in the gap or get Medicaid today is wrong.", tip: "Say what they can get today: at $30,000 they’re above $27,320, so they can get help buying a plan on HealthCare.gov." },
             { id: "expand", label: "Applied full expansion to them", all: [/(expan|bottoms)/i, /(qualify|eligible|37,?7|thirty.seven|138|under the (new |expanded )?limit|get medicaid|be covered|medicaid would)/i], ai: "Says that under full Medicaid expansion (Bottoms's plan), a family of three earning about $30,000 would likely qualify for Medicaid, because the limit would be about $37,700 (138% of poverty).", tip: "Say that with full expansion the limit for three would be about $37,700, so at $30,000 they’d likely qualify for Medicaid." },
             { id: "hedge", label: "Didn’t overpromise", all: [/(likely|probably|should|might|depend|check|from what you|based on what|sounds like|i think|i believe)/i], ai: "Signals that eligibility depends on details or points them to check (for example HealthCare.gov or 'from what you've told me'), instead of guaranteeing coverage.", tip: "Add a hedge: “From what you’ve told me, you’d likely qualify. HealthCare.gov can check.”" }
           ],
-          flags: [{ re: /(you'?re|you are|your family is)[^.]{0,12}in the gap|(get|qualify for) medicaid (now|today|already)/i, why: "At $30,000 a family of three is above the poverty line, so today they can get help buying a plan, not Medicaid." }, AGAINST]
+          flags: [{ re: /(you'?re|you are|your family is)[^.]{0,12}in the gap|(get|qualify for) medicaid (now|today|already)/i, why: "At $30,000 a family of three is above the poverty line, so today they can get help buying a plan, not Medicaid.", cancels: ["today"] }, AGAINST, DEMOPP]
         } },
       { type: "result", attempt: 2, allH: "You applied the rule to a new family. That’s the skill.", btn: "Finish the lesson" },
       { type: "done", scroll: true, h: "You can explain health insurance in Georgia", d1: "Bri", d2: "Rosa",
         can: [
           { t: "Explain who Georgia’s Medicaid leaves out", from: [[1, "gap"]], tip: "Say why Bri is stuck: too much for Medicaid, too little for help buying a plan." },
           { t: "Place a new family on the income line", from: [[2, "today"], [2, "expand"]], tip: "Use the three lines for a family of three: $7,900, $27,320 and $37,700." },
-          { t: "Say fairly where both candidates stand", from: [[1, "dem"], [1, "rep"]], tip: "Name both plans: full expansion, and a smaller plan tied to work hours." }
+          { t: "Say fairly where both candidates stand", from: [[1, "dem"], [1, "rep"]], tip: "Name both plans: full expansion, and coverage tied to reporting work." }
         ],
         tomorrow: "We’ll ask you where help buying a plan starts for a family of three, and what full expansion would change.",
         origin: "A real 2026 race: Keisha Lance Bottoms (Democrat) and Rick Jackson (Republican) for governor of Georgia. Their positions come from their own plans and news coverage during the campaign, which ended on Election Day, Nov 3, 2026. Built by Warmup from public sources; not affiliated with or approved by either campaign. Bri, Ana, Dee, Tasha and Rosa are made-up examples.",
@@ -1481,19 +1498,19 @@ WU.home = [
 (function () {
   "use strict";
   var WU = window.WU, s = WU.sup;
-  var CANADA_PAYS = { re: /canada (pays|is paying|will pay|paid|pays for)/i, why: "Canada doesn’t pay the US tariff. The US company bringing the goods in pays it." };
-  var CAUSED_ALL = { re: /(tariffs?|they) (caused|cost us|killed|wiped out|destroyed|took) (all )?(of )?(those |the |our |4,?000 )?(\w+ )?jobs/i, why: "The job numbers don’t prove tariffs caused the losses. Say tariffs may be one reason." };
-  var ANTI_ALL = { re: /(el.?sayed|the democrat)[^.]{0,20}(opposes|is against|wants to (end|get rid of)) (all )?tariffs/i, why: "El-Sayed isn’t against all tariffs, only what he calls dumb ones." };
+  var CANADA_PAYS = { re: /canad\w*( \w+){0,2} (pays|is paying|will pay|paid|pays for)\b/i, why: "Canada doesn’t pay the US tariff. The US company bringing the goods in pays it.", cancels: ["who", "who2"] };
+  var CAUSED_ALL = { re: /(tariffs?|they) (caused|cost us|killed|wiped out|destroyed|took) (all )?(of )?(those |the |our |4,?000 )?(\w+ )?jobs/i, why: "The job numbers don’t prove tariffs caused the losses. Say tariffs may be one reason.", cancels: ["honest"] };
+  var ANTI_ALL = { re: /(el.?sayed|the democrat)[^.]{0,20}(opposes|is against|wants to (end|get rid of)) (all )?tariffs/i, why: "El-Sayed isn’t against all tariffs, only what he calls dumb ones.", cancels: ["eld"] };
   var FACTS = [
     "A tariff is a tax on imported goods, paid to US Customs by the US company bringing the goods into the country.",
     "That company can pass the cost on in higher prices, take a smaller profit or switch suppliers. New York Fed economists found about 90% of the cost of 2025's tariffs fell on US businesses and consumers.",
-    "Steel and aluminum from Canada are taxed at 50%. Parts that meet the USMCA trade deal's rules skip some other US tariffs. Canada has its own counter-tariffs on some US goods.",
+    "Steel and aluminum from Canada are taxed at 50%. Parts that meet the US-Mexico-Canada trade deal's rules skip some other US tariffs. Canada has its own tariffs on some US goods.",
     "Auto parts can cross the US-Canada border several times before a car is finished (NBC News followed one part that crossed four times), so tariffs can apply more than once.",
     "Michigan had about 4,000 fewer auto parts manufacturing jobs in June 2026 than in June 2025 (113,600 to 109,600, about 3.5%). Vehicle manufacturing added about 500 jobs over the same period.",
     "The job numbers show timing, not cause. Other forces, such as shifts in electric vehicle plans and pressure on suppliers, also affect auto jobs. A 2025 University of Michigan forecast estimated tariffs would cost Michigan about 3,300 auto jobs and called the estimate very uncertain.",
-    "Abdul El-Sayed (2026 Democratic nominee, Michigan U.S. Senate): \"I'm not against tariffs per se. I'm just against dumb tariffs.\" He wants smart, targeted tariffs tied to Michigan jobs, with unions at the table. The UAW endorsed him in June 2026.",
-    "Mike Rogers (2026 Republican nominee): backed the tariffs in September 2026; in October said \"Canada is not our enemy\" and called to end the Canada tariff fight, while saying \"there are tariffs that have helped.\"",
-    "Presidents imposed these tariffs using powers Congress has delegated. A senator votes on trade laws and can vote to limit those powers but can't set tariffs alone.",
+    "Abdul El-Sayed (2026 Democratic nominee, Michigan U.S. Senate): \"I'm not against tariffs per se. I'm just against dumb tariffs.\" He wants smart, targeted tariffs tied to Michigan jobs, with unions at the table. ",
+    "Mike Rogers (2026 Republican nominee): has backed the tariffs; in October 2026 said \"Canada is not our enemy\" and called to end the Canada tariff fight, while saying \"there are tariffs that have helped.\"",
+    "Presidents set these tariffs using powers Congress has delegated; in February 2026 the Supreme Court struck down tariffs based on emergency powers (IEEPA). A senator votes on trade laws and can vote to limit those powers but can't set tariffs alone.",
     "Canvassers explain the mechanism and the evidence; they don't claim certainty the evidence doesn't support."
   ];
   var ICON_BORDER = '<svg viewBox="0 0 52 52" aria-hidden="true"><path d="M26 6 V46" stroke="#9aa3ad" stroke-width="3" stroke-dasharray="5 5"/><path d="M28 30 h14 l5 5 -5 5 h-14 z" fill="#b3261e"/><circle cx="14" cy="22" r="8" fill="#8d98a6"/><circle cx="14" cy="22" r="3.5" fill="#6f7b88"/></svg>';
@@ -1520,7 +1537,7 @@ WU.home = [
       { t: "Newsweek: Rogers’s September statement backing the tariffs", u: "https://www.newsweek.com/mike-rogers-turns-on-trumps-tariffs-what-michigan-republican-said-before-12538135" },
       { t: "Reuters via GV Wire, Oct 7, 2026: Rogers’s ad calling to end the Canada tariff fight", u: "https://gvwire.com/2026/10/07/michigan-republican-rogers-calls-for-end-to-canada-tariff-fight-breaking-with-trump-again/" },
       { t: "UAW statement, Aug 25, 2026: tariffs aimed at low-wage countries, no escalation with Canada", u: "https://uaw.org/uaw-president-shawn-fain-on-u-s-trade-escalation-with-canada/" },
-      { t: "Michigan Public, June 5, 2026: the UAW endorses El-Sayed", u: "https://www.michiganpublic.org/politics-government/2026-06-05/uaw-backs-el-sayed-over-other-democrats-running-for-us-senate" },
+      { t: "Fortune, Feb 20, 2026: the Supreme Court strikes down the tariffs based on emergency powers (IEEPA), 6 to 3", u: "https://fortune.com/2026/02/20/supreme-court-slaps-down-175-billion-worth-of-trump-tariffs-as-unconstitutional/" },
       { t: "Congressional Research Service, R48435: Congressional and presidential authority to impose import tariffs", u: "https://www.everycrsreport.com/reports/R48435.html" }
     ],
     learn: [
@@ -1549,8 +1566,8 @@ WU.home = [
         stops: [{ t: "Steel made", c: "ca", icon: "coil" }, { t: "Stamped into a part", c: "us", icon: "part" }, { t: "Welded into a bigger piece", c: "ca", icon: "frame" }, { t: "More parts added", c: "us", icon: "plus" }, { t: "Into a finished car", c: "ca", icon: "car" }],
         cross: [
           { tax: true, tag: "50%", text: "Into Michigan. The US tariff on steel from Canada applies: 50%, paid by the Michigan plant bringing it in." + s(3) },
-          { tax: true, tag: "Canada\u2019s tariff", text: "Into Ontario. Canada’s own counter-tariffs can apply to some US goods, paid by the Canadian company bringing it in." + s(4) },
-          { tax: "maybe", tag: "Maybe", text: "Into Michigan again. Parts that meet the USMCA trade deal’s rules skip some US tariffs, but the steel and aluminum in them are taxed either way." + s(3) },
+          { tax: "maybe", tag: "Maybe", text: "Into Ontario. Canada’s own tariffs on some US goods can apply here, paid by the Canadian company bringing the part in." + s(4) },
+          { tax: "maybe", tag: "Maybe", text: "Into Michigan again. Parts that meet the US-Mexico-Canada trade deal’s rules skip some US tariffs, but steel and aluminum are taxed either way." + s(3) },
           { tax: "maybe", tag: "Maybe", text: "Into Ontario again. Whether a tariff applies depends on the part and the trade rules. Each crossing is another chance for one." }
         ],
         start: "Follow one part from Canadian steel to a finished car, and watch its cost.",
@@ -1558,7 +1575,7 @@ WU.home = [
         note: "An example route. Real parts take many routes; NBC News followed one that crossed four times." + s(6) + " The cost column is an illustration, not real prices.",
         btn: "What happened to Michigan’s auto parts jobs" },
       { type: "bars", src: [7, 8, 9, 10],
-        h: "Michigan had about 4,000 fewer auto parts jobs in June 2026 than a year before" + s(7),
+        h: "Michigan had about 4,000 fewer auto parts jobs in a year. The numbers show when, not why." + s(7),
         bars: [{ lab: "Michigan auto parts jobs, June 2025", v: 113600, txt: "113,600" + s(7), c: "#8a8f96" }, { lab: "Michigan auto parts jobs, June 2026", v: 109600, txt: "109,600" + s(7), c: "#b3261e" }],
         alt: "Two bars drawn to scale: 113,600 Michigan auto parts jobs in June 2025 and 109,600 in June 2026, a drop of about 3.5%.",
         p: "That’s a 3.5% drop. Over the same year, vehicle assembly jobs rose by about 500." + s(8),
@@ -1569,23 +1586,23 @@ WU.home = [
             { t: "No. Tariffs can’t affect jobs.", ok: false, why: "They can. Tariffs raise costs for companies that buy steel and parts from abroad. The question is how much, and the job numbers alone can’t answer it." }
           ] },
         btn: "Sort what’s shown from what isn’t" },
-      { type: "sort", src: [1, 8, 11], h: "Some tariff claims are shown by evidence. Others aren’t, at least not yet.",
+      { type: "sort", src: [1, 8], h: "Some tariff claims are shown by evidence. Others aren’t, at least not yet.",
         p: "Sort each claim. Getting this right is what makes you trustworthy.", labels: ["Shown by evidence", "Not shown"],
         items: [
           { t: "US companies pay the tariff when goods cross into the US.", a: "k", why: "That’s how tariffs are collected: the company bringing goods in pays US Customs." },
           { t: "Most of the cost of 2025’s tariffs stayed with US businesses and shoppers.", a: "k", why: "New York Fed economists measured it: about 90%." + s(1) },
           { t: "Tariffs caused all 4,000 lost auto parts jobs.", a: "n", why: "Jobs fell while tariffs rose, but other forces moved jobs too. Nobody has measured the tariffs’ share." },
-          { t: "Tariffs have already brought back more Michigan auto jobs than they cost.", a: "n", why: "Not so far: parts jobs fell about 4,000 and vehicle jobs rose about 500. Announced plant moves haven’t added jobs yet." + s(8, 11) }
+          { t: "Tariffs have already brought back more Michigan auto jobs than they cost.", a: "n", why: "Not shown: no one has measured how many jobs tariffs added or cost. Parts jobs fell about 4,000 and vehicle jobs rose about 500, but that’s timing, not cause." + s(8) }
         ], btn: "Where the candidates for Senate stand" },
       { type: "compare", src: [12, 13, 14, 15, 16, 17, 18],
         h: "Both candidates for Senate back some tariffs. They differ on which ones, and on Canada.",
         cands: [{ side: "d", ini: "AE", name: "Abdul El-Sayed", role: "Democratic nominee" }, { side: "r", ini: "MR", name: "Mike Rogers", role: "Republican nominee" }],
         rows: [
           { l: "In their words", d: "<q>I’m not against tariffs per se. I’m just against dumb tariffs.</q>" + s(12), r: "<q>Canada is not our enemy,</q> but <q>there are tariffs that have helped.</q>" + s(12) },
-          { l: "On these tariffs", d: "Smart, targeted tariffs tied to Michigan jobs, with unions at the table" + s(12, 13), r: "Backed them in September; in October called to end the Canada tariff fight" + s(14, 15) }
+          { l: "On these tariffs", d: "Smart, targeted tariffs tied to Michigan jobs, with unions at the table" + s(12, 13), r: "Has backed the tariffs; in October called to end the Canada tariff fight" + s(14, 15) }
         ],
-        office: "Presidents imposed these tariffs using powers Congress has given the office. A senator votes on trade laws and can vote to limit those powers, but can’t set tariffs alone." + s(18),
-        p: "The autoworkers’ union backs tariffs on low-wage countries, not a fight with Canada, and endorsed El-Sayed." + s(16, 17),
+        office: "Presidents set these tariffs using powers Congress gave the office, and in February 2026 the Supreme Court struck down the ones based on emergency powers. A senator votes on trade laws and can vote to limit those powers, but can’t set tariffs alone." + s(17, 18),
+        p: "The autoworkers’ union backs tariffs on low-wage countries, not a fight with Canada." + s(16),
         btn: "Practice it at a door" }
     ],
     door: [
@@ -1597,14 +1614,15 @@ WU.home = [
           ask: "These tariffs on Canada are hitting our plant. Who actually pays for them, and what would the candidates for Senate do?",
           facts: FACTS,
           items: [
-            { id: "who", label: "Explained who pays", all: [/(compan(y|ies)|business(es)?|importer|plant|we pay|you pay|americans pay|paid (here|in the us)|higher prices|prices|90|ninety)/i], ai: "Explains that the US company bringing goods in pays the tariff at the border, and that most of the cost stays with US businesses and shoppers (for example through higher prices). Saying Canada pays is wrong.", tip: "Say who pays: the US company bringing goods in, and much of it ends up in prices." },
+            { id: "who", label: "Explained who pays", all: [/(compan(y|ies)|business(es)?|importer|plant|we pay|you pay|americans pay|paid (here|in the us))/i, /(pay|paid|price|cost)/i], ai: "Explains that the US company bringing goods in pays the tariff at the border, and that most of the cost stays with US businesses and shoppers (for example through higher prices). Saying Canada pays is wrong.", tip: "Say who pays: the US company bringing goods in, and much of it ends up in prices." },
             { id: "chain", label: "Explained why autos get hit hard", all: [/(cross(es|ing)?|back and forth|four times|more than once|again and again|supply chain|multiple times|twice)/i], ai: "Explains that auto parts cross the US-Canada border several times, so tariffs can apply more than once and costs pile up.", tip: "Add why autos get hit hard: parts cross the border back and forth, so tariffs can hit more than once." },
-            { id: "honest", label: "Was careful about the job numbers", all: [/(4,?000|four thousand|jobs)/i, /(may|might|could|one reason|part of|not the only|hard to (say|know|tell)|can'?t (say|prove|tell)|other (reasons|things|factors)|doesn'?t prove|not proven|likely)/i], ai: "Mentions jobs AND shows caution: Michigan had about 4,000 fewer auto parts jobs in a year, and the numbers alone don't prove how much tariffs caused (tariffs may be one reason). Credit only if both are present.", tip: "Mention the jobs carefully: about 4,000 fewer auto parts jobs, and tariffs may be one reason." },
-            { id: "sides", label: "Said where both candidates stand, fairly", all: [/(el.?sayed|democrat|dumb|targeted|smart tariffs)/i, /(rogers|republican|he backed|backed (them|the tariffs)|not our enemy|end the (canada )?(fight|tariff))/i], ai: "States El-Sayed's position (not against all tariffs, against 'dumb' ones; targeted tariffs tied to Michigan jobs, unions at the table) AND Rogers's (backed the tariffs; now wants the Canada fight ended while keeping others he says helped).", tip: "Give both sides: El-Sayed wants targeted tariffs, not “dumb” ones; Rogers backed them and now wants the Canada fight ended." }
+            { id: "honest", label: "Was careful about the job numbers", not: [/(caused|killed|destroyed|wiped out)/i], all: [/(4,?000|four thousand|jobs)/i, /(may|might|could|one reason|part of|not the only|hard to (say|know|tell)|can'?t (say|prove|tell)|other (reasons|things|factors)|doesn'?t prove|not proven|likely)/i], ai: "Mentions jobs AND shows caution: Michigan had about 4,000 fewer auto parts jobs in a year, and the numbers alone don't prove how much tariffs caused (tariffs may be one reason). Credit only if both are present.", tip: "Mention the jobs carefully: about 4,000 fewer auto parts jobs, and tariffs may be one reason." },
+            { id: "eld", label: "Said where El-Sayed stands", all: [/(el.?sayed|democrat)/i, /(dumb|targeted|smart|not against|unions)/i], ai: "States El-Sayed's position in a way that matches his words: not against tariffs as such, against 'dumb' ones; wants targeted tariffs tied to Michigan jobs, with unions at the table.", tip: "Give El-Sayed\u2019s view: targeted tariffs, not \u201Cdumb\u201D ones, with unions at the table." },
+            { id: "rog", label: "Said where Rogers stands, fairly", all: [/(rogers|republican)/i, /(backed|support|not our enemy|end the (canada )?(fight|tariff)|canada fight|helped)/i], not: [/(scam|hates?|liar|lying)/i], ai: "States Rogers's position fairly: he has backed the tariffs, and in October called to end the Canada tariff fight while saying some tariffs have helped.", tip: "Give Rogers\u2019s view: he backed the tariffs and now wants the Canada fight ended." }
           ],
           flags: [CANADA_PAYS, CAUSED_ALL, ANTI_ALL]
         } },
-      { type: "result", attempt: 1, allH: "All four. That’s a complete, careful answer.", btn: "Hear a strong answer" },
+      { type: "result", attempt: 1, allH: "All five. That’s a complete, careful answer.", btn: "Hear a strong answer" },
       { type: "hear", name: "Samira", voice: "f", h: "A strong answer to Samira, with each key point marked",
         lines: [
           { who: "c", t: '<span class="pt" data-n="1">The US company bringing goods in pays the tariff, like a plant buying Canadian steel, and most of it ends up in higher prices here.</span> <span class="pt" data-n="2">Car parts cross the border back and forth, so tariffs can hit the same part more than once.</span>' },
@@ -1623,11 +1641,11 @@ WU.home = [
           ask: "I run a hardware store in Lansing. A lot of my tools and lumber come from suppliers in Canada. If tariffs go up on that stuff, does that hurt me or help me?",
           facts: FACTS.concat(["For Ray: the tariff is paid at the border by whoever imports the goods into the US, Ray himself if he imports directly or his US supplier, who will likely charge him more. He may then raise prices, take a smaller profit or switch suppliers; the overall effect depends on details."]),
           items: [
-            { id: "who2", label: "Said who pays first", all: [/(supplier|importer|whoever brings|bring(s|ing)? (it|them|the goods|that stuff|stuff) in|at the border|(you|he|they)( would|'d| will)? pay(s)? (the|that|a) (tariff|tax))/i], ai: "Explains that the tariff is paid at the border by whoever imports the goods into the US: Ray if he imports directly, or his US supplier, who will likely charge him more.", tip: "Start with who pays: Ray, or the US supplier bringing the goods in, pays the tariff at the border." },
+            { id: "who2", label: "Said who pays first", all: [/(your (us |american )?supplier|importer|whoever brings|bring(s|ing)? (it|them|the goods|that stuff|stuff) in|at the border|(you|he|they)( would|'d| will)? pay(s)? (the|that|a) (tariff|tax))/i], not: [/canad\w*( \w+){0,2} (pays|paid)/i], ai: "Explains that the tariff is paid at the border by whoever imports the goods into the US: Ray if he imports directly, or his US supplier, who will likely charge him more.", tip: "Start with who pays: Ray, or the US supplier bringing the goods in, pays the tariff at the border." },
             { id: "options2", label: "Named what can happen next", all: [/(raise|higher|pass (it|that|the cost)|prices?|profit|margin|eat|absorb|switch|other suppliers?|somewhere else|elsewhere|american.made|us.made)/i], ai: "Names at least one realistic response: Ray pays more and raises prices, takes a smaller profit, or switches to other suppliers.", tip: "Say what he can do: raise prices, take a smaller profit or find other suppliers." },
             { id: "honest2", label: "Was honest about the uncertainty", all: [/(depend|might|may|could|not sure|hard to say|probably|likely)/i], ai: "Says the effect depends on details (how much he can pass on, competitors, other suppliers) instead of promising it will only hurt or only help.", tip: "Be honest: “It depends on whether you can pass the cost on or switch suppliers.”" }
           ],
-          flags: [CANADA_PAYS, { re: /(definitely|guarantee|for sure)[^.]{0,20}(help|hurt)/i, why: "Nobody can promise that. It depends on his costs and his options." }]
+          flags: [CANADA_PAYS, { re: /(definitely|guarantee\w*|for sure|certainly)[^.]{0,40}(help|hurt)|(help|hurt)\w*[^.]{0,40}(definitely|for sure|guarantee\w*|certainly)/i, why: "Nobody can promise that. It depends on his costs and his options.", cancels: ["honest2"] }]
         } },
       { type: "result", attempt: 2, allH: "You traced a tariff through a new business. That’s the skill.", btn: "Finish the lesson" },
       { type: "done", scroll: true, h: "You can explain tariffs and auto jobs", d1: "Samira", d2: "Ray",
@@ -1635,7 +1653,7 @@ WU.home = [
           { t: "Say where a tariff is charged and who pays it first", any: true, from: [[1, "who"], [2, "who2"]], tip: "The US company bringing goods in pays at the border." },
           { t: "Explain why parts that cross back and forth cost more", from: [[1, "chain"]], tip: "Parts cross the border several times, so tariffs can hit more than once." },
           { t: "Be honest about what the job numbers show", from: [[1, "honest"]], tip: "About 4,000 fewer parts jobs; tariffs may be one reason, not proven." },
-          { t: "Say fairly where both candidates stand", from: [[1, "sides"]], tip: "El-Sayed: targeted tariffs, not dumb ones. Rogers: backed them, now wants the Canada fight ended." }
+          { t: "Say fairly where both candidates stand", from: [[1, "eld"], [1, "rog"]], tip: "El-Sayed: targeted tariffs, not dumb ones. Rogers: backed them, now wants the Canada fight ended." }
         ],
         tomorrow: "We’ll ask you who pays a US tariff, and why auto parts can get hit more than once.",
         origin: "A real 2026 race: Abdul El-Sayed (Democrat) and Mike Rogers (Republican) for U.S. Senate in Michigan. Their positions come from their own statements and news coverage during the campaign, which ended on Election Day, Nov 3, 2026. Built by Warmup from public sources; not affiliated with or approved by either campaign. Samira, Ray and the Grand Rapids furniture maker are made-up examples.",
