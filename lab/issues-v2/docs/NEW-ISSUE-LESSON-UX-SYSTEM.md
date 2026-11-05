@@ -15,6 +15,7 @@ The shared mobile experience for every issue lesson, whatever its format. Built 
 
 - **Frame.** Full screen on a phone (safe-area padding on all sides). On a laptop the lesson sits in a 402-pixel phone frame, as tall as the window allows up to 874 pixels, on the warm page color. [Kept]
 - **Top.** Close ✕, then the segmented story bar: one segment per screen, full or empty. At the switch to the door, the Learn bar folds into a green "✓ Learn" chip and the door's segments turn blue. [Kept]
+- **The story bar is navigation.** Tap any screen you've reached to go back to it; tap "✓ Learn" from the door to return to Learn. Screens you've finished stay finished, so going back never locks the button again. Each segment has a 26-pixel tap target around its 5-pixel bar. [New, after Robert's Nov 5 review]
 - **Body.** A flex column that scales to fit. One variable, `--k`, multiplies every font size, gap and picture height; the engine picks the largest value from 1.12 down to 0.74 that fits with no scrolling. On very short screens the body scrolls rather than clip, and the test suite reports every screen that does. [Kept and extended]
 - **Bottom.** Sources (small, left) and the main button (the rest of the row). The main button wraps to two lines, never truncates. [Kept]
 - **Screen tag.** Bottom right, small gray ("GA2 3", "MI2 D2"). GA2 and MI2 mark version 2 so they never collide with the live tags. [Kept]
@@ -38,13 +39,14 @@ Tokens (all in `lesson.css`, single light theme like the live app): ink `#3c3c3c
 | `cover` | Real race and date, header, three "you'll be able to" goals with small pictures, the Learn and At the door line with screen counts (no minutes until lessons are timed with people), the not-affiliated line | Every lesson | scenes.js |
 | `ask` | The voter at their open door, their quote in Newsreader, a guess with three options; the answer arrives on a later screen | Every lesson | scenes.js |
 | `ruler` | The Rule model: income line with zones, the story's people, slider plus chips plus drag, a readout in words, optional switch between two sets of rules, task tracking | Rule lessons | models.js |
-| `border` | The Chain's first link: goods cross, the tariff tag appears, an arrow shows who pays, then three choices and a measured-share bar | Chain lessons about prices | models.js |
+| `border` | The Chain's first link: goods cross, the tariff tag appears, an arrow shows who pays, then a measured-share bar with each part labeled where it fits (a slice too thin for its words gets its label underneath) | Chain lessons about prices | models.js |
 | `route` | The Chain: a route across a border (or any line between two places) step by step, crossings colored by tariff status, a cost bar that grows | Chain lessons | models.js |
 | `bars` | Evidence drawn to scale, an optional newspaper clipping and an optional check question | Every format | scenes.js |
 | `count` | A big number with a familiar comparison, people drawn to scale | Optional | scenes.js |
 | `apply` | New cases one at a time, each answered until right, optional mini model after each answer | Every format | scenes.js |
-| `sort` | Claims sorted into "Shown by evidence" or "Not shown," with why | Chain lessons, any disputed number | scenes.js |
-| `compare` | The choice: initials avatars, real names and party, the same rows for both, a yellow note on what the office can do | Every candidate lesson | scenes.js |
+| `sort` | One claim at a time ("Claim 2 of 3"), two big buttons ("Proven" or "Not proven"), the reason after each answer, then "Next claim" | Chain lessons, any disputed number | scenes.js |
+| `choice` | The choice: one tab per candidate (initials, name, party), one full-width card at a time with the plan, a quote if there is one and the same labeled rows for both; after both are seen, "The difference:" in one sentence; a yellow note on what the office can do | Every candidate lesson | scenes.js |
+| `compare` | Retired. The two-column version of the choice; kept in the code only so older drafts still open | None | scenes.js |
 | `door` | The voter's door on top, the conversation thread, mic or typing, example answer link | Every lesson | practice.js |
 | `result` | Feedback: mode badge, each point with the learner's quoted words or "Not heard yet," flags for misstatements, what worked, next time, try again | Every lesson | practice.js |
 | `hear` | A strong answer with each key point marked, play aloud | Every lesson | practice.js |
@@ -61,6 +63,9 @@ A Flow lesson needs one more model scene (`flow`: sources, destinations, a movab
 - **Checks.** Tap an option; red with an explanation if wrong, green with the reason if right; options lock once right; one case at a time.
 - **Guesses** are never graded on the spot; the model screen answers them and names the learner's guess.
 - **State is kept per lesson** while the page is open, so Back and Try again don't lose work.
+- **Never a two-column text grid on a phone.** Two columns of sentences at 180 pixels each read as a wall. Compare people or options one at a time (tabs), then state the difference in one sentence. [New, after Robert's Nov 5 review]
+- **One question on screen at a time.** A list of claims with buttons beside each one asks the learner to hold several decisions at once; show one claim, answer it, then the next. [New, after Robert's Nov 5 review]
+- **Labels never get cut off.** If a label doesn't fit its shape, it moves next to the shape. The walk test fails any clipped main button; check drawn labels by eye. [New, after Robert's Nov 5 review]
 - **Example answers** are always labeled "Example answer, not yours," and their results say so.
 
 ## 6. Illustration
@@ -110,7 +115,7 @@ The prototype is plain JavaScript and CSS with no framework, in the same style a
 ```
 src/core.js      engine: shell, story bar, routing, scale-to-fit, sources sheet, gating
 src/art.js       the warm-up's door and voter figures plus the sisters and Samira
-src/scenes.js    cover, ask, count, bars, apply, sort, compare
+src/scenes.js    cover, ask, count, bars, apply, sort, choice (compare retired)
 src/models.js    ruler (Rule), border and route (Chain)
 src/coach.js     feedback: AI via Claude when reachable, quick check otherwise, evidence guard
 src/practice.js  door, result, hear, catch, done; speech in and out

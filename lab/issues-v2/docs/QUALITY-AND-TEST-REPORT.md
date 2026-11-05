@@ -14,7 +14,7 @@ Nov 5, 2026. What was built, what works, what was tested and how, and what still
 
 | Check | Result | How |
 |---|---|---|
-| Both lessons, start to finish | Pass at 5 sizes: 375x667, 390x844, 430x932, 1366x700, 1440x820 | `tests/walk.cjs` taps through every screen like a learner (a wrong guess first, every zone, the switch, each check, each crossing, the sort), answers door 1 by voice through a stand-in microphone and door 2 by typing |
+| Both lessons, start to finish | Pass at 5 sizes: 375x667, 390x844, 430x932, 1366x700, 1440x820 | `tests/walk.cjs` taps through every screen like a learner (a wrong guess first, every zone, the switch, each check, each crossing, the sort), answers door 1 by voice through a stand-in microphone and door 2 by typing; then taps the story bar back to Learn screen 3 and forward again, and fails if a finished screen locks |
 | Page errors | 0 at every size | Same walk |
 | Overflow, clipped text, labels cut off, things sticking out of the phone | 0 at every size; no screen falls back to scrolling except the last one by design | Same walk's layout check, with Figtree and Newsreader loaded |
 | Buttons left locked after the task | 0 | Same walk |
@@ -86,3 +86,7 @@ A separate agent that didn't build the lessons reviewed them (walked both at 136
 | 11 | Slider without an accessible name; focus lost after sending the steel | Both fixed |
 
 **Not changed, and why.** The reviewer called the four taps on the route and the "find all three zones" task partly for show. I kept them: following each crossing is the mechanism, and visiting each zone is how the line gets built. Dee's readout now explains why she sits in the blue zone. Ray's door still tests mainly who pays and what can happen next; adding the chain and the job evidence to it would make day 2 longer.
+
+## Robert's Nov 5 review
+
+Four screens read as confusing and the story bar didn't go back. Fixed: candidate tabs replace the two-column grids, the sort shows one claim at a time, the border bar's labels fit, and the story bar navigates. Rules added to the UX system (never a two-column text grid on a phone; one question on screen at a time; labels never cut off; the story bar is navigation). After the changes: 43 checks at each of six sizes (375x667, 390x844, 402x874, 430x932, 1366x700, 1440x820), 0 page errors, 0 layout problems; 18 of 18 coach tests pass. The walk test now covers going back through the story bar.

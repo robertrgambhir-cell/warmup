@@ -36,14 +36,25 @@ What each v2 screen replaces, what it keeps, what changed and why. The originals
 |---|---|---|---|---|---|---|
 | Cover: three facts, one causal ("lost about 4,000… as tariffs climbed") | Cover: three abilities; race and date | Layout | No causal claim on the cover | F: timing isn't cause | All | F |
 | — | MI2 1, Ask: Samira, "Who pays the US tariff?" guess | Samira | New guess screen | The most common misconception is "the other country pays" | Who pays | R |
-| MI 1: tariff is a tax, about 90% on US businesses and shoppers | MI2 2, the border: send the steel across; the tariff tag appears; the Michigan company pays US Customs; three choices; the 90% bar | The 90% finding | The learner makes it happen; the three things a company can do are drawn | Seeing who pays beats being told | Who pays | H |
+| MI 1: tariff is a tax, about 90% on US businesses and shoppers | MI2 2, the border: send the steel across; the tariff tag appears; the Michigan company pays US Customs; the 90% bar, labeled in plain words | The 90% finding | The learner makes it happen; the three things a company can do are drawn | Seeing who pays beats being told | Who pays | H |
 | MI 2: Canada from 0% to 50%, Canada hit back | Folded into MI2 2 and MI2 3 | The 50% and Canada's counter-tariffs | Stated where they apply | — | Who pays | — |
 | MI 3: Samira, a part crosses the border four times | MI2 3, the route: follow one part across four crossings; each crossing colored by whether a tariff applies; a cost bar grows | The four crossings (the most promising picture in the original) | Now the central interaction; crossings say which tariffs apply and which may not (USMCA) | Why autos get hit hard is the mechanism | Why parts cost more | H, F (USMCA nuance) |
 | MI 4: about 4,000 jobs lost "as tariffs climbed" | MI2 4: the same numbers drawn honestly to scale (113,600 to 109,600), vehicle jobs up about 500, and "Does this show the tariffs caused the drop?" | The jobs numbers | The causal framing is gone; the learner has to say what the chart can't show; the University of Michigan forecast is shown with its "very uncertain" caveat | Correlation is not causation | Job numbers | F, R |
-| — | MI2 5, evidence check: four claims sorted, two shown and two not shown (one tempting to each side) | — | New | Calibration, and fairness to both directions | Job numbers | H |
-| MI 5, MI 6, MI 7: opponent; UAW; Maya | MI2 6, the choice: El-Sayed and Rogers on the same rows; the office note, including the Supreme Court's February 2026 ruling; the UAW's position as context | Their own words; the UAW's position | Real names; what a senator can and can't do about tariffs; the endorsement line dropped for balance | The original never said who sets tariffs | Both candidates | F, R |
+| — | MI2 5, evidence check: three claims, one at a time, each answered "Proven" or "Not proven" with the reason (one proven, one tempting to each side) | — | New | Calibration, and fairness to both directions | Job numbers | H |
+| MI 5, MI 6, MI 7: opponent; UAW; Maya | MI2 6, the choice: a tab for El-Sayed and a tab for Rogers, one full-width card at a time, then the difference in one sentence; the office note, including the Supreme Court's February 2026 ruling | Their own words; the UAW's position | Real names; what a senator can and can't do about tariffs; the endorsement line dropped for balance | The original never said who sets tariffs | Both candidates | F, R |
 | P1 to P8 | MI2 D1 to D7, as in Georgia; tomorrow's door is Ray's hardware store in Lansing | The structure | Transfer to a new business; the planted mistake is now "Canada pays these tariffs" (the original planted "Maya is against all tariffs") | The new mistake is the misconception the lesson exists to fix | All | R, H |
 
 ## The cut that didn't make it
 
 A furniture-maker check (who pays a lumber tariff; what a later layoff can show) was built and removed to save about 45 seconds; Ray's door tests the same transfer. Its data is saved in `cut/tariffs-apply-cut.js`, ready to paste back.
+
+## Robert's Nov 5 review of four screens
+
+Robert called GA2 5, MI2 2, MI2 5 and MI2 6 confusing and found the story bar didn't go back. What changed:
+
+| Screen | Before | Now |
+|---|---|---|
+| GA2 5 and MI2 6, the choice | Two narrow columns of sentences side by side, six rows each | One tab per candidate; one full-width card at a time (plan, quote, the same three rows); after you've seen both, "The difference:" in one sentence |
+| MI2 2, the border | A row of three option tiles plus a 90% bar with a label cut off | Tiles gone (the three options are one sentence); the bar names each part, and the thin slice's label sits under it |
+| MI2 5, the sort | Four claims in a list, each with two small buttons | Three claims, one at a time, with two big buttons and the reason after each |
+| Story bar | Decoration | Tap any screen you've reached to go back; "✓ Learn" returns to Learn from the door; finished screens stay unlocked |

@@ -65,9 +65,8 @@
         h: "A tariff is a tax the US company bringing goods in pays at the border",
         alt: "A coil of steel crosses from Canada into Michigan. A red tag reads Tariff: 50%. An arrow shows the Michigan parts maker paying the tariff to US Customs.",
         reveal: { key: "p1", right: 1, opts: ["The Canadian steel mill", "The Michigan company bringing it in", "Canada’s government"], yes: "The Michigan company bringing the steel in pays it to US Customs.", no: "The Michigan company bringing the steel in pays it to US Customs, not Canada." },
-        p: "Steel from Canada is taxed at 50%." + s(3) + " Then the company has three choices:",
-        next: [{ i: "price", t: "Raise its prices" }, { i: "profit", t: "Take a smaller profit" }, { i: "switch", t: "Find other suppliers" }],
-        who: { lab: "Who ended up paying for 2025’s tariffs, measured by New York Fed economists" + s(1), us: 90, txt: "About 90% US businesses and shoppers" },
+        p: "Steel from Canada is taxed at 50%." + s(3) + " To cover it, the company can raise its prices, take a smaller profit or find other suppliers. Most companies passed the cost on:",
+        who: { lab: "Who ended up paying for 2025’s tariffs, measured by New York Fed economists" + s(1), us: 90, a: "US businesses and shoppers, about 90%", b: "Sellers abroad paid the rest" },
         btn: "Follow one part across the border" },
       { type: "route", src: [3, 4, 6],
         h: "A car part can cross the border four times, and costs can pile up each time a tariff applies" + s(6),
@@ -95,23 +94,25 @@
             { t: "No. Tariffs can’t affect jobs.", ok: false, why: "They can. Tariffs raise costs for companies that buy steel and parts from abroad. The question is how much, and the job numbers alone can’t answer it." }
           ] },
         btn: "Sort what’s shown from what isn’t" },
-      { type: "sort", src: [1, 8], h: "Some tariff claims are shown by evidence. Others aren’t, at least not yet.",
-        p: "Sort each claim. Getting this right is what makes you trustworthy.", labels: ["Shown by evidence", "Not shown"],
+      { type: "sort", src: [1, 8], h: "Proven or not? Getting this right is what makes you trustworthy at the door.",
+        labels: ["Proven", "Not proven"],
         items: [
-          { t: "US companies pay the tariff when goods cross into the US.", a: "k", why: "That’s how tariffs are collected: the company bringing goods in pays US Customs." },
-          { t: "Most of the cost of 2025’s tariffs stayed with US businesses and shoppers.", a: "k", why: "New York Fed economists measured it: about 90%." + s(1) },
-          { t: "Tariffs caused all 4,000 lost auto parts jobs.", a: "n", why: "Jobs fell while tariffs rose, but other forces moved jobs too. Nobody has measured the tariffs’ share." },
-          { t: "Tariffs have already brought back more Michigan auto jobs than they cost.", a: "n", why: "Not shown: no one has measured how many jobs tariffs added or cost. Parts jobs fell about 4,000 and vehicle jobs rose about 500, but that’s timing, not cause." + s(8) }
+          { t: "Most of the cost of 2025’s tariffs stayed with US businesses and shoppers.", a: "k", why: "Proven. New York Fed economists measured it: about 90%." + s(1) },
+          { t: "Tariffs caused all 4,000 lost auto parts jobs.", a: "n", why: "Not proven. Jobs fell while tariffs rose, but other things moved jobs too, and nobody has measured the tariffs’ share." },
+          { t: "Tariffs have already brought back more Michigan auto jobs than they cost.", a: "n", why: "Not proven. No one has measured how many jobs tariffs added or cost. Parts jobs fell about 4,000 and vehicle jobs rose about 500, but that’s timing, not cause." + s(8) }
         ], btn: "Where the candidates for Senate stand" },
-      { type: "compare", src: [12, 13, 14, 15, 16, 17, 18],
-        h: "Both candidates for Senate back some tariffs. They differ on which ones, and on Canada.",
-        cands: [{ side: "d", ini: "AE", name: "Abdul El-Sayed", role: "Democratic nominee" }, { side: "r", ini: "MR", name: "Mike Rogers", role: "Republican nominee" }],
-        rows: [
-          { l: "In their words", d: "<q>I’m not against tariffs per se. I’m just against dumb tariffs.</q>" + s(12), r: "<q>Canada is not our enemy,</q> but <q>there are tariffs that have helped.</q>" + s(12) },
-          { l: "On these tariffs", d: "Smart, targeted tariffs tied to Michigan jobs, with unions at the table" + s(12, 13), r: "Has backed the tariffs; in October called to end the Canada tariff fight" + s(14, 15) }
+      { type: "choice", src: [12, 13, 14, 15, 17, 18],
+        h: "Both candidates for Senate back some tariffs. They split on the fight with Canada.",
+        cands: [
+          { side: "d", ini: "AE", name: "Abdul El-Sayed", short: "El-Sayed", role: "Democratic nominee",
+            plan: "Smart, targeted tariffs tied to Michigan jobs, with unions at the table" + s(12, 13),
+            quote: "\u201CI\u2019m not against tariffs per se. I\u2019m just against dumb tariffs.\u201D" + s(12), lines: [] },
+          { side: "r", ini: "MR", name: "Mike Rogers", short: "Rogers", role: "Republican nominee",
+            plan: "Has backed the tariffs. In October he called for an end to the Canada tariff fight" + s(14, 15),
+            quote: "\u201CCanada is not our enemy,\u201D but \u201Cthere are tariffs that have helped.\u201D" + s(12), lines: [] }
         ],
-        office: "Presidents set these tariffs using powers Congress gave the office, and in February 2026 the Supreme Court struck down the ones based on emergency powers. A senator votes on trade laws and can vote to limit those powers, but can’t set tariffs alone." + s(17, 18),
-        p: "The autoworkers’ union backs tariffs on low-wage countries, not a fight with Canada." + s(16),
+        diff: "Both keep some tariffs. El-Sayed wants them targeted, with unions at the table; Rogers wants the fight with Canada ended.",
+        office: "A senator votes on trade laws and can vote to limit a president\u2019s tariff powers, but can\u2019t set tariffs alone. In February 2026 the Supreme Court struck down the tariffs based on emergency powers." + s(17, 18),
         btn: "Practice it at a door" }
     ],
     door: [

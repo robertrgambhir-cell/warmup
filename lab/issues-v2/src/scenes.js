@@ -116,30 +116,65 @@
     }
   };
 
-  /* ---------- sort: shown by evidence, or not shown? (calibrating claims, used by every format) ---------- */
+  /* ---------- sort: one claim at a time, proven or not (calibrating claims, used by every format) ---------- */
   S.sort = {
     html: function (sc) {
-      return "<h2>" + sc.h + "</h2>" + (sc.p ? '<p class="small">' + sc.p + "</p>" : "") + '<div class="sort">' + sc.items.map(function (it, i) {
-        return '<div class="sitem" data-i="' + i + '"><p>' + it.t + '</p><div class="pick" role="group" aria-label="Is this shown by evidence?"><button type="button" class="k" data-a="k" aria-pressed="false">' + sc.labels[0] + '</button><button type="button" class="n" data-a="n" aria-pressed="false">' + sc.labels[1] + '</button></div><div class="why" hidden></div></div>';
-      }).join("") + "</div>";
+      return "<h2>" + sc.h + '</h2><div id="claim" class="grow" style="display:flex;flex-direction:column;gap:calc(12px * var(--k))"></div>';
     },
     mount: function (sc, ctx) {
-      var got = {};
-      ctx.lock("Sort all " + sc.items.length + " to keep going");
-      ctx.body.querySelectorAll(".sitem").forEach(function (el) {
-        var it = sc.items[+el.getAttribute("data-i")];
-        el.querySelectorAll(".pick button").forEach(function (b) {
+      var k = 0, box = document.getElementById("claim");
+      ctx.lock("Answer all " + sc.items.length + " to keep going");
+      function one() {
+        var it = sc.items[k];
+        box.innerHTML = '<p class="kick">Claim ' + (k + 1) + " of " + sc.items.length + '</p><p class="claim">\u201C' + it.t + '\u201D</p>' +
+          '<div class="tf" role="group" aria-label="Is this claim proven by evidence?"><button type="button" class="tfb k" data-a="k">' + WU.icon.check + "<span>" + sc.labels[0] + '</span></button><button type="button" class="tfb n" data-a="n">' + WU.icon.bang.replace("<svg", '<svg style="transform:rotate(180deg)"') + "<span>" + sc.labels[1] + '</span></button></div><div id="why"></div><div id="nx2"></div>';
+        box.querySelectorAll(".tfb").forEach(function (b) {
           b.onclick = function () {
             var a = b.getAttribute("data-a"), ok = a === it.a;
-            el.querySelectorAll(".pick button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
-            el.classList.toggle("ok", ok); el.classList.toggle("no", !ok);
-            var w = el.querySelector(".why"); w.hidden = false; w.innerHTML = "<b>" + (ok ? "Right. " : "Look again. ") + "</b>" + it.why;
-            if (ok) { got[el.getAttribute("data-i")] = true; el.querySelector(".pick").outerHTML = '<span class="chosen ' + a + '">' + WU.icon.check.replace("<svg", '<svg width="13" height="13"') + (a === "k" ? sc.labels[0] : sc.labels[1]) + "</span>"; }
-            if (Object.keys(got).length === sc.items.length) ctx.ready();
+            b.classList.add(ok ? "right" : "wrong");
+            document.getElementById("why").innerHTML = '<p class="say ' + (ok ? "good" : "bad") + '"><b>' + (ok ? "Right. " : "Not quite. ") + "</b>" + it.why + "</p>";
+            if (ok) {
+              box.querySelectorAll(".tfb").forEach(function (x) { x.disabled = true; });
+              if (k < sc.items.length - 1) { document.getElementById("nx2").innerHTML = '<button class="ghost" type="button" id="nc" style="width:100%">Next claim</button>'; document.getElementById("nc").onclick = function () { k++; one(); }; }
+              else ctx.ready();
+            }
             WU.fit();
           };
         });
-      });
+        WU.fit();
+      }
+      one();
+    }
+  };
+
+  /* ---------- choice: one candidate at a time, full width, same parts for both; then the difference ---------- */
+  S.choice = {
+    html: function (sc) {
+      var tabs = sc.cands.map(function (x, i) { return '<button type="button" role="tab" data-i="' + i + '" aria-selected="false"><span class="av ' + x.side + '" aria-hidden="true">' + x.ini + "</span><span><b>" + esc(x.short || x.name) + "</b><small>" + esc(x.role) + "</small></span></button>"; }).join("");
+      return "<h2>" + sc.h + '</h2><div class="ctabs" role="tablist" aria-label="The candidates">' + tabs + '</div><div class="cpanel" id="cpanel" role="tabpanel" aria-live="polite"></div><div id="cdiff"></div>' +
+        (sc.office ? '<div class="office">' + WU.icon.capitol + "<span>" + sc.office + "</span></div>" : "");
+    },
+    mount: function (sc, ctx) {
+      var seen = {}, panel = document.getElementById("cpanel");
+      ctx.lock("Tap both candidates to keep going");
+      function show(i) {
+        var c = sc.cands[i]; seen[i] = true;
+        ctx.body.querySelectorAll(".ctabs button").forEach(function (b) { b.setAttribute("aria-selected", String(+b.getAttribute("data-i") === i)); b.classList.toggle("on", +b.getAttribute("data-i") === i); });
+        panel.className = "cpanel " + c.side;
+        panel.innerHTML = '<p class="cplan">' + c.plan + "</p>" + (c.quote ? '<p class="cquote">' + c.quote + "</p>" : "") +
+          c.lines.map(function (l) { return '<div class="cline"><span>' + l.l + "</span><p>" + l.t + "</p></div>"; }).join("");
+        if (Object.keys(seen).length === sc.cands.length) {
+          document.getElementById("cdiff").innerHTML = '<p class="say good"><b>The difference: </b>' + sc.diff + "</p>";
+          ctx.ready();
+        } else {
+          var other = sc.cands[1 - i];
+          document.getElementById("cdiff").innerHTML = '<p class="do">' + WU.icon.hand + "<span>Now tap " + esc(other.short || other.name) + "</span></p>";
+          ctx.lock("Tap both candidates to keep going");
+        }
+        WU.fit();
+      }
+      ctx.body.querySelectorAll(".ctabs button").forEach(function (b) { b.onclick = function () { show(+b.getAttribute("data-i")); }; });
+      show(0);
     }
   };
 

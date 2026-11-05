@@ -65,13 +65,22 @@ const TYPE = {
       }
       else if (type === "apply") { await shot(`${id}-L${i}-apply-start`); const m = await p.evaluate(() => WU.app.lesson.learn[WU.app.i].cases.length); for (let c = 0; c < m; c++) { await solveOpts("#case"); if (c < m - 1) { await p.click("#nx"); await p.waitForTimeout(80); } } }
       else if (type === "bars") { if (await p.$(".opt")) { await shot(`${id}-L${i}-bars-start`); await solveOpts("#body"); } }
-      else if (type === "sort") { await shot(`${id}-L${i}-sort-start`); const ans = await p.evaluate(() => WU.app.lesson.learn[WU.app.i].items.map((x) => x.a)); for (let j = 0; j < ans.length; j++) { const wrong = ans[j] === "k" ? "n" : "k"; if (j === 2) await p.click(`.sitem[data-i="${j}"] button[data-a="${wrong}"]`); await p.click(`.sitem[data-i="${j}"] button[data-a="${ans[j]}"]`); } }
+      else if (type === "sort") { await shot(`${id}-L${i}-sort-start`); const ans = await p.evaluate(() => WU.app.lesson.learn[WU.app.i].items.map((x) => x.a)); for (let j = 0; j < ans.length; j++) { const wrong = ans[j] === "k" ? "n" : "k"; if (j === 1) await p.click(`.tfb[data-a="${wrong}"]`); await p.click(`.tfb[data-a="${ans[j]}"]`); if (j < ans.length - 1) await p.click("#nc"); } }
+      else if (type === "choice") { await shot(`${id}-L${i}-choice-start`); await p.click('.ctabs button[data-i="1"]'); }
       else if (type === "border") { await shot(`${id}-L${i}-border-start`); await p.click("#send"); await p.waitForTimeout(1400); }
       else if (type === "route") { await shot(`${id}-L${i}-route-start`); while (await p.$("#adv")) { await p.click("#adv"); await p.waitForTimeout(60); } }
       if (await locked()) log.push({ file: `${id}-L${i}`, problem: "button still locked after the interaction" });
       await shot(`${id}-L${i}-${type}`);
       await next();
     }
+    { /* the story bar goes back: the Learn chip, then an earlier segment, then forward again with no task to redo */
+      await p.click("#tolearn"); await p.waitForTimeout(150);
+      await p.click('#seg button.sg[data-i="2"]'); await p.waitForTimeout(150);
+      const back = await tag(); if (!/ 2$/.test(back)) log.push({ file: id + "-stepper", problem: "tapping the story bar did not go back (got " + back + ")" });
+      if (await locked()) log.push({ file: id + "-stepper", problem: "a finished screen locked again on the way back" });
+      await p.click('#seg button.sg[data-i="' + (L.length - 1) + '"]'); await p.waitForTimeout(150);
+      if (await locked()) log.push({ file: id + "-stepper", problem: "the last Learn screen locked again" });
+      await next(); }
     const D = await p.evaluate(() => WU.app.lesson.door.map((s) => s.type));
     for (let i = 0; i < D.length; i++) {
       const type = D[i], att = await p.evaluate(() => WU.app.lesson.door[WU.app.i].attempt);

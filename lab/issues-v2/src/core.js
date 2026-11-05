@@ -40,7 +40,7 @@
   function shell() {
     root = document.getElementById("wu");
     root.innerHTML = '<div class="stage"><div class="phone" id="phone"><div class="scr" id="scr">' +
-      '<div class="top"><button class="x" id="close" aria-label="Close and go to the lesson list">' + WU.icon.x + '</button><div class="seg" id="seg" aria-hidden="true"></div></div>' +
+      '<div class="top"><button class="x" id="close" aria-label="Close and go to the lesson list">' + WU.icon.x + '</button><div class="seg" id="seg" role="navigation" aria-label="Lesson progress"></div></div>' +
       '<main class="body" id="body" aria-live="polite"></main>' +
       '<div class="foot" id="foot"><button class="src" id="srcb" type="button">' + WU.icon.doc + 'Sources</button><button class="next" id="next" type="button"></button></div>' +
       '<div class="tag" id="tag"></div>' +
@@ -88,24 +88,34 @@
     WU.speak.stop();
     if (where === "home") { app.lesson = null; renderHome(); try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} return; }
     var L = WU.lessons[where]; if (!L) return renderHome();
-    app.lesson = L; app.part = "learn"; app.i = 0; app.st = { lesson: where };
+    app.lesson = L; app.part = "learn"; app.i = 0; app.st = { lesson: where }; app.reached = {}; app.passed = {};
     try { history.replaceState(null, "", "#" + where); } catch (e) {}
     show();
   };
   WU.next = function () {
     var L = app.lesson, list = app.part === "learn" ? L.learn : L.door;
+    app.passed = app.passed || {}; app.passed[app.part] = Math.max(app.passed[app.part] == null ? -1 : app.passed[app.part], app.i);
     if (app.i < list.length - 1) { app.i++; show(); return; }
     if (app.part === "learn") { app.part = "door"; app.i = 0; show(); return; }
     WU.go("home");
   };
   WU.jump = function (part, i) { app.part = part; app.i = i; show(); };
 
+  /* the story bar: one segment per screen, full or empty; tap any screen you've reached to go back to it */
   function bar() {
-    var L = app.lesson, nL = L.learn.length, nD = L.door.length, out = "";
-    if (app.part === "learn") { for (var a = 0; a < nL; a++) out += '<i class="' + (a <= app.i ? "full" : "") + '"></i>'; seg.className = "seg"; }
-    else { out = '<span class="chip-done">' + WU.icon.check.replace("<svg", '<svg width="11" height="11"') + "Learn</span>"; for (var b = 0; b < nD; b++) out += '<i class="' + (b <= app.i ? "full" : "") + '"></i>'; seg.className = "seg door"; }
+    var L = app.lesson, part = app.part, n = part === "learn" ? L.learn.length : L.door.length, out = "";
+    var reached = (app.reached = app.reached || {}), key = part;
+    reached[key] = Math.max(reached[key] || 0, app.i);
+    if (part === "door") out = '<button type="button" class="chip-done" id="tolearn" aria-label="Go back to Learn">' + WU.icon.check.replace("<svg", '<svg width="11" height="11"') + "Learn</button>";
+    for (var a = 0; a < n; a++) {
+      var full = a <= app.i, can = a <= reached[key] && a !== app.i;
+      out += '<button type="button" class="sg' + (full ? " full" : "") + '" data-i="' + a + '"' + (can ? ' aria-label="Go to screen ' + (a + 1) + '"' : ' disabled aria-hidden="true" tabindex="-1"') + "><i></i></button>";
+    }
+    seg.className = "seg" + (part === "door" ? " door" : "");
     seg.innerHTML = out;
-    seg.setAttribute("aria-label", (app.part === "learn" ? "Learn, screen " : "At the door, screen ") + (app.i + 1) + " of " + (app.part === "learn" ? nL : nD));
+    seg.removeAttribute("aria-hidden");
+    seg.querySelectorAll("button.sg:not([disabled])").forEach(function (b) { b.onclick = function () { WU.jump(part, +b.getAttribute("data-i")); }; });
+    var tl = document.getElementById("tolearn"); if (tl) tl.onclick = function () { WU.jump("learn", L.learn.length - 1); };
   }
 
   /* the scene's own controller calls ctx.ready(label) when its interaction is done, or ctx.lock(instruction) */
@@ -122,7 +132,8 @@
     var ctx = {
       L: L, sc: sc, st: app.st, body: body,
       ready: function (label) { nextBtn.removeAttribute("aria-disabled"); if (label) nextBtn.textContent = label; else nextBtn.textContent = sc.btn || "Continue"; WU.fit(); },
-      lock: function (instr) { nextBtn.setAttribute("aria-disabled", "true"); nextBtn.textContent = instr; },
+      revisit: app.passed && app.i <= (app.passed[app.part] == null ? -1 : app.passed[app.part]),
+      lock: function (instr) { if (app.passed && app.i <= (app.passed[app.part] == null ? -1 : app.passed[app.part])) return; /* a screen you already finished never locks again */ nextBtn.setAttribute("aria-disabled", "true"); nextBtn.textContent = instr; },
       label: function (t) { nextBtn.textContent = t; },
       onNext: function (fn) { app.onNext = fn; },
       next: WU.next

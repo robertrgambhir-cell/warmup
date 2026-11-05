@@ -146,7 +146,7 @@
         document.getElementById("bnext").innerHTML = "";
         var r = sc.reveal, g = ctx.st[r.key];
         var guess = g == null ? "" : '<p class="say ' + (g === r.right ? "good" : "info") + '"><b>You guessed “' + esc(r.opts[g]) + '.”</b> ' + (g === r.right ? r.yes : r.no) + "</p>";
-        var bar = '<div style="display:flex;flex-direction:column;gap:6px"><p class="small" style="margin:0">' + sc.who.lab + '</p><div style="display:flex;height:calc(20px * var(--k));border-radius:10px;overflow:hidden"><i style="display:block;width:' + sc.who.us + '%;background:#b3261e"></i><i style="display:block;flex:1;background:#c9cdd3"></i></div><p style="margin:0;font:800 calc(15px * var(--k))/1.2 var(--sans);color:#b3261e">' + sc.who.txt + "</p></div>";
+        var bar = '<div style="display:flex;flex-direction:column;gap:6px"><p class="small" style="margin:0">' + sc.who.lab + '</p><div class="split" aria-hidden="true"><i style="width:' + sc.who.us + '%"><b>' + sc.who.a + '</b></i><i></i></div><p class="split-b"><span></span>' + sc.who.b + "</p></div>";
         var opts = sc.next ? '<div class="nexts">' + sc.next.map(function (n) { return '<div><span class="ni">' + NEXT_ICON[n.i] + "</span><b>" + n.t + "</b></div>"; }).join("") + "</div>" : "";
         document.getElementById("bout").innerHTML = '<div style="display:flex;flex-direction:column;gap:12px">' + guess + "<p>" + sc.p + "</p>" + opts + bar + "</div>";
         ctx.st["sent_" + sc.key] = true;
