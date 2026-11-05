@@ -1,0 +1,1648 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Warmup Issue Lessons</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500;1,6..72,600&display=swap">
+<style>
+/* Warmup issue lessons, v2 prototype.
+   Layout concept: one phone-shaped column; a fixed top (close + story bar), a body that holds one scene and scales
+   to fit with no scrolling (one --k variable sets every size), and a fixed bottom row (Sources + the main button).
+   Single light look, like the live app. Tokens follow the v12 lesson screens (styles12.css) so the redesign can drop
+   into the app without a new visual language. */
+:root {
+  color-scheme: light;
+  --sans: "Figtree", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --ink: #3c3c3c; --body: #4b4b4b; --muted: #5a5a5a; --faint: #6b7178;
+  --line: #e5e5e5; --panel: #f4f6f8; --page: #ece7df; --white: #ffffff;
+  --green: #35b57c; --green-deep: #1b7a4d; --btn: #1f8455; --btn-edge: #145c3a; --btn-blue: #3567b8; --green-soft: #e7f6ee; --green-edge: #2a9465;
+  --red: #b3261e; --red-soft: #fbeceb;
+  --amber: #c27c12; --amber-fill: #f2b134; --amber-soft: #fdf3dc;
+  --blue: #2f6f9f; --blue-fill: #4a7fd1; --blue-soft: #e3eef7;
+  --dem: #2f5fa8; --rep: #b04a3a;
+  --clip: #fffdf8; --clip-line: #e4ddcf;
+  --focus: #1F4C91;
+  --k: 1;
+}
+* { box-sizing: border-box; }
+html, body, #wu { height: 100%; }
+body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+button { font-family: inherit; }
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+/* ---------- the stage: full screen on a phone, a phone frame on a laptop ---------- */
+.stage { height: 100%; display: flex; align-items: center; justify-content: center; padding: 0; }
+.phone { position: relative; width: 100%; height: 100%; background: var(--white); display: flex; flex-direction: column; overflow: hidden; }
+@media (min-width: 560px) and (min-height: 560px) {
+  .stage { padding: 18px 16px; }
+  .phone { width: 402px; height: min(874px, calc(100% - 4px)); border-radius: 34px; box-shadow: 0 22px 60px -28px rgba(40,30,10,.45), 0 0 0 1px rgba(0,0,0,.06); }
+}
+.scr { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column;
+  padding: calc(14px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
+
+/* top row: close + story bar (one segment per screen, full or empty) */
+.top { display: flex; align-items: center; gap: 12px; height: 26px; flex: none; }
+.x { border: 0; background: none; padding: 0; width: 26px; height: 26px; color: #9a9a9a; cursor: pointer; display: grid; place-items: center; border-radius: 8px; }
+.x svg { width: 18px; height: 18px; }
+.seg { display: flex; gap: 4px; flex: 1; min-width: 0; align-items: center; }
+.seg i { flex: 1; height: 5px; border-radius: 5px; background: var(--line); transition: background .25s; }
+.seg i.full { background: var(--green); }
+.seg.door i.full { background: var(--blue-fill); }
+.chip-done { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 8px; border-radius: 10px; background: var(--green-soft); color: var(--green-deep); font: 800 11px/1 var(--sans); }
+
+/* body: one scene, scaled to fit */
+.body { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: calc(14px * var(--k)); padding-top: calc(14px * var(--k)); }
+.body > * { flex: none; }
+.body.scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+.stack .col i.m { background: var(--amber-fill); }
+details > summary { list-style: revert; }
+.body .grow { flex: 1 1 auto; min-height: 0; }
+.kick { font: 800 calc(12px * var(--k))/1.2 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin: 0; }
+h1, h2 { margin: 0; font: 800 calc(24px * var(--k))/1.2 var(--sans); letter-spacing: -.01em; color: var(--ink); text-wrap: balance; }
+h1 { font-size: calc(27px * var(--k)); }
+.body p { margin: 0; font: 500 calc(16px * var(--k))/1.45 var(--sans); color: var(--body); text-wrap: pretty; }
+.body p.small { font-size: calc(14px * var(--k)); color: var(--muted); }
+.sup { font: 700 .55em/0 var(--sans); vertical-align: .9em; margin-left: 1px; color: inherit; }
+.pic { border-radius: 18px; padding: calc(14px * var(--k)) 12px; background: var(--panel); }
+.pic.plain { background: transparent; padding: 0; }
+.do { display: flex; align-items: center; gap: 8px; font: 700 calc(14px * var(--k))/1.3 var(--sans); color: var(--blue); }
+.do svg { width: 18px; height: 18px; flex: none; }
+.do.done { color: var(--green-deep); }
+
+/* bottom row: Sources (small) + the main button, which previews the next takeaway */
+.foot { flex: none; display: flex; gap: 10px; margin-top: 12px; }
+.src { flex: none; min-height: 54px; padding: 0 12px; border: 2px solid var(--line); border-bottom-width: 4px; background: #fff; border-radius: 16px; font: 800 13px/1 var(--sans); color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.src svg { width: 16px; height: 16px; }
+.next { flex: 1; min-width: 0; border: 0; border-radius: 16px; min-height: 54px; padding: 6px 12px 8px; text-wrap: balance; background: var(--btn); color: #fff; font: 800 15.5px/1.2 var(--sans); cursor: pointer; box-shadow: 0 4px 0 var(--btn-edge); transition: background .2s, box-shadow .2s, color .2s; }
+.next:active { transform: translateY(4px); box-shadow: none; }
+.next[aria-disabled="true"] { background: #e9ecef; color: #6b7178; box-shadow: 0 4px 0 #d4d8dd; cursor: default; }
+.next[aria-disabled="true"]:active { transform: none; box-shadow: 0 4px 0 #d4d8dd; }
+.next.blue { background: var(--btn-blue); box-shadow: 0 4px 0 #24497f; }
+.next.blue[aria-disabled="true"] { background: #e9ecef; color: #6b7178; box-shadow: 0 4px 0 #d4d8dd; }
+.ghost { border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 14px; background: #fff; color: var(--ink); font: 800 14px/1 var(--sans); min-height: 44px; padding: 0 14px; cursor: pointer; }
+.linkish { border: 0; background: none; color: var(--blue); font: 700 13.5px/1.3 var(--sans); padding: 6px 2px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+/* screen tag (Robert reviews by number) */
+.tag { position: absolute; right: 8px; bottom: calc(2px + env(safe-area-inset-bottom, 0px)); font: 700 9.5px/1 var(--sans); color: #b8bcc2; letter-spacing: .04em; pointer-events: none; }
+
+/* sources sheet */
+.sheet { position: absolute; inset: 0; background: rgba(0,0,0,.28); display: none; align-items: flex-end; z-index: 9; }
+.sheet.on { display: flex; }
+.sheet .card { width: 100%; background: #fff; border-radius: 22px 22px 0 0; padding: 18px 20px calc(22px + env(safe-area-inset-bottom, 0px)); max-height: 82%; overflow: auto; }
+.sheet h3 { margin: 0; font: 800 19px/1.2 var(--sans); }
+.sheet .note { margin: 4px 0 12px; font: 500 13.5px/1.35 var(--sans); color: var(--muted); }
+.sheet ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 9px; font: 500 14.5px/1.35 var(--sans); color: var(--body); }
+.sheet ol a { color: var(--blue); }
+.sheet .close { margin-top: 16px; width: 100%; }
+
+/* ---------- shared pieces ---------- */
+.race { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font: 700 calc(12.5px * var(--k))/1.3 var(--sans); color: var(--muted); }
+.race b { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 11px; background: var(--panel); color: var(--ink); font-weight: 800; }
+.fine { font: 500 calc(12px * var(--k))/1.35 var(--sans) !important; color: var(--faint) !important; }
+.quote { font: 500 calc(21px * var(--k))/1.3 var(--serif); color: var(--ink); margin: 0; text-wrap: pretty; }
+.quote::before { content: "\201C"; } .quote::after { content: "\201D"; }
+.who { font: 700 calc(13px * var(--k))/1.3 var(--sans); color: var(--muted); }
+.clip { display: flex; flex-direction: column; gap: 6px; padding: calc(12px * var(--k)) 14px; background: var(--clip); border: 1px solid var(--clip-line); border-radius: 6px; box-shadow: 0 6px 14px -10px rgba(60,40,10,.45); transform: rotate(-.6deg); }
+.clip .o { font: 600 italic 12.5px/1 var(--serif); color: #5b554d; }
+.clip .h { font: 600 calc(19px * var(--k))/1.22 var(--serif); color: #24211d; }
+.clip .d { font: 500 11.5px/1 var(--sans); color: #7a736a; }
+
+/* cover */
+.goals { display: flex; flex-direction: column; gap: calc(12px * var(--k)); }
+.goal { display: grid; grid-template-columns: calc(52px * var(--k)) 1fr; gap: 12px; align-items: center; }
+.goal .ic { width: calc(52px * var(--k)); height: calc(52px * var(--k)); border-radius: 14px; background: var(--panel); display: grid; place-items: center; }
+.goal .ic svg { width: 78%; height: 78%; }
+.goal p { font: 600 calc(15.5px * var(--k))/1.35 var(--sans) !important; color: var(--ink) !important; }
+.parts { display: flex; gap: 18px; font: 800 calc(14px * var(--k))/1.2 var(--sans); }
+.parts span { display: inline-flex; align-items: center; gap: 7px; }
+.parts .l { color: var(--green-deep); } .parts .d { color: var(--blue); }
+.parts svg { width: 20px; height: 20px; }
+.parts small { font-weight: 600; color: var(--muted); }
+
+/* options (predict, apply, check) */
+.opts { display: flex; flex-direction: column; gap: calc(8px * var(--k)); }
+.opt { text-align: left; width: 100%; min-height: calc(48px * var(--k)); padding: calc(10px * var(--k)) 14px; border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 14px; background: #fff; font: 700 calc(15px * var(--k))/1.3 var(--sans); color: var(--ink); cursor: pointer; display: flex; gap: 10px; align-items: center; }
+.opt .dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #c9cdd3; flex: none; display: grid; place-items: center; }
+.opt[aria-pressed="true"] { border-color: var(--blue-fill); background: var(--blue-soft); }
+.opt[aria-pressed="true"] .dot { border-color: var(--blue-fill); background: var(--blue-fill); box-shadow: inset 0 0 0 3px #fff; }
+.opt.right { border-color: var(--green); background: var(--green-soft); }
+.opt.right .dot { border-color: var(--green); background: var(--green); box-shadow: inset 0 0 0 3px #fff; }
+.opt.wrong { border-color: #e2a39e; background: var(--red-soft); }
+.opt.wrong .dot { border-color: var(--red); background: var(--red); box-shadow: inset 0 0 0 3px #fff; }
+.opt:disabled { cursor: default; }
+.say { border-radius: 14px; padding: calc(10px * var(--k)) 13px; font: 500 calc(14.5px * var(--k))/1.4 var(--sans); }
+.say.good { background: var(--green-soft); color: #1d5b3c; }
+.say.bad { background: var(--red-soft); color: #7a1c16; }
+.say.info { background: var(--blue-soft); color: #1f4466; }
+.say b { font-weight: 800; }
+
+/* ---------- Rule model: the income line ---------- */
+.ruler { display: flex; flex-direction: column; gap: calc(10px * var(--k)); }
+.ruler svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: none; }
+.ruler .zone-t { font: 800 13px var(--sans); }
+.ruler .tick { font: 600 11.5px var(--sans); fill: var(--muted); }
+.ruler .nm { font: 800 13px var(--sans); fill: var(--ink); }
+.ruler .handle { cursor: grab; }
+.ruler input[type=range] { width: 100%; margin: 0; accent-color: var(--blue-fill); height: 28px; }
+.readout { border-radius: 14px; padding: calc(11px * var(--k)) 13px; background: #fff; border: 2px solid var(--line); display: flex; flex-direction: column; gap: 4px; min-height: calc(84px * var(--k)); }
+.readout .amt { font: 800 calc(18px * var(--k))/1.15 var(--sans); color: var(--ink); }
+.readout .st { font: 700 calc(14.5px * var(--k))/1.35 var(--sans); }
+.readout .st.g { color: var(--green-deep); } .readout .st.a { color: #8a5608; } .readout .st.b { color: var(--blue); } .readout .st.r { color: var(--red); }
+.readout .sub { font: 500 calc(13.5px * var(--k))/1.35 var(--sans); color: var(--muted); }
+.who-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.who-row button { border: 2px solid var(--line); background: #fff; border-radius: 20px; min-height: 36px; padding: 0 12px; font: 800 13px/1 var(--sans); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.who-row button[aria-pressed="true"] { border-color: var(--blue-fill); background: var(--blue-soft); }
+.found { display: flex; gap: 6px; align-items: center; font: 700 calc(13px * var(--k))/1.2 var(--sans); color: var(--muted); flex-wrap: wrap; }
+.found i { width: 22px; height: 8px; border-radius: 4px; background: var(--line); }
+.found i.on { background: var(--green); }
+.toggle { display: grid; grid-template-columns: 1fr 1fr; background: var(--panel); border-radius: 14px; padding: 4px; gap: 4px; }
+.toggle button { border: 0; border-radius: 11px; min-height: 40px; font: 800 calc(14px * var(--k))/1.15 var(--sans); color: var(--muted); background: transparent; cursor: pointer; padding: 4px 6px; }
+.toggle button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+
+/* count of people */
+.count { display: flex; flex-direction: column; gap: calc(10px * var(--k)); }
+.count .lab { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.count .lab b { font: 800 calc(22px * var(--k))/1.1 var(--sans); }
+.count .lab b.r { color: var(--red); }
+.count .lab span { font: 600 calc(14px * var(--k))/1.2 var(--sans); color: var(--muted); }
+.count .ppl { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 5px 8px; width: min(100%, calc(300px * var(--k))); }
+.count .ppl svg { width: 100%; height: auto; display: block; }
+
+/* bars (expected vs got; jobs) */
+.hbars { display: flex; flex-direction: column; gap: calc(12px * var(--k)); }
+.hb { display: grid; grid-template-columns: 1fr auto; row-gap: 5px; column-gap: 10px; align-items: center; }
+.hb > span { grid-column: 1 / -1; font: 600 calc(13.5px * var(--k))/1.25 var(--sans); color: var(--muted); }
+.hb .t { height: calc(20px * var(--k)); border-radius: 11px; background: transparent; }
+.hb .t i { display: block; height: 100%; border-radius: 11px; }
+.hb b { font: 800 calc(18px * var(--k))/1 var(--sans); min-width: 72px; text-align: right; }
+
+/* compare: same rows for both candidates */
+.cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+.cmp .hd { display: flex; align-items: center; gap: 8px; padding-bottom: 8px; }
+.cmp .av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: #fff; font: 800 13px/1 var(--sans); flex: none; }
+.cmp .av.d { background: var(--dem); } .cmp .av.r { background: var(--rep); }
+.cmp .hd b { display: block; font: 800 calc(14px * var(--k))/1.15 var(--sans); color: var(--ink); }
+.cmp .hd small { display: block; font: 600 11.5px/1.2 var(--sans); color: var(--muted); }
+.cmp .rl { grid-column: 1 / -1; font: 800 calc(11px * var(--k))/1 var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--faint); padding: calc(9px * var(--k)) 0 5px; border-top: 1.5px solid var(--line); }
+.cmp .cell { font: 600 calc(13.5px * var(--k))/1.35 var(--sans); color: var(--ink); padding-bottom: 2px; }
+.cmp .cell q { font: 500 italic calc(14px * var(--k))/1.3 var(--serif); }
+.office { display: flex; gap: 10px; align-items: flex-start; border-radius: 14px; background: var(--amber-soft); padding: calc(10px * var(--k)) 12px; font: 600 calc(13.5px * var(--k))/1.4 var(--sans); color: #5f4208; }
+.office svg { width: 22px; height: 22px; flex: none; margin-top: 1px; }
+
+/* sort: known vs not shown */
+.sort { display: flex; flex-direction: column; gap: calc(8px * var(--k)); }
+.sitem { border: 2px solid var(--line); border-radius: 14px; padding: calc(9px * var(--k)) 11px; background: #fff; display: flex; flex-direction: column; gap: 8px; }
+.sitem p { font: 600 calc(14px * var(--k))/1.35 var(--sans) !important; color: var(--ink) !important; }
+.sitem .pick { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.sitem .pick button { min-height: 36px; border-radius: 10px; border: 2px solid var(--line); background: #fff; font: 800 12.5px/1.1 var(--sans); color: var(--muted); cursor: pointer; }
+.sitem .pick button[aria-pressed="true"].k { border-color: var(--green); background: var(--green-soft); color: var(--green-deep); }
+.sitem .pick button[aria-pressed="true"].n { border-color: var(--amber-fill); background: var(--amber-soft); color: #7a4d06; }
+.sitem .why { font: 500 calc(13px * var(--k))/1.35 var(--sans); color: var(--muted); }
+.sitem.ok { border-color: #bfe6cf; } .sitem.no { border-color: #f0c2bd; }
+
+/* ---------- Chain model: the route ---------- */
+.route svg { display: block; width: 100%; height: auto; overflow: visible; }
+.route .lbl { font: 800 12px var(--sans); fill: var(--muted); letter-spacing: .06em; }
+.route .step-t { font: 700 11.5px var(--sans); fill: var(--ink); }
+.cost { display: flex; flex-direction: column; gap: 6px; }
+.cost .bar { display: flex; height: calc(22px * var(--k)); border-radius: 8px; overflow: hidden; background: #fff; border: 2px solid var(--line); }
+.cost .bar i { display: block; height: 100%; border-right: 2px solid #fff; transition: width .4s; }
+.cost .bar i.w { background: #c9ced6; } .cost .bar i.t { background: var(--red); } .cost .bar i.m { background: var(--amber-fill); }
+.cost .key { display: flex; gap: 12px; flex-wrap: wrap; font: 700 calc(12px * var(--k))/1.2 var(--sans); color: var(--muted); }
+.cost .key span { display: inline-flex; align-items: center; gap: 5px; }
+.cost .key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.stack { display: flex; align-items: flex-end; gap: 10px; }
+.stack .col { display: flex; flex-direction: column-reverse; width: 46px; border-radius: 8px; overflow: hidden; border: 2px solid var(--line); background: #fff; min-height: 10px; }
+.stack .col i { display: block; height: calc(18px * var(--k)); background: #c9ced6; border-top: 2px solid #fff; }
+.stack .col i.t { background: var(--red); }
+.stack p { font: 600 calc(13.5px * var(--k))/1.35 var(--sans) !important; }
+
+/* ---------- At the door ---------- */
+.doorpic { border-radius: 18px; overflow: hidden; flex: none; background: #f4efe7; }
+.doorpic svg { display: block; width: 100%; height: auto; max-height: calc(210px * var(--k)); }
+.thread { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; min-height: 0; }
+.bub { max-width: 88%; border-radius: 16px; padding: 9px 12px; font: 500 calc(14.5px * var(--k))/1.4 var(--sans); }
+.bub small { display: block; font: 800 10.5px/1 var(--sans); letter-spacing: .07em; text-transform: uppercase; margin-bottom: 4px; opacity: .75; }
+.bub.v { background: var(--panel); color: var(--ink); align-self: flex-start; border-bottom-left-radius: 5px; }
+.bub.me { background: var(--blue-soft); color: #1f3550; align-self: flex-end; border-bottom-right-radius: 5px; }
+.bub.c { background: var(--green-soft); color: #1d4a33; align-self: flex-end; border-bottom-right-radius: 5px; }
+.bub .pt { display: inline; border-radius: 4px; padding: 0 2px; }
+.bub .pt[data-n]::after { content: attr(data-n); font: 800 9px/1 var(--sans); vertical-align: .7em; margin-left: 2px; color: var(--green-deep); }
+.speak { display: flex; flex-direction: column; gap: 8px; }
+.mic { display: flex; align-items: center; gap: 12px; border: 2px solid var(--line); border-radius: 16px; padding: 8px 10px; background: #fff; min-height: 58px; }
+.mic button.m { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--green); color: #fff; display: grid; place-items: center; cursor: pointer; flex: none; box-shadow: 0 3px 0 var(--green-deep); }
+.mic button.m.on { background: var(--red); box-shadow: 0 3px 0 #7a1c16; animation: pulse 1.2s infinite; }
+@keyframes pulse { 50% { transform: scale(1.06); } }
+.mic button.m svg { width: 20px; height: 20px; }
+.mic .live { flex: 1; min-width: 0; font: 500 calc(14px * var(--k))/1.35 var(--sans); color: var(--muted); }
+.typebox { width: 100%; min-height: 72px; resize: none; border: 2px solid var(--line); border-radius: 14px; padding: 10px 12px; font: 500 15px/1.4 var(--sans); color: var(--ink); }
+.row2 { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.mode { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px; border-radius: 12px; font: 800 11px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase; }
+.mode.ai { background: #ece6fb; color: #4b2c99; }
+.mode.qc { background: #eef0f2; color: #545b63; }
+.res { display: flex; flex-direction: column; gap: calc(8px * var(--k)); }
+.ri { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; }
+.ri .m { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; }
+.ri .m svg { width: 15px; height: 15px; }
+.ri.ok .m { background: var(--green); color: #fff; } .ri.no .m { background: #eceef1; color: #8a8f96; } .ri.flag .m { background: var(--red); color: #fff; }
+.ri b { display: block; font: 800 calc(14.5px * var(--k))/1.3 var(--sans); color: var(--ink); }
+.ri span { display: block; font: 500 calc(13px * var(--k))/1.35 var(--sans); color: var(--muted); }
+.ri span q { font: 500 italic 1.04em/1.3 var(--serif); color: #2c3a48; }
+.growth { display: grid; grid-template-columns: 1fr auto auto; gap: 6px 14px; align-items: center; font: 600 calc(13.5px * var(--k))/1.3 var(--sans); }
+.growth .h { font: 800 10.5px/1 var(--sans); letter-spacing: .07em; color: var(--faint); text-transform: uppercase; }
+.big-ok { display: flex; align-items: center; gap: 12px; }
+.big-ok .ring { width: 58px; height: 58px; border-radius: 50%; background: var(--green); display: grid; place-items: center; color: #fff; flex: none; }
+.big-ok .ring svg { width: 30px; height: 30px; }
+.miss { display: flex; flex-direction: column; gap: 8px; }
+.miss button { text-align: left; border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 14px; background: #fff; padding: 10px 12px; font: 600 calc(14.5px * var(--k))/1.4 var(--sans); color: var(--ink); cursor: pointer; }
+.miss button.wrong { border-color: var(--red); background: var(--red-soft); }
+.miss button.picked-ok { border-color: #e2a39e; }
+
+/* home */
+.home-h { font: 800 calc(26px * var(--k))/1.15 var(--sans); }
+.lrow { display: grid; grid-template-columns: calc(48px * var(--k)) 1fr; gap: 12px; align-items: center; text-align: left; width: 100%; border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 18px; background: #fff; padding: calc(10px * var(--k)) 12px; cursor: pointer; color: var(--ink); }
+.lrow .ic { width: calc(48px * var(--k)); height: calc(48px * var(--k)); border-radius: 15px; display: grid; place-items: center; }
+.lrow .ic svg { width: 32px; height: 32px; }
+.lrow b { display: block; font: 800 calc(16px * var(--k))/1.2 var(--sans); }
+.lrow .qq { display: block; font: 500 italic calc(14px * var(--k))/1.3 var(--serif); color: var(--body); margin-top: 3px; }
+.lrow .fm { display: inline-flex; margin-top: calc(6px * var(--k)); height: calc(21px * var(--k)); align-items: center; padding: 0 8px; border-radius: 11px; font: 800 11px/1 var(--sans); background: var(--panel); color: var(--muted); }
+.lrow.off { opacity: .55; cursor: default; border-bottom-width: 2px; }
+.lrow.off .qq { display: none; }
+.lrow.off b::after { content: " · not rebuilt yet"; font-weight: 600; color: var(--faint); font-size: 13px; }
+
+/* the door, as the warm-up draws it: open by default, the voter breathes and blinks (copied from the live app) */
+.doorpic svg.voter .fig-wrap { transition: transform 1.1s cubic-bezier(.3,.7,.2,1), opacity 1.1s ease; }
+.doorpic svg.voter .door-panel { transform-box: fill-box; transform-origin: right center; transform: scaleX(0.14); transition: transform .9s cubic-bezier(.3,.7,.2,1); }
+.doorpic svg.voter.shut .door-panel { transform: scaleX(1); }
+.doorpic svg.voter .fig { animation: wu-breathe 4.2s ease-in-out infinite; }
+.doorpic svg.voter .eyes { transform-box: fill-box; transform-origin: center; animation: wu-blink 5.2s infinite; }
+@keyframes wu-breathe { 50% { transform: translateY(1.4px); } }
+@keyframes wu-blink { 0%, 94%, 100% { transform: scaleY(1); } 96.5% { transform: scaleY(0.12); } }
+
+.nexts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.nexts > div { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; background: var(--panel); border-radius: 14px; padding: calc(10px * var(--k)) 6px; }
+.nexts .ni svg { width: calc(34px * var(--k)); height: calc(34px * var(--k)); display: block; }
+.nexts b { font: 800 calc(13px * var(--k))/1.25 var(--sans); color: var(--ink); }
+.sitem .chosen { align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 12px; font: 800 12px/1 var(--sans); }
+.sitem .chosen.k { background: var(--green-soft); color: var(--green-deep); } .sitem .chosen.n { background: var(--amber-soft); color: #7a4d06; }
+.sitem.ok { gap: 6px; }
+
+</style>
+</head>
+<body>
+<div id="wu"></div>
+<script>
+/* ===== core.js ===== */
+/* Warmup issue lessons v2: the engine.
+   A lesson is data (src/lessons/*.js). Each scene names a type; WU.scene[type] draws it and wires its interaction.
+   The engine owns the shell: the story bar, the bottom row, the sources sheet, scale-to-fit, the screen tag and
+   gating (a scene that asks the learner to do something keeps its button locked, with the instruction as its label,
+   until it's done). No framework, no build step at runtime, so it can be pasted into the single-file app. */
+(function () {
+  "use strict";
+  var WU = (window.WU = window.WU || {});
+  WU.scene = WU.scene || {};
+  WU.lessons = WU.lessons || {};
+  var Q = new URLSearchParams(location.search);
+  WU.fast = Q.has("fast");
+
+  WU.esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  /* a numbered source mark; numbers are per lesson, so the sheet and the end screen agree */
+  WU.sup = function () { return '<span class="sup">' + Array.prototype.slice.call(arguments).join(",") + "</span>"; };
+  WU.money = function (n) { return "$" + Math.round(n).toLocaleString("en-US"); };
+  WU.icon = {
+    x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>',
+    book: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C6.5 4 9.5 4 12 6c2.5-2 5.5-2 8-.5V19c-2.5-1.5-5.5-1.5-8 .5-2.5-2-5.5-2-8-.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 6v13.5" stroke="currentColor" stroke-width="2"/></svg>',
+    door: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4h12v17M3.5 21h17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="13" r="1.3" fill="currentColor"/></svg>',
+    doc: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 12h5M10 16h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    hand: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 013 0V10m0 0V4.5a1.5 1.5 0 013 0V10m0 0V6.5a1.5 1.5 0 013 0V14c0 4-2.5 7-6.5 7S6 19 4.5 15.5L3 12c-.6-1.4 1.3-2.4 2.2-1.2L7 13V8.5a1.5 1.5 0 013 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    dash: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12h10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
+    bang: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="12" cy="18.5" r="1.8" fill="currentColor"/></svg>',
+    mic: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0012 0M12 17v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    stop: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/></svg>',
+    play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>',
+    capitol: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20v-7M10 20v-7M14 20v-7M18 20v-7M4.5 13h15M12 4v2M7 13a5 5 0 0110 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  };
+
+  /* ---------- state ---------- */
+  var app = (WU.app = { lesson: null, part: "learn", i: 0, st: {} });
+  function store(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem("wu2:" + k) || "null"); localStorage.setItem("wu2:" + k, JSON.stringify(v)); } catch (e) { return null; } }
+  WU.store = store;
+
+  /* ---------- shell ---------- */
+  var root, scr, body, nextBtn, srcBtn, seg, tagEl, sheet;
+  function shell() {
+    root = document.getElementById("wu");
+    root.innerHTML = '<div class="stage"><div class="phone" id="phone"><div class="scr" id="scr">' +
+      '<div class="top"><button class="x" id="close" aria-label="Close and go to the lesson list">' + WU.icon.x + '</button><div class="seg" id="seg" aria-hidden="true"></div></div>' +
+      '<main class="body" id="body" aria-live="polite"></main>' +
+      '<div class="foot" id="foot"><button class="src" id="srcb" type="button">' + WU.icon.doc + 'Sources</button><button class="next" id="next" type="button"></button></div>' +
+      '<div class="tag" id="tag"></div>' +
+      '<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><div class="card"></div></div>' +
+      "</div></div></div>";
+    scr = document.getElementById("scr"); body = document.getElementById("body"); nextBtn = document.getElementById("next");
+    srcBtn = document.getElementById("srcb"); seg = document.getElementById("seg"); tagEl = document.getElementById("tag"); sheet = document.getElementById("sheet");
+    document.getElementById("close").onclick = function () { WU.speak.stop(); WU.go("home"); };
+    nextBtn.onclick = function () { if (nextBtn.getAttribute("aria-disabled") === "true") { nudge(); return; } if (app.onNext) app.onNext(); };
+    srcBtn.onclick = openSources;
+    sheet.onclick = function (e) { if (e.target === sheet) closeSheet(); };
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && sheet.classList.contains("on")) closeSheet(); });
+    window.addEventListener("resize", fit);
+  }
+  function nudge() { /* a locked button points at what to do */ var d = body.querySelector(".do:not(.done)"); if (d) { d.animate && d.animate([{ transform: "translateX(0)" }, { transform: "translateX(5px)" }, { transform: "translateX(-4px)" }, { transform: "translateX(0)" }], { duration: 280 }); } }
+
+  /* ---------- scale to fit: one variable sets every size, the largest that fits with no scrolling ---------- */
+  function fit() {
+    if (!body) return;
+    var k = 1.12, min = 0.74;
+    if (body.dataset.fallback) { body.classList.remove("scroll"); delete body.dataset.fallback; }
+    if (body.classList.contains("scroll")) { scr.style.setProperty("--k", 1); app.k = 1; return; }
+    scr.style.setProperty("--k", k);
+    var guard = 0;
+    while (body.scrollHeight > body.clientHeight + 1 && k > min && guard++ < 40) { k = Math.round((k - 0.02) * 100) / 100; scr.style.setProperty("--k", k); }
+    app.k = k;
+    /* last resort on very short screens: scroll rather than clip (the walk test reports every screen that does this) */
+    if (body.scrollHeight > body.clientHeight + 1) { body.classList.add("scroll"); body.dataset.fallback = "1"; }
+  }
+  WU.fit = function () { requestAnimationFrame(fit); };
+
+  /* ---------- sources sheet: numbered for this lesson; links on the last screen ---------- */
+  function openSources() {
+    var L = app.lesson, ids = app.srcIds || [];
+    if (!L || !ids.length) return;
+    var items = ids.map(function (n) { var s = L.sources[n - 1]; return "<li value=\"" + n + "\">" + WU.esc(s.t) + "</li>"; }).join("");
+    sheet.querySelector(".card").innerHTML = '<h3 id="sheet-h">Sources</h3><p class="note">Every number on this screen has a mark. Links are on the last screen.</p><ol>' + items + '</ol><button class="ghost close" type="button">Close</button>';
+    sheet.querySelector(".close").onclick = closeSheet;
+    sheet.classList.add("on"); sheet.querySelector(".close").focus();
+  }
+  function closeSheet() { sheet.classList.remove("on"); srcBtn.focus(); }
+
+  /* ---------- routing ---------- */
+  WU.go = function (where) {
+    WU.speak.stop();
+    if (where === "home") { app.lesson = null; renderHome(); try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} return; }
+    var L = WU.lessons[where]; if (!L) return renderHome();
+    app.lesson = L; app.part = "learn"; app.i = 0; app.st = { lesson: where };
+    try { history.replaceState(null, "", "#" + where); } catch (e) {}
+    show();
+  };
+  WU.next = function () {
+    var L = app.lesson, list = app.part === "learn" ? L.learn : L.door;
+    if (app.i < list.length - 1) { app.i++; show(); return; }
+    if (app.part === "learn") { app.part = "door"; app.i = 0; show(); return; }
+    WU.go("home");
+  };
+  WU.jump = function (part, i) { app.part = part; app.i = i; show(); };
+
+  function bar() {
+    var L = app.lesson, nL = L.learn.length, nD = L.door.length, out = "";
+    if (app.part === "learn") { for (var a = 0; a < nL; a++) out += '<i class="' + (a <= app.i ? "full" : "") + '"></i>'; seg.className = "seg"; }
+    else { out = '<span class="chip-done">' + WU.icon.check.replace("<svg", '<svg width="11" height="11"') + "Learn</span>"; for (var b = 0; b < nD; b++) out += '<i class="' + (b <= app.i ? "full" : "") + '"></i>'; seg.className = "seg door"; }
+    seg.innerHTML = out;
+    seg.setAttribute("aria-label", (app.part === "learn" ? "Learn, screen " : "At the door, screen ") + (app.i + 1) + " of " + (app.part === "learn" ? nL : nD));
+  }
+
+  /* the scene's own controller calls ctx.ready(label) when its interaction is done, or ctx.lock(instruction) */
+  function show() {
+    var L = app.lesson, list = app.part === "learn" ? L.learn : L.door, sc = list[app.i];
+    var draw = WU.scene[sc.type];
+    if (!draw) throw new Error("No scene type " + sc.type);
+    WU.speak.stop();
+    bar();
+    app.srcIds = sc.src || [];
+    srcBtn.hidden = !app.srcIds.length;
+    tagEl.textContent = L.tag + " " + (app.part === "learn" ? (app.i === 0 ? "Cover" : app.i) : "D" + (app.i + 1));
+    nextBtn.className = "next" + (app.part === "door" ? " blue" : "");
+    var ctx = {
+      L: L, sc: sc, st: app.st, body: body,
+      ready: function (label) { nextBtn.removeAttribute("aria-disabled"); if (label) nextBtn.textContent = label; else nextBtn.textContent = sc.btn || "Continue"; WU.fit(); },
+      lock: function (instr) { nextBtn.setAttribute("aria-disabled", "true"); nextBtn.textContent = instr; },
+      label: function (t) { nextBtn.textContent = t; },
+      onNext: function (fn) { app.onNext = fn; },
+      next: WU.next
+    };
+    app.onNext = WU.next;
+    body.classList.toggle("scroll", !!sc.scroll);
+    body.scrollTop = 0;
+    body.innerHTML = draw.html ? draw.html(sc, ctx) : "";
+    nextBtn.removeAttribute("aria-disabled");
+    nextBtn.textContent = sc.btn || "Continue";
+    if (draw.mount) draw.mount(sc, ctx);
+    fit();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    var h = body.querySelector("h1,h2"); if (h) { h.setAttribute("tabindex", "-1"); if (!WU.firstPaint) h.focus({ preventScroll: true }); }
+    WU.firstPaint = false;
+  }
+  WU.refit = fit;
+
+  /* ---------- home: the two rebuilt lessons, and the three still on the old design ---------- */
+  function renderHome() {
+    bodyHome();
+  }
+  function bodyHome() {
+    body.classList.remove("scroll");
+    seg.innerHTML = ""; seg.className = "seg"; tagEl.textContent = "Home"; srcBtn.hidden = true;
+    var rows = (WU.home || []).map(function (h) {
+      var on = !!WU.lessons[h.id];
+      return '<button class="lrow' + (on ? "" : " off") + '" ' + (on ? 'data-go="' + h.id + '"' : 'disabled aria-disabled="true"') + ' type="button"><span class="ic" style="background:' + h.color + '">' + h.icon + '</span><span><b>' + WU.esc(h.name) + '</b><span class="qq">“' + WU.esc(h.quote) + '”</span><span class="fm">' + WU.esc(h.format) + "</span></span></button>";
+    }).join("");
+    body.innerHTML = '<p class="kick">Warmup issue lessons · prototype</p><h1 class="home-h">Learn the issue, then explain it at the door</h1>' +
+      '<p class="small">Two lessons rebuilt on the new system. Each takes about five minutes. The other three are still on the old design.</p>' +
+      '<div style="display:flex;flex-direction:column;gap:10px">' + rows + "</div>" +
+      '<p class="fine">A review prototype, separate from the live Warmup app. Built by Warmup from public sources. Not affiliated with or approved by any campaign.</p>';
+    body.querySelectorAll("[data-go]").forEach(function (b) { b.onclick = function () { WU.go(b.getAttribute("data-go")); }; });
+    nextBtn.className = "next";
+    nextBtn.removeAttribute("aria-disabled");
+    nextBtn.textContent = "Start: health insurance";
+    app.onNext = function () { WU.go("health"); };
+    fit();
+  }
+
+  /* ---------- boot ---------- */
+  WU.firstPaint = true;
+  WU.boot = function () {
+    shell();
+    route();
+    window.addEventListener("hashchange", function () { var h = (location.hash || "").replace("#", ""); if (!app.lesson || h.indexOf(app.lesson.id) !== 0) route(); });
+  };
+  function route() {
+    var h = (location.hash || "").replace("#", "");
+    var m = /^(\w+?)(?:-(learn|door)(\d+))?$/.exec(h);
+    if (Q.get("lesson")) m = [null, Q.get("lesson"), Q.get("part") || "learn", Q.get("i") || "0"];
+    if (m && WU.lessons[m[1]]) { WU.go(m[1]); if (m[2]) WU.jump(m[2], +m[3] || 0); }
+    else renderHome();
+  }
+})();
+
+/* ===== art.js ===== */
+/* Warmup issue lessons v2: drawings.
+   figure() and doorScene() are copied from the warm-up lesson (door11.js), so the door looks the same as the live app.
+   The sisters and Samira are the live lesson's own drawings (brain/examples/maya-2026). */
+(function () {
+  "use strict";
+  var WU = (window.WU = window.WU || {});
+  var svgSeq = 0;
+  var MOUTH = {
+    neutral: "M152 165 Q160 167.5 168 165", smile: "M150 162 Q160 172.5 170 162",
+    open: "M151.5 162.5 Q160 176 168.5 162.5 Q160 165.5 151.5 162.5 Z", mid: "M153.5 163.5 Q160 170.5 166.5 163.5 Q160 165.5 153.5 163.5 Z"
+  };
+  var LOOKS = {
+    bri:    { skin: "#8a5a3c", shade: "#6f4630", style: "bob", hair: "#2a1d17", shirt: "#d99a2b", shirtShade: "#b67f1f" },
+    rosa:   { skin: "#C68E68", shade: "#A8724F", style: "long", hair: "#3A2418", shirt: "#3E7F6E", shirtShade: "#2F6556", badge: true },
+    samira: { skin: "#C99A72", shade: "#AB7E58", style: "wrap",  hair: "#5B6F8F", shirt: "#2F5F8F", shirtShade: "#264D74" },
+    ray:    { skin: "#E3B08C", shade: "#C4906C", style: "short", hair: "#6B6259", shirt: "#B5552B", shirtShade: "#934421", glasses: true }
+  };
+  var LOOKS2 = LOOKS;
+  var HOME2 = {
+    bri:    { kind: "house", wall: "#E3E6EC", texture: "boards", line: "#D3D8E0", door: "#2F6F7F", frame: "#FFFDF6", window: true, num: "52", extra: "plant" },
+    rosa:   { kind: "house", wall: "#EADCC8", texture: "boards", line: "#DCCBB3", door: "#7A3E5C", frame: "#FFFDF6", glass: true, window: true, num: "318", extra: "plant" },
+    samira: { kind: "apt", wall: "#E4DFEE", floor: "#CBC2DB", door: "#3F5E7A", frame: "#6C6580", num: "4C", extra: "plant" },
+    ray:    { kind: "house", wall: "#D8C7AA", texture: "boards", line: "#C7B493", door: "#2F4F3F", frame: "#F5EEE0", window: true, num: "1207", extra: "wood" }
+  };
+  function figure(p) {
+    var back = {
+      bob: '<path d="M128 152 C124 114 142 104 160 104 C178 104 196 114 192 152 C193 166 195 177 197 185 C187 188 182 178 182 166 L138 166 C138 178 133 188 123 185 C125 177 127 166 128 152 Z" fill="' + p.hair + '"/>',
+      long: '<path d="M126 150 C122 110 142 100 160 100 C178 100 198 110 194 150 L199 216 C189 217 184 198 182 172 L138 172 C136 198 131 217 121 216 Z" fill="' + p.hair + '"/>',
+      wrap: '<path d="M124 150 C120 108 142 98 160 98 C178 98 200 108 196 150 C198 172 204 190 212 204 C190 214 130 214 108 204 C116 190 122 172 124 150 Z" fill="' + p.hair + '"/>'
+    }[p.style] || "";
+    var capBob = '<path d="M133.5 135 C134 115 147 108 160 108 C174 108 187 116 186.5 136 C181 125 171 120 160 120 C150 120 140 125 133.5 135 Z" fill="' + p.hair + '"/>';
+    var front = {
+      bob: capBob, long: capBob,
+      short: '<path d="M134 134 C134 114 147 108 160 108 C173 108 186 114 186 134 C181 123 171 118.5 160 118.5 C149 118.5 139 123 134 134 Z" fill="' + p.hair + '"/>',
+      wrap: '<path fill-rule="evenodd" d="M128 141 A32 36 0 1 1 192 141 A32 36 0 1 1 128 141 Z M137 145 A23 27 0 1 0 183 145 A23 27 0 1 0 137 145 Z" fill="' + p.hair + '"/><path d="M134 163 C140 182 151 190 160 190 C169 190 180 182 186 163 C194 182 203 194 210 206 C186 216 134 216 110 206 C117 194 126 182 134 163 Z" fill="' + p.hair + '"/>'
+    }[p.style] || "";
+    var beard = p.beard ? '<path d="M136.5 148 C137.5 167 148 177.5 160 177.5 C172 177.5 182.5 167 183.5 148 C178.5 158 170.5 162.5 160 162.5 C149.5 162.5 141.5 158 136.5 148 Z" fill="' + p.hair + '"/>' : "";
+    var ears = p.style === "wrap" ? "" : '<ellipse cx="134" cy="143" rx="4.6" ry="7" fill="' + p.shade + '"/><ellipse cx="186" cy="143" rx="4.6" ry="7" fill="' + p.shade + '"/>';
+    return '<g class="fig">' + back +
+      '<path d="M108 248 C110 209 128 191 160 191 C192 191 210 209 212 248 Z" fill="' + p.shirt + '"/>' +
+      (p.flannel ? '<path d="M120 214 H200 M114 232 H206 M142 196 V248 M178 196 V248" stroke="' + p.shirtShade + '" stroke-width="3" opacity=".7"/>' : "") +
+      (p.badge ? '<rect x="178" y="207" width="12" height="16" rx="2" fill="#FCF8F2" stroke="' + p.shirtShade + '" stroke-width="1.5"/>' : "") +
+      '<rect x="151" y="164" width="18" height="32" rx="7" fill="' + p.shade + '"/>' + ears +
+      '<ellipse cx="160" cy="140" rx="26" ry="30" fill="' + p.skin + '"/>' + beard + front +
+      '<g stroke="' + (p.hair === "#DAD5CE" ? "#8E877F" : "#241A16") + '" stroke-width="2.6" stroke-linecap="round"><path class="brow brow-l" d="M143 131 L155 129.5"/><path class="brow brow-r" d="M165 129.5 L177 131"/></g>' +
+      '<g class="look"><g class="eyes"><ellipse cx="150" cy="142" rx="2.7" ry="3.3" fill="#1C1A24"/><ellipse cx="170" cy="142" rx="2.7" ry="3.3" fill="#1C1A24"/></g></g>' +
+      (p.glasses ? '<g fill="none" stroke="#3A302A" stroke-width="1.8"><circle cx="150" cy="142" r="7"/><circle cx="170" cy="142" r="7"/><path d="M157 141.5 Q160 139.5 163 141.5 M143 141 L135 139 M177 141 L185 139"/></g>' : "") +
+      '<path d="M160 146 Q157 154 161.5 156.5" fill="none" stroke="' + p.shade + '" stroke-width="2" stroke-linecap="round"/>' +
+      '<path class="mouth" d="' + MOUTH.neutral + '" fill="none" stroke="#45261F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>';
+  }
+  function doorScene(key, o) {
+    o = o || {};
+    var h = HOME2[key], id = "sc" + (svgSeq += 1), fig = figure(LOOKS2[key]), apt = h.kind === "apt";
+    var cls = ["voter", "main", o.shut ? "shut" : ""].join(" ").trim(), D = "M106 244 V62 H214 V244 Z", tex = "";
+    if (h.texture === "boards") tex = '<g stroke="' + h.line + '" stroke-width="1.5">' + [24, 48, 72, 96, 120, 144, 168, 192, 216].map(function (y) { return '<path d="M0 ' + y + ' H320"/>'; }).join("") + '</g>';
+    var base = apt ? '<rect y="196" width="320" height="44" fill="' + h.floor + '"/><path d="M0 196 H320" stroke="#00000014" stroke-width="3"/><circle cx="51" cy="81" r="24" fill="#F6C76B" fill-opacity="0.2"/><rect x="36" y="70" width="30" height="22" rx="4" fill="#F3EBDD" stroke="#CFC5B5" stroke-width="2"/>'
+      : '<circle cx="64" cy="90" r="24" fill="#F6C76B" fill-opacity="0.22"/><rect x="58" y="78" width="12" height="18" rx="3" fill="#3B3631"/><circle cx="64" cy="90" r="5" fill="#F6C76B"/>';
+    var win = h.window ? '<rect x="238" y="74" width="56" height="62" rx="3" fill="#EEF2F2" stroke="' + h.frame + '" stroke-width="5"/><path d="M266 74 V136 M238 105 H294" stroke="' + h.frame + '" stroke-width="3"/>' : "";
+    var extra = { plant: '<path d="M30 240 L36 206 H64 L70 240 Z" fill="#B8704F"/><circle cx="42" cy="198" r="12" fill="#5E8A5A"/><circle cx="58" cy="194" r="13" fill="#6B9A63"/><circle cx="50" cy="184" r="11" fill="#7AA86F"/>',
+      wood: '<g fill="#9C6B43" stroke="#7A5232" stroke-width="2"><circle cx="252" cy="226" r="9"/><circle cx="272" cy="226" r="9"/><circle cx="292" cy="226" r="9"/><circle cx="262" cy="209" r="9"/><circle cx="282" cy="209" r="9"/><circle cx="272" cy="192" r="9"/></g><g fill="#C9A27A"><circle cx="252" cy="226" r="4"/><circle cx="272" cy="226" r="4"/><circle cx="292" cy="226" r="4"/><circle cx="262" cy="209" r="4"/><circle cx="282" cy="209" r="4"/><circle cx="272" cy="192" r="4"/></g>' }[h.extra] || "";
+    var panel = apt ? '<rect x="122" y="80" width="76" height="66" rx="3" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="3"/><rect x="122" y="160" width="76" height="70" rx="3" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="3"/><circle cx="160" cy="100" r="3" fill="#2A2622"/><circle cx="198" cy="156" r="4.5" fill="#D9D2C4"/>'
+      : (h.glass ? '<rect x="128" y="78" width="64" height="40" rx="3" fill="#F3E3C4" fill-opacity="0.55"/><path d="M160 78 V118 M128 98 H192" stroke="' + h.door + '" stroke-width="3"/>' : '<rect x="124" y="78" width="72" height="56" rx="3" fill="none" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="3"/>') + '<rect x="124" y="140" width="72" height="84" rx="3" fill="none" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="3"/><circle cx="198" cy="160" r="4.5" fill="#F6C76B"/>';
+    var num = apt ? '<rect x="238" y="92" width="34" height="24" rx="4" fill="#3B3631"/><text x="255" y="109" text-anchor="middle" font-family="Figtree, sans-serif" font-weight="700" font-size="13" fill="#F3EBDD">' + h.num + '</text>'
+      : '<text x="64" y="134" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-size="15" fill="#3B3631">' + h.num + '</text>';
+    return '<svg class="' + cls + '" viewBox="0 0 320 240" role="img" aria-label="' + WU.esc(o.label || "A voter at the front door") + '"><defs><clipPath id="' + id + '"><path d="' + D + '"/></clipPath></defs>' +
+      '<rect width="320" height="240" fill="' + h.wall + '"/>' + tex + base + win + extra + '<path d="' + D + '" fill="#F7E7C8"/>' +
+      '<g clip-path="url(#' + id + ')"><g class="fig-wrap">' + fig + '</g></g><g class="door-panel"><path d="' + D + '" fill="' + h.door + '"/>' + panel + '</g>' +
+      '<path d="M102 244 V58 H218 V244" fill="none" stroke="' + h.frame + '" stroke-width="' + (apt ? 5 : 6) + '"/>' + num +
+      '<rect x="' + (apt ? 96 : 86) + '" y="' + (apt ? 232 : 234) + '" width="' + (apt ? 128 : 148) + '" height="' + (apt ? 8 : 6) + '" rx="2" fill="' + (apt ? "#8C6B52" : "#B9AE9C") + '"/></svg>';
+  }
+
+  WU.art = {
+    door: function (key, label) { return doorScene(key, { label: label }); },
+    talk: function (on) { var m = document.querySelector(".voter .mouth"); if (!m) return; clearInterval(WU.art._t); if (!on) { m.setAttribute("d", MOUTH.neutral); m.setAttribute("fill", "none"); return; } var k = 0; WU.art._t = setInterval(function () { k = (k + 1) % 3; var d = [MOUTH.open, MOUTH.mid, MOUTH.neutral][k]; m.setAttribute("d", d); m.setAttribute("fill", k < 2 ? "#45261F" : "none"); }, 140); },
+    ana: "<svg viewBox=\"0 0 110 184\" preserveAspectRatio=\"xMidYMax meet\" aria-hidden=\"true\"><rect x=\"46\" y=\"148\" width=\"7.5\" height=\"30\" rx=\"3.5\" fill=\"#2f2a33\"/><rect x=\"56.5\" y=\"148\" width=\"7.5\" height=\"30\" rx=\"3.5\" fill=\"#2f2a33\"/><rect x=\"41\" y=\"80\" width=\"28\" height=\"26\" rx=\"10\" fill=\"#2a1d17\"/><path d=\"M40 110 Q55 99 70 110 L75 152 L35 152 Z\" fill=\"#3f7f8c\"/><rect x=\"51.5\" y=\"93\" width=\"7\" height=\"11\" fill=\"#9a6644\"/><circle cx=\"55\" cy=\"84\" r=\"13.5\" fill=\"#2a1d17\"/><circle cx=\"55\" cy=\"87\" r=\"11.2\" fill=\"#9a6644\"/><path d=\"M43.4 86 Q46 72 57 73 Q66 74 66.8 85 Q58 79 43.4 86 Z\" fill=\"#2a1d17\"/><path d=\"M36 50 L36 122 Q36 129 30 128\" stroke=\"#4a4148\" stroke-width=\"2.6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M-4 52 Q36 6 76 52 Q66.0 45 56.0 52 Q46.0 45 36 52 Q26.0 45 16.0 52 Q6.0 45 -4 52 Z\" fill=\"#35b57c\"/><path d=\"M36 52 Q34 26 36 14\" stroke=\"#2a9465\" stroke-width=\"1.6\" fill=\"none\"/><path d=\"M67 111 L72 141\" stroke=\"#3f7f8c\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><path d=\"M67 111 L72 141\" stroke=\"rgba(0,0,0,.18)\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><circle cx=\"72\" cy=\"142\" r=\"3.6\" fill=\"#9a6644\"/><path d=\"M43 111 L36 118\" stroke=\"#3f7f8c\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><path d=\"M43 111 L36 118\" stroke=\"rgba(0,0,0,.18)\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><circle cx=\"36\" cy=\"119\" r=\"3.6\" fill=\"#9a6644\"/></svg>",
+    briRain: "<svg viewBox=\"0 0 110 184\" preserveAspectRatio=\"xMidYMax meet\" aria-hidden=\"true\"><ellipse cx=\"55\" cy=\"179\" rx=\"30\" ry=\"5\" fill=\"#9fb2c4\" opacity=\".55\"/><g fill=\"#a9b4bf\"><circle cx=\"41\" cy=\"30\" r=\"12\"/><circle cx=\"57\" cy=\"23\" r=\"15\"/><circle cx=\"72\" cy=\"31\" r=\"11\"/><rect x=\"31\" y=\"30\" width=\"50\" height=\"12\" rx=\"6\"/></g><path d=\"M33 54 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M47 52 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M63 55 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M77 53 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M31 70 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M39 64 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M73 66 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M80 74 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M29 86 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M81 90 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M34 100 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M77 104 l-3 9\" stroke=\"#6f9cc6\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><rect x=\"46\" y=\"148\" width=\"7.5\" height=\"30\" rx=\"3.5\" fill=\"#2f2a33\"/><rect x=\"56.5\" y=\"148\" width=\"7.5\" height=\"30\" rx=\"3.5\" fill=\"#2f2a33\"/><rect x=\"41\" y=\"80\" width=\"28\" height=\"26\" rx=\"10\" fill=\"#2a1d17\"/><path d=\"M40 110 Q55 99 70 110 L75 152 L35 152 Z\" fill=\"#d99a2b\"/><rect x=\"51.5\" y=\"93\" width=\"7\" height=\"11\" fill=\"#8a5a3c\"/><circle cx=\"55\" cy=\"84\" r=\"13.5\" fill=\"#2a1d17\"/><circle cx=\"55\" cy=\"87\" r=\"11.2\" fill=\"#8a5a3c\"/><path d=\"M43.4 86 Q46 72 57 73 Q66 74 66.8 85 Q58 79 43.4 86 Z\" fill=\"#2a1d17\"/><path d=\"M43 111 L38 141\" stroke=\"#d99a2b\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><path d=\"M43 111 L38 141\" stroke=\"rgba(0,0,0,.18)\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><circle cx=\"38\" cy=\"142\" r=\"3.6\" fill=\"#8a5a3c\"/><path d=\"M67 111 L72 141\" stroke=\"#d99a2b\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><path d=\"M67 111 L72 141\" stroke=\"rgba(0,0,0,.18)\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><circle cx=\"72\" cy=\"142\" r=\"3.6\" fill=\"#8a5a3c\"/></svg>",
+    briUmb: "<svg viewBox=\"0 0 110 184\" preserveAspectRatio=\"xMidYMax meet\" aria-hidden=\"true\"><ellipse cx=\"55\" cy=\"179\" rx=\"34\" ry=\"6\" fill=\"#bfe8d3\"/><rect x=\"46\" y=\"148\" width=\"7.5\" height=\"30\" rx=\"3.5\" fill=\"#2f2a33\"/><rect x=\"56.5\" y=\"148\" width=\"7.5\" height=\"30\" rx=\"3.5\" fill=\"#2f2a33\"/><rect x=\"41\" y=\"80\" width=\"28\" height=\"26\" rx=\"10\" fill=\"#2a1d17\"/><path d=\"M40 110 Q55 99 70 110 L75 152 L35 152 Z\" fill=\"#d99a2b\"/><rect x=\"51.5\" y=\"93\" width=\"7\" height=\"11\" fill=\"#8a5a3c\"/><circle cx=\"55\" cy=\"84\" r=\"13.5\" fill=\"#2a1d17\"/><circle cx=\"55\" cy=\"87\" r=\"11.2\" fill=\"#8a5a3c\"/><path d=\"M43.4 86 Q46 72 57 73 Q66 74 66.8 85 Q58 79 43.4 86 Z\" fill=\"#2a1d17\"/><path d=\"M74 50 L74 122 Q74 129 68 128\" stroke=\"#4a4148\" stroke-width=\"2.6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M34 52 Q74 6 114 52 Q104.0 45 94.0 52 Q84.0 45 74 52 Q64.0 45 54.0 52 Q44.0 45 34 52 Z\" fill=\"#35b57c\"/><path d=\"M74 52 Q72 26 74 14\" stroke=\"#2a9465\" stroke-width=\"1.6\" fill=\"none\"/><path d=\"M43 111 L38 141\" stroke=\"#d99a2b\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><path d=\"M43 111 L38 141\" stroke=\"rgba(0,0,0,.18)\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><circle cx=\"38\" cy=\"142\" r=\"3.6\" fill=\"#8a5a3c\"/><path d=\"M67 111 L74 118\" stroke=\"#d99a2b\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><path d=\"M67 111 L74 118\" stroke=\"rgba(0,0,0,.18)\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><circle cx=\"74\" cy=\"119\" r=\"3.6\" fill=\"#8a5a3c\"/></svg>",
+    dee: "<svg viewBox=\"0 0 110 184\" preserveAspectRatio=\"xMidYMax meet\" aria-hidden=\"true\"><rect x=\"46\" y=\"148\" width=\"7.5\" height=\"30\" rx=\"3.5\" fill=\"#2f2a33\"/><rect x=\"56.5\" y=\"148\" width=\"7.5\" height=\"30\" rx=\"3.5\" fill=\"#2f2a33\"/><rect x=\"41\" y=\"80\" width=\"28\" height=\"26\" rx=\"10\" fill=\"#2a1d17\"/><path d=\"M40 110 Q55 99 70 110 L75 152 L35 152 Z\" fill=\"#3a5a9b\"/><rect x=\"51.5\" y=\"93\" width=\"7\" height=\"11\" fill=\"#a8714d\"/><circle cx=\"55\" cy=\"84\" r=\"13.5\" fill=\"#2a1d17\"/><circle cx=\"55\" cy=\"87\" r=\"11.2\" fill=\"#a8714d\"/><path d=\"M43.4 86 Q46 72 57 73 Q66 74 66.8 85 Q58 79 43.4 86 Z\" fill=\"#2a1d17\"/><path d=\"M74 50 L74 122 Q74 129 68 128\" stroke=\"#4a4148\" stroke-width=\"2.6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M34 52 Q74 6 114 52 Q104.0 45 94.0 52 Q84.0 45 74 52 Q64.0 45 54.0 52 Q44.0 45 34 52 Z\" fill=\"#35b57c\"/><path d=\"M74 52 Q72 26 74 14\" stroke=\"#2a9465\" stroke-width=\"1.6\" fill=\"none\"/><path d=\"M43 111 L38 141\" stroke=\"#3a5a9b\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><path d=\"M43 111 L38 141\" stroke=\"rgba(0,0,0,.18)\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><circle cx=\"38\" cy=\"142\" r=\"3.6\" fill=\"#a8714d\"/><path d=\"M67 111 L74 118\" stroke=\"#3a5a9b\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><path d=\"M67 111 L74 118\" stroke=\"rgba(0,0,0,.18)\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><circle cx=\"74\" cy=\"119\" r=\"3.6\" fill=\"#a8714d\"/></svg>",
+    samiraG: "<g transform=\"translate(0 4)\"><rect x=\"33\" y=\"148\" width=\"7.5\" height=\"30\" rx=\"3.5\" fill=\"#2f2a33\"/><rect x=\"43.5\" y=\"148\" width=\"7.5\" height=\"30\" rx=\"3.5\" fill=\"#2f2a33\"/><path d=\"M27 110 Q42 99 57 110 L62 152 L22 152 Z\" fill=\"#2F5F8F\"/><circle cx=\"42\" cy=\"85\" r=\"14.5\" fill=\"#5B6F8F\"/><path d=\"M27.8 86 Q26 103 23 113 Q42 104 61 113 Q58 103 56.2 86 Z\" fill=\"#5B6F8F\"/><ellipse cx=\"42\" cy=\"88.5\" rx=\"9.4\" ry=\"10.6\" fill=\"#C99A72\"/><path d=\"M31.8 87 Q33 74.5 42 75 Q51 74.5 52.2 87 Q48 80 42 80 Q36 80 31.8 87 Z\" fill=\"#5B6F8F\"/><path d=\"M30 111 L25 141\" stroke=\"#2F5F8F\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><path d=\"M30 111 L25 141\" stroke=\"rgba(0,0,0,.18)\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><circle cx=\"25\" cy=\"142\" r=\"3.6\" fill=\"#C99A72\"/><path d=\"M54 111 L63 124\" stroke=\"#2F5F8F\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><path d=\"M54 111 L63 124\" stroke=\"rgba(0,0,0,.18)\" stroke-width=\"7.5\" stroke-linecap=\"round\"/><circle cx=\"63\" cy=\"125\" r=\"3.6\" fill=\"#C99A72\"/><g transform=\"translate(59 112) scale(0.8)\"><path d=\"M0 0 H24 Q27 0 27 3 V9 H9 V24 Q9 27 6 27 H3 Q0 27 0 24 Z\" fill=\"#9aa5b1\" stroke=\"#6f7b88\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/><circle cx=\"19\" cy=\"4.6\" r=\"2.2\" fill=\"#eef1f5\"/><circle cx=\"4.6\" cy=\"19\" r=\"2.2\" fill=\"#eef1f5\"/></g></g>"
+  };
+})();
+
+/* ===== scenes.js ===== */
+/* Warmup issue lessons v2: the shared scene library (every format uses these).
+   cover · ask (a voter's question + a guess) · count · bars (evidence, with a clipping) · apply (new cases) ·
+   sort (shown by evidence vs not shown) · compare (both candidates on the same rows, plus what the office can do). */
+(function () {
+  "use strict";
+  var WU = (window.WU = window.WU || {}), S = WU.scene, esc = WU.esc;
+
+  function opt(t, i) { return '<button class="opt" type="button" data-i="' + i + '" aria-pressed="false"><span class="dot" aria-hidden="true"></span><span>' + t + "</span></button>"; }
+  function doLine(t) { return '<p class="do">' + WU.icon.hand + "<span>" + t + "</span></p>"; }
+  WU.doLine = doLine;
+  WU.opt = opt;
+
+  /* ---------- cover: what you'll be able to do, the real race, the two parts ---------- */
+  S.cover = {
+    html: function (sc) {
+      var g = sc.goals.map(function (x) { return '<div class="goal"><span class="ic">' + x.icon + "</span><p>" + x.t + "</p></div>"; }).join("");
+      return '<div class="race">' + WU.icon.capitol.replace("<svg", '<svg width="16" height="16"') + "<b>" + esc(sc.race) + "</b><span>" + esc(sc.when) + "</span></div>" +
+        "<h1>" + sc.h + '</h1><div class="goals">' + g + "</div>" +
+        '<div class="parts"><span class="l">' + WU.icon.book + "Learn <small>about " + sc.times[0] + ' min</small></span><span class="d">' + WU.icon.door + "At the door <small>about " + sc.times[1] + " min</small></span></div>" +
+        '<p class="fine">' + sc.fine + "</p>";
+    }
+  };
+
+  /* ---------- ask: a voter's real question, then the learner commits to a guess (it's answered on a later screen) ---------- */
+  S.ask = {
+    html: function (sc) {
+      return '<div class="doorpic">' + WU.art.door(sc.voter, sc.who) + "</div>" +
+        '<div><p class="quote">' + esc(sc.quote) + '</p><p class="who" style="margin-top:6px">' + esc(sc.who) + "</p></div>" +
+        "<h2>" + sc.q + '</h2><div class="opts">' + sc.opts.map(opt).join("") + '</div><div id="after"></div>';
+    },
+    mount: function (sc, ctx) {
+      ctx.lock("Make a guess to keep going");
+      var prev = ctx.st[sc.key];
+      ctx.body.querySelectorAll(".opt").forEach(function (b) {
+        b.onclick = function () {
+          ctx.body.querySelectorAll(".opt").forEach(function (o) { o.setAttribute("aria-pressed", "false"); });
+          b.setAttribute("aria-pressed", "true");
+          ctx.st[sc.key] = +b.getAttribute("data-i");
+          document.getElementById("after").innerHTML = '<p class="say info">' + sc.after + "</p>";
+          ctx.ready();
+        };
+        if (prev === +b.getAttribute("data-i")) b.click();
+      });
+    }
+  };
+
+  /* ---------- count: one big number, one familiar comparison, drawn to scale ---------- */
+  function person(c) { return '<svg viewBox="0 0 20 34" aria-hidden="true"><circle cx="10" cy="7" r="5.5" fill="' + c + '"/><path d="M2.5 33 V20 Q2.5 14 10 14 Q17.5 14 17.5 20 V33 Z" fill="' + c + '"/></svg>'; }
+  S.count = {
+    html: function (sc) {
+      function row(n, c) { var o = ""; for (var i = 0; i < n; i++) o += person(c); return '<div class="ppl">' + o + "</div>"; }
+      return "<h2>" + sc.h + '</h2><div class="pic"><div class="count" role="img" aria-label="' + esc(sc.alt) + '">' +
+        '<div class="lab"><b class="r">' + sc.a.big + "</b><span>" + sc.a.lab + "</span></div>" + row(sc.a.n, "#b3261e") +
+        '<div class="lab"><b>' + sc.b.big + "</b><span>" + sc.b.lab + "</span></div>" + row(sc.b.n, "#a7adb5") +
+        '<p class="small" style="margin:0">' + sc.unit + "</p></div></div><p>" + sc.p + "</p>";
+    }
+  };
+
+  /* ---------- bars: evidence drawn to scale, with an optional newspaper clipping ---------- */
+  S.bars = {
+    html: function (sc) {
+      var max = Math.max.apply(null, sc.bars.map(function (b) { return b.v; }));
+      var bars = sc.bars.map(function (b) {
+        var w = Math.max(2, (b.v / max) * 100);
+        var fill = b.dash ? "border:2px dashed #a7a29a;background:transparent" : "background:" + b.c;
+        return '<div class="hb"><span>' + b.lab + '</span><div class="t"><i style="width:' + w + "%;" + fill + '"></i></div><b style="color:' + (b.dash ? "var(--ink)" : b.c) + '">' + b.txt + "</b></div>";
+      }).join("");
+      var clip = sc.clip ? '<div class="clip" role="img" aria-label="Headline from ' + esc(sc.clip.o) + ": " + esc(sc.clip.h) + '"><span class="o">' + sc.clip.o + '</span><span class="h">' + sc.clip.h + '</span><span class="d">' + sc.clip.d + "</span></div>" : "";
+      return "<h2>" + sc.h + "</h2>" + (sc.clipFirst ? clip : "") + '<div class="pic"><div class="hbars" role="img" aria-label="' + esc(sc.alt) + '">' + bars + "</div></div>" + (sc.clipFirst ? "" : clip) + (sc.p ? "<p>" + sc.p + "</p>" : "") + (sc.q ? '<h2 style="font-size:calc(18px * var(--k))">' + sc.q.t + '</h2><div class="opts">' + sc.q.opts.map(function (o, i) { return opt(o.t, i); }).join("") + '</div><div id="qa"></div>' : "");
+    },
+    mount: function (sc, ctx) { if (sc.q) checkOne(sc.q, ctx, ctx.body); }
+  };
+
+  /* one multiple-choice question that must end on the right answer; wrong picks explain and stay open */
+  function checkOne(q, ctx, scope, done) {
+    if (!done) ctx.lock(q.lock || "Answer to keep going");
+    var first = true, out = scope.querySelector("#qa");
+    scope.querySelectorAll(".opt").forEach(function (b) {
+      b.onclick = function () {
+        var o = q.opts[+b.getAttribute("data-i")];
+        b.classList.add(o.ok ? "right" : "wrong");
+        out.innerHTML = '<p class="say ' + (o.ok ? "good" : "bad") + '"><b>' + (o.ok ? (first ? "Right. " : "That's it. ") : "Not quite. ") + "</b>" + o.why + "</p>";
+        if (o.ok) { scope.querySelectorAll(".opt").forEach(function (x) { x.disabled = true; }); if (done) done(first); else ctx.ready(); }
+        first = false; WU.fit();
+      };
+    });
+  }
+  WU.checkOne = checkOne;
+
+  /* ---------- apply: the same idea on new cases, one at a time ---------- */
+  S.apply = {
+    html: function (sc) {
+      return "<h2>" + sc.h + "</h2>" + (sc.p ? "<p>" + sc.p + "</p>" : "") + '<div id="case"></div>';
+    },
+    mount: function (sc, ctx) {
+      var k = 0, rightFirst = 0, box = document.getElementById("case");
+      ctx.lock("Answer all " + sc.cases.length + " to keep going");
+      function one() {
+        var c = sc.cases[k];
+        box.innerHTML = '<p class="kick" style="margin-bottom:6px">' + (k + 1) + " of " + sc.cases.length + "</p>" + (c.pic ? '<div class="pic plain" style="margin-bottom:8px">' + c.pic(ctx) + "</div>" : "") +
+          '<h2 style="font-size:calc(18.5px * var(--k));margin-bottom:10px">' + c.q + '</h2><div class="opts">' + c.opts.map(function (o, i) { return opt(o.t, i); }).join("") + '</div><div id="qa" style="margin-top:8px"></div><div id="more" style="margin-top:8px"></div>';
+        checkOne(c, ctx, box, function (first) {
+          if (first) rightFirst++;
+          if (c.after) c.after(box, ctx);
+          if (k < sc.cases.length - 1) {
+            document.getElementById("more").innerHTML = '<button class="ghost" type="button" id="nx">Next case</button>';
+            document.getElementById("nx").onclick = function () { k++; one(); };
+          } else { ctx.st[sc.key] = rightFirst; ctx.ready(); }
+          WU.fit();
+        });
+        WU.fit();
+      }
+      one();
+    }
+  };
+
+  /* ---------- sort: shown by evidence, or not shown? (calibrating claims, used by every format) ---------- */
+  S.sort = {
+    html: function (sc) {
+      return "<h2>" + sc.h + "</h2>" + (sc.p ? '<p class="small">' + sc.p + "</p>" : "") + '<div class="sort">' + sc.items.map(function (it, i) {
+        return '<div class="sitem" data-i="' + i + '"><p>' + it.t + '</p><div class="pick" role="group" aria-label="Is this shown by evidence?"><button type="button" class="k" data-a="k" aria-pressed="false">' + sc.labels[0] + '</button><button type="button" class="n" data-a="n" aria-pressed="false">' + sc.labels[1] + '</button></div><div class="why" hidden></div></div>';
+      }).join("") + "</div>";
+    },
+    mount: function (sc, ctx) {
+      var got = {};
+      ctx.lock("Sort all " + sc.items.length + " to keep going");
+      ctx.body.querySelectorAll(".sitem").forEach(function (el) {
+        var it = sc.items[+el.getAttribute("data-i")];
+        el.querySelectorAll(".pick button").forEach(function (b) {
+          b.onclick = function () {
+            var a = b.getAttribute("data-a"), ok = a === it.a;
+            el.querySelectorAll(".pick button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+            el.classList.toggle("ok", ok); el.classList.toggle("no", !ok);
+            var w = el.querySelector(".why"); w.hidden = false; w.innerHTML = "<b>" + (ok ? "Right. " : "Look again. ") + "</b>" + it.why;
+            if (ok) { got[el.getAttribute("data-i")] = true; el.querySelector(".pick").outerHTML = '<span class="chosen ' + a + '">' + WU.icon.check.replace("<svg", '<svg width="13" height="13"') + (a === "k" ? sc.labels[0] : sc.labels[1]) + "</span>"; }
+            if (Object.keys(got).length === sc.items.length) ctx.ready();
+            WU.fit();
+          };
+        });
+      });
+    }
+  };
+
+  /* ---------- compare: the same rows for both candidates, then what the office can and can't do ---------- */
+  S.compare = {
+    html: function (sc) {
+      var c = sc.cands;
+      var head = c.map(function (x) { return '<div class="hd"><span class="av ' + x.side + '" aria-hidden="true">' + x.ini + "</span><span><b>" + esc(x.name) + "</b><small>" + esc(x.role) + "</small></span></div>"; }).join("");
+      var rows = sc.rows.map(function (r) { return '<div class="rl">' + r.l + '</div><div class="cell">' + r.d + '</div><div class="cell">' + r.r + "</div>"; }).join("");
+      return "<h2>" + sc.h + '</h2><div class="cmp" role="table" aria-label="Where the two candidates stand, row by row">' + head + rows + "</div>" +
+        (sc.office ? '<div class="office">' + WU.icon.capitol + "<span>" + sc.office + "</span></div>" : "") + (sc.p ? '<p class="small">' + sc.p + "</p>" : "");
+    }
+  };
+})();
+
+/* ===== models.js ===== */
+/* Warmup issue lessons v2: the interactive models.
+   Rule format ("Who qualifies?"): the income line. Drag a household along it, see which zone it lands in, flip one
+   condition (a different law) and watch the zones move.
+   Chain format ("What causes what?"): the border crossing and the route. Send goods across, see who pays and when;
+   follow one part across the border and watch costs pile up where a tariff can apply. */
+(function () {
+  "use strict";
+  var WU = (window.WU = window.WU || {}), S = WU.scene, esc = WU.esc;
+  var FILL = { g: "#bfe9d3", r: "#f6d5d1", b: "#cfe0f5", a: "#fbe3b0" }, INK = { g: "#1b7a4d", r: "#b3261e", b: "#2f6f9f", a: "#8a5608" };
+
+  /* ---------- the income line ---------- */
+  function zoneAt(zs, v) { for (var i = 0; i < zs.length; i++) if (v < zs[i].to) return i; return zs.length - 1; }
+  function nest(svg, x, y, w, h) { return svg.replace("<svg ", '<svg x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" '); }
+  function rulerSVG(R, world, v, o) {
+    o = o || {};
+    var W = 360, X = function (n) { return 8 + (Math.min(n, R.max) / R.max) * (W - 16); }, zs = R.worlds[world];
+    var mini = !!o.mini, top = mini ? 6 : 88, bh = mini ? 20 : 34, out = "", from = 0, id = "rc" + Math.random().toString(36).slice(2, 7);
+    out += '<defs><clipPath id="' + id + '"><rect x="8" y="' + top + '" width="' + (W - 16) + '" height="' + bh + '" rx="' + (mini ? 6 : 9) + '"/></clipPath></defs><g clip-path="url(#' + id + ')">';
+    zs.forEach(function (z) {
+      var a = X(from), b = X(Math.min(z.to, R.max));
+      out += '<rect x="' + a + '" y="' + top + '" width="' + Math.max(0, b - a) + '" height="' + bh + '" fill="' + FILL[z.c] + '"/>';
+      if (!mini) { var nm = (b - a) > z.name.length * 7.4 + 14 ? z.name : ((b - a) > (z.short || "").length * 7.4 + 10 ? z.short : ""); if (nm) out += '<text class="zone-t" x="' + (a + b) / 2 + '" y="' + (top + bh / 2 + 4.5) + '" text-anchor="middle" fill="' + INK[z.c] + '" stroke="' + FILL[z.c] + '" stroke-width="4" paint-order="stroke">' + esc(nm) + "</text>"; }
+      from = z.to;
+    });
+    out += "</g>";
+    /* the zone edges are the numbers to remember, so they get the labels; plus $0 and the end of the line */
+    var ly = top + bh + (mini ? 14 : 17), lab = '<text class="tick" x="8" y="' + ly + '">$0</text>';
+    zs.forEach(function (z) {
+      if (z.to >= R.max) return;
+      var x = X(z.to);
+      out += '<path d="M' + x + " " + (top - 3) + " V" + (top + bh + 3) + '" stroke="' + INK[z.c] + '" stroke-width="2"/>';
+      lab += '<text class="tick" x="' + x + '" y="' + ly + '" text-anchor="middle" style="font-weight:800;font-size:' + (mini ? 11 : 12.5) + "px;fill:" + INK[z.c] + '">' + esc(z.edge || WU.money(z.to)) + "</text>";
+    });
+    var lastEdge = zs.filter(function (z) { return z.to < R.max; }).map(function (z) { return X(z.to); }).pop() || 0;
+    if (!mini && W - 8 - lastEdge > 90) lab += '<text class="tick" x="' + (W - 8) + '" y="' + ly + '" text-anchor="end">$' + R.max / 1000 + "k a year</text>";
+    var ppl = "";
+    if (!mini) (R.people || []).forEach(function (p) {
+      var art = typeof p.art === "function" ? p.art(world) : p.art, x = X(p.v), near = Math.abs(p.v - v) <= 600;
+      ppl += nest(art, x - 21, 0, 42, 70) + '<text class="nm" x="' + x + '" y="' + (top - 6) + '" text-anchor="middle"' + (near ? ' style="fill:#2f5fa8"' : "") + ">" + esc(p.name) + "</text>";
+    });
+    var mx = X(v), mk = '<g class="handle" pointer-events="none"><path d="M' + mx + " " + (top - 5) + " V" + (top + bh + 5) + '" stroke="#262320" stroke-width="3" stroke-linecap="round"/><circle cx="' + mx + '" cy="' + (top + bh + (mini ? 0 : 1)) + '" r="' + (mini ? 6 : 8) + '" fill="#fff" stroke="#262320" stroke-width="3"/></g>';
+    var H = ly + 6;
+    return '<svg viewBox="0 0 ' + W + " " + H + '" aria-hidden="true">' + ppl + out + lab + mk + "</svg>";
+  }
+  WU.rulerSVG = rulerSVG;
+
+  function rulerBlock(sc) {
+    var R = sc.ruler;
+    return '<div class="ruler">' + (sc.toggle ? '<div class="toggle" role="group" aria-label="Which rules">' + sc.toggle.map(function (t, i) { return '<button type="button" data-w="' + t.w + '" aria-pressed="' + (i === 0) + '">' + t.t + "</button>"; }).join("") + "</div>" : "") +
+      '<div class="pic plain" id="rsvg"></div>' +
+      '<label class="sr" for="rng">Yearly income for ' + esc(R.family) + '</label><input id="rng" type="range" min="0" max="' + R.max + '" step="250" value="' + sc.start + '">' +
+      '<div class="who-row">' + (R.people || []).map(function (p) { return '<button type="button" data-v="' + p.v + '" aria-pressed="false">' + esc(p.name) + " · " + WU.money(p.v) + "</button>"; }).join("") + "</div>" +
+      '<div class="readout" id="read" aria-live="polite"></div></div>';
+  }
+
+  S.ruler = {
+    html: function (sc) { return "<h2>" + sc.h + "</h2>" + (sc.p ? '<p class="small">' + sc.p + "</p>" : "") + rulerBlock(sc) + '<div id="task"></div>'; },
+    mount: function (sc, ctx) {
+      var R = sc.ruler, world = sc.toggle ? sc.toggle[0].w : "today", v = sc.start, seen = {}, flipped = false;
+      var svgBox = document.getElementById("rsvg"), rng = document.getElementById("rng"), read = document.getElementById("read"), task = document.getElementById("task");
+      function person() { var p = null; (R.people || []).forEach(function (q) { if (Math.abs(q.v - v) <= 600) p = q; }); return p; }
+      function draw() {
+        var zs = R.worlds[world], zi = zoneAt(zs, v), z = zs[zi], p = person();
+        svgBox.innerHTML = rulerSVG(R, world, v);
+        var st = p && p.read && p.read[world] ? p.read[world] : z.read;
+        read.innerHTML = '<span class="amt">' + (p ? esc(p.name) + " · " : "") + WU.money(v) + " a year</span>" +
+          '<span class="st ' + z.c + '">' + st[0] + "</span>" + (st[1] ? '<span class="sub">' + st[1] + "</span>" : "");
+        (ctx.body.querySelectorAll(".who-row button") || []).forEach(function (b) { b.setAttribute("aria-pressed", String(p && +b.getAttribute("data-v") === p.v)); });
+        rng.setAttribute("aria-valuetext", WU.money(v) + " a year: " + z.name);
+        seen[world + zi] = true;
+        progress();
+      }
+      function progress() {
+        if (sc.task === "zones") {
+          var n = R.worlds.today.length, got = 0; for (var i = 0; i < n; i++) if (seen["today" + i]) got++;
+          var dots = ""; for (var j = 0; j < n; j++) dots += '<i class="' + (seen["today" + j] ? "on" : "") + '"></i>';
+          task.innerHTML = '<p class="found' + '">' + dots + "<span>" + (got < n ? "Zones found: " + got + " of " + n + ". Drag the line or tap a sister." : "All three zones found.") + "</span></p>" + (got === n && sc.reveal ? reveal() : "");
+          if (got === n) ctx.ready(); else ctx.lock("Find all three zones to keep going");
+        } else if (sc.task === "flip") {
+          task.innerHTML = flipped ? '<p class="say good">' + sc.flipped + "</p>" : WU.doLine(sc.doText);
+          if (flipped) ctx.ready(); else ctx.lock(sc.lockText || "Flip the switch to keep going");
+        }
+        WU.fit();
+      }
+      function reveal() {
+        var r = sc.reveal, g = ctx.st[r.key];
+        if (g == null) return '<p class="say info">' + r.none + "</p>";
+        return '<p class="say ' + (g === r.right ? "good" : "info") + '"><b>You guessed “' + esc(r.opts[g]) + '.”</b> ' + (g === r.right ? r.yes : r.no) + "</p>";
+      }
+      function set(n) { v = Math.max(0, Math.min(R.max, Math.round(n / 250) * 250)); rng.value = v; draw(); }
+      rng.oninput = function () { set(+rng.value); };
+      ctx.body.querySelectorAll(".who-row button").forEach(function (b) { b.onclick = function () { set(+b.getAttribute("data-v")); }; });
+      ctx.body.querySelectorAll(".toggle button").forEach(function (b) {
+        b.onclick = function () {
+          world = b.getAttribute("data-w");
+          ctx.body.querySelectorAll(".toggle button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+          if (world !== sc.toggle[0].w) flipped = true;
+          draw();
+        };
+      });
+      /* drag on the drawing itself */
+      var dragging = false;
+      function at(e) { var r = svgBox.getBoundingClientRect(); var x = (e.clientX - r.left) / r.width * 360; set(((x - 6) / 348) * R.max); }
+      svgBox.addEventListener("pointerdown", function (e) { dragging = true; svgBox.setPointerCapture && svgBox.setPointerCapture(e.pointerId); at(e); });
+      svgBox.addEventListener("pointermove", function (e) { if (dragging) at(e); });
+      svgBox.addEventListener("pointerup", function () { dragging = false; });
+      svgBox.addEventListener("pointercancel", function () { dragging = false; });
+      svgBox.style.touchAction = "none";
+      draw();
+    }
+  };
+
+  /* ---------- the border crossing: where a tariff is charged and who pays it first ---------- */
+  var COIL = '<g><ellipse cx="0" cy="0" rx="17" ry="17" fill="#8d98a6"/><ellipse cx="0" cy="0" rx="11" ry="11" fill="#b8c1cc"/><ellipse cx="0" cy="0" rx="5" ry="5" fill="#6f7b88"/></g>';
+  var NEXT_ICON = {
+    price: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 15 L15 5 H26 V16 L16 26 Z" fill="#fbe3b0" stroke="#8a5608" stroke-width="2" stroke-linejoin="round"/><circle cx="21" cy="10" r="2" fill="#8a5608"/><path d="M13 21 V12 M9.5 15.5 L13 12 L16.5 15.5" stroke="#b3261e" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    profit: '<svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="16" cy="23" rx="9" ry="3.5" fill="#bfe9d3" stroke="#1b7a4d" stroke-width="2"/><ellipse cx="16" cy="18" rx="9" ry="3.5" fill="#bfe9d3" stroke="#1b7a4d" stroke-width="2"/><path d="M25 6 V13 M22 10 L25 13 L28 10" stroke="#b3261e" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    switch: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 11 H24 M20 7 L24 11 L20 15 M26 21 H8 M12 17 L8 21 L12 25" stroke="#2f6f9f" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  };
+  S.border = {
+    html: function (sc) {
+      return "<h2>" + sc.h + "</h2>" +
+        '<div class="pic" style="padding:10px 8px"><svg id="bsvg" viewBox="0 0 360 150" role="img" aria-label="' + esc(sc.alt) + '">' +
+        '<rect x="0" y="0" width="150" height="150" rx="12" fill="#f1ebe1"/><rect x="210" y="0" width="150" height="150" rx="12" fill="#e8eef6"/>' +
+        '<text x="12" y="20" style="font:800 11px var(--sans);letter-spacing:.06em;fill:#7a6a55">CANADA</text><text x="348" y="142" text-anchor="end" style="font:800 11px var(--sans);letter-spacing:.06em;fill:#4b6a8c">US · MICHIGAN</text>' +
+        '<path d="M180 6 V144" stroke="#9aa3ad" stroke-width="3" stroke-dasharray="7 7"/>' +
+        '<g transform="translate(160 18)"><rect width="40" height="34" rx="5" fill="#fff" stroke="#9aa3ad" stroke-width="2"/><text x="20" y="15" text-anchor="middle" style="font:800 7.5px var(--sans);fill:#545b63">US</text><text x="20" y="25" text-anchor="middle" style="font:800 7.5px var(--sans);fill:#545b63">CUSTOMS</text></g>' +
+        '<g transform="translate(306 104)"><rect x="-40" y="-24" width="80" height="40" rx="6" fill="#fff" stroke="#9aa3ad" stroke-width="2"/><path d="M-40 -24 L0 -40 L40 -24" fill="#dfe6ef" stroke="#9aa3ad" stroke-width="2"/><text x="0" y="0" text-anchor="middle" style="font:800 9px var(--sans);fill:#2f5fa8">MICHIGAN</text><text x="0" y="11" text-anchor="middle" style="font:800 9px var(--sans);fill:#2f5fa8">PARTS MAKER</text></g>' +
+        '<g id="coil" transform="translate(70 108)" style="transition:transform .9s cubic-bezier(.4,.1,.2,1)">' + COIL + '<text y="32" text-anchor="middle" style="font:700 10px var(--sans);fill:#545b63">steel</text></g>' +
+        '<g id="tagg" opacity="0" style="transition:opacity .4s .7s"><path d="M196 70 h66 l8 9 -8 9 h-66 z" fill="#b3261e"/><text x="231" y="83" text-anchor="middle" style="font:800 11px var(--sans);fill:#fff">' + esc(sc.rate) + '</text></g>' +
+        '<g id="pay" opacity="0" style="transition:opacity .4s 1.1s"><path d="M306 60 C306 38 262 34 204 34" stroke="#1b7a4d" stroke-width="2.5" fill="none" stroke-dasharray="4 4"/><path d="M209 29 L203 34 L209 39" stroke="#1b7a4d" stroke-width="2.5" fill="none"/><text x="266" y="24" text-anchor="middle" style="font:800 10.5px var(--sans);fill:#1b7a4d">pays the tariff</text></g>' +
+        "</svg></div>" +
+        '<div id="bnext"><button class="ghost" type="button" id="send" style="width:100%">Send the steel across the border</button></div><div id="bout"></div>';
+    },
+    mount: function (sc, ctx) {
+      ctx.lock("Send the steel across to keep going");
+      var send = document.getElementById("send");
+      function go() {
+        document.getElementById("coil").setAttribute("transform", "translate(234 108)");
+        document.getElementById("tagg").setAttribute("opacity", "1");
+        document.getElementById("pay").setAttribute("opacity", "1");
+        document.getElementById("bnext").innerHTML = "";
+        var r = sc.reveal, g = ctx.st[r.key];
+        var guess = g == null ? "" : '<p class="say ' + (g === r.right ? "good" : "info") + '"><b>You guessed “' + esc(r.opts[g]) + '.”</b> ' + (g === r.right ? r.yes : r.no) + "</p>";
+        var bar = '<div style="display:flex;flex-direction:column;gap:6px"><p class="small" style="margin:0">' + sc.who.lab + '</p><div style="display:flex;height:calc(20px * var(--k));border-radius:10px;overflow:hidden"><i style="display:block;width:' + sc.who.us + '%;background:#b3261e"></i><i style="display:block;flex:1;background:#c9cdd3"></i></div><p style="margin:0;font:800 calc(15px * var(--k))/1.2 var(--sans);color:#b3261e">' + sc.who.txt + "</p></div>";
+        var opts = sc.next ? '<div class="nexts">' + sc.next.map(function (n) { return '<div><span class="ni">' + NEXT_ICON[n.i] + "</span><b>" + n.t + "</b></div>"; }).join("") + "</div>" : "";
+        document.getElementById("bout").innerHTML = '<div style="display:flex;flex-direction:column;gap:12px">' + guess + "<p>" + sc.p + "</p>" + opts + bar + "</div>";
+        ctx.st["sent_" + sc.key] = true;
+        ctx.ready(); WU.fit();
+      }
+      send.onclick = go;
+      if (ctx.st["sent_" + sc.key]) go();
+    }
+  };
+
+  /* ---------- the route: one part, four border crossings ---------- */
+  var STOP_ICON = {
+    coil: '<circle r="9" fill="#8d98a6"/><circle r="4" fill="#6f7b88"/>',
+    part: '<path d="M-9 -9 H7 Q9 -9 9 -7 V-3 H-3 V7 Q-3 9 -5 9 H-7 Q-9 9 -9 7 Z" fill="#9aa5b1" stroke="#6f7b88" stroke-width="1.3" stroke-linejoin="round"/>',
+    frame: '<path d="M-10 -6 H10 V6 H-10 Z M-6 -2 H6 V2 H-6 Z" fill-rule="evenodd" fill="#9aa5b1" stroke="#6f7b88" stroke-width="1.2"/>',
+    plus: '<path d="M-10 -6 H10 V6 H-10 Z" fill="#9aa5b1" stroke="#6f7b88" stroke-width="1.2"/><circle cx="-4" cy="0" r="2.3" fill="#eef1f5"/><circle cx="4" cy="0" r="2.3" fill="#eef1f5"/>',
+    car: '<path d="M-12 4 Q-12 -1 -7 -2 L-3 -8 Q-2 -9 1 -9 H5 Q8 -9 9 -7 L12 -2 Q14 -1 14 4 V6 H-12 Z" fill="#4a7fd1"/><circle cx="-6" cy="6" r="3.2" fill="#2f2a33"/><circle cx="8" cy="6" r="3.2" fill="#2f2a33"/>'
+  };
+  S.route = {
+    html: function (sc) {
+      return "<h2>" + sc.h + '</h2><div class="pic route" style="padding:6px 4px 2px"><svg id="rsv" viewBox="0 0 360 236" role="img" aria-label="' + esc(sc.alt) + '"></svg></div>' +
+        '<div id="rtx" aria-live="polite"></div>' +
+        '<div class="cost" aria-hidden="true"><div class="key"><span>Cost of the part so far:</span><span><i style="background:#c9ced6"></i>work</span><span><i style="background:var(--red)"></i>tariff</span><span><i style="background:var(--amber-fill)"></i>may apply</span></div><div class="bar" id="stk"></div></div>' +
+        '<div id="rbtn"></div>';
+    },
+    mount: function (sc, ctx) {
+      var k = 0, xs = [44, 116, 188, 260, 330], C = 54, U = 176, B = 116;
+      function y(i) { return sc.stops[i].c === "ca" ? C : U; }
+      function draw() {
+        var s = '<rect x="0" y="0" width="360" height="' + (B - 3) + '" rx="12" fill="#f1ebe1"/><rect x="0" y="' + (B + 3) + '" width="360" height="' + (236 - B - 3) + '" rx="12" fill="#e8eef6"/>' +
+          '<text class="lbl" transform="translate(9 ' + (B - 8) + ') rotate(-90)">CANADA</text><text class="lbl" transform="translate(9 ' + (B + 8) + ') rotate(-90)" text-anchor="end">US · MICHIGAN</text>' +
+          '<path d="M0 ' + B + ' H360" stroke="#9aa3ad" stroke-width="3" stroke-dasharray="7 7"/>';
+        for (var i = 0; i < sc.stops.length - 1; i++) {
+          var x1 = xs[i], x2 = xs[i + 1], y1 = y(i), y2 = y(i + 1), mx = (x1 + x2) / 2, done = i < k;
+          s += '<path d="M' + x1 + " " + y1 + " C" + mx + " " + y1 + " " + mx + " " + y2 + " " + x2 + " " + y2 + '" stroke="' + (done ? "#545b63" : "#c3c9d0") + '" stroke-width="3" fill="none" stroke-linecap="round"' + (done ? "" : ' stroke-dasharray="2 6"') + "/>";
+        }
+        for (var c = 0; c < sc.stops.length - 1; c++) {
+          var cx = (xs[c] + xs[c + 1]) / 2, dn = c < k, tax = sc.cross[c].tax, col = tax === true ? "#b3261e" : tax ? "#d38a12" : "#545b63";
+          s += '<g transform="translate(' + cx + " " + B + ')"><circle r="12" fill="' + (dn ? col : "#fff") + '" stroke="' + (dn ? "#fff" : "#c3c9d0") + '" stroke-width="2.5"/><text y="4.5" text-anchor="middle" style="font:800 12px var(--sans);fill:' + (dn ? "#fff" : "#8a8f96") + '">' + (c + 1) + "</text></g>";
+          if (false && dn && sc.cross[c].tag) s += '<text x="' + cx + '" y="' + (B + (sc.stops[c + 1].c === "us" ? -18 : 28)) + '" text-anchor="middle" style="font:800 11px var(--sans);fill:' + col + '">' + esc(sc.cross[c].tag) + "</text>";
+        }
+        sc.stops.forEach(function (st, i) {
+          var yy = y(i), on = i <= k, up = st.c === "ca";
+          s += '<g transform="translate(' + xs[i] + " " + yy + ')" style="opacity:' + (on ? 1 : 0.4) + '"><circle r="19" fill="#fff" stroke="' + (i === k ? "#262320" : "#d5d9de") + '" stroke-width="' + (i === k ? 3 : 2) + '"/>' + (STOP_ICON[st.icon] || "") + "</g>";
+          var words = st.t.split(" "), mid = Math.ceil(words.length / 2), l1 = words.slice(0, mid).join(" "), l2 = words.slice(mid).join(" ");
+          var ty = up ? yy - 40 : yy + 33, tx = Math.min(Math.max(xs[i], 44), 324);
+          s += '<text class="step-t" x="' + tx + '" y="' + ty + '" text-anchor="middle" style="opacity:' + (on ? 1 : 0.5) + '"><tspan x="' + tx + '">' + esc(l1) + '</tspan><tspan x="' + tx + '" dy="13">' + esc(l2) + "</tspan></text>";
+        });
+        document.getElementById("rsv").innerHTML = s;
+        var parts = [["w", 3]];
+        for (var j = 0; j < k; j++) { var tx2 = sc.cross[j].tax; if (tx2) parts.push([tx2 === true ? "t" : "m", tx2 === true ? 2 : 1.4]); parts.push(["w", 2]); }
+        var tot = 3 + 2 * sc.cross.length + 2 * 2 + 1.4 * 2;
+        document.getElementById("stk").innerHTML = parts.map(function (q) { return '<i class="' + q[0] + '" style="width:' + (q[1] / tot * 100) + '%"></i>'; }).join("");
+        var t = k === 0 ? "<p>" + sc.start + "</p>" : '<p class="kick" style="margin-bottom:4px">Crossing ' + k + " of " + sc.cross.length + "</p><p>" + sc.cross[k - 1].text + "</p>";
+        document.getElementById("rtx").innerHTML = t + (k === sc.cross.length ? '<p class="small" style="margin-top:8px">' + sc.end + "</p>" : "");
+        document.getElementById("rbtn").innerHTML = k < sc.cross.length ? '<button class="ghost" type="button" id="adv" style="width:100%">' + (k === 0 ? "Send it across: crossing 1" : "Next: crossing " + (k + 1)) + "</button>" : '<p class="fine">' + sc.note + "</p>";
+        var adv = document.getElementById("adv"); if (adv) adv.onclick = function () { k++; ctx.st.routeK = k; draw(); };
+        if (k === sc.cross.length) ctx.ready(); else ctx.lock("Follow all " + sc.cross.length + " crossings to keep going");
+        WU.fit();
+      }
+      if (ctx.st.routeK) k = ctx.st.routeK;
+      draw();
+    }
+  };
+})();
+
+/* ===== coach.js ===== */
+/* Warmup issue lessons v2: feedback on a spoken (or typed) answer.
+   Two honest modes, always labeled on screen:
+   - "AI feedback": Claude reads the answer against the lesson's rubric and approved facts (only where the page can
+     reach Claude: the claude.ai artifact's `sample` capability, or a future server endpoint, WU.coach.endpoint).
+   - "Quick check": phrase matching, no AI. It looks for key phrases, so it can miss a good answer or be fooled.
+   Either way a point is credited only when the learner's own words show it: the result quotes those words, and an
+   AI credit whose quote isn't in the answer is dropped. */
+(function () {
+  "use strict";
+  var WU = (window.WU = window.WU || {});
+  function norm(s) { return String(s || "").toLowerCase().replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, " ").trim(); }
+  function sentences(t) { return String(t || "").replace(/([.!?])\s+/g, "$1\n").split(/\n+/).map(function (s) { return s.trim(); }).filter(Boolean); }
+  /* the sentence (or, for one long run-on transcript, the 14 words) around a match */
+  function around(t, re) {
+    var ss = sentences(t);
+    for (var i = 0; i < ss.length; i++) if (re.test(ss[i]) && ss[i].split(" ").length <= 20) return ss[i];
+    var m = re.exec(t); if (!m) return "";
+    var words = t.split(/\s+/), pos = t.slice(0, m.index).split(/\s+/).length - 1, a = Math.max(0, pos - 5), b = Math.min(words.length, pos + 8);
+    return (a > 0 ? "\u2026" : "") + words.slice(a, b).join(" ") + (b < words.length ? "\u2026" : "");
+  }
+  /* the evidence shown is the shortest sentence that matches every pattern, so the quote really shows the point */
+  function evidence(text, all) {
+    var ss = sentences(text).filter(function (x) { return all.every(function (r) { return r.test(x); }); }).sort(function (a, b) { return a.length - b.length; });
+    if (ss.length && ss[0].split(" ").length <= 30) return ss[0];
+    return around(text, all[0]);
+  }
+  function rx(s) { return s instanceof RegExp ? s : new RegExp(s, "i"); }
+
+  function quick(rubric, text) {
+    var items = rubric.items.map(function (it) {
+      var all = (it.all || []).map(rx), hit = all.every(function (r) { return r.test(text); });
+      return { id: it.id, label: it.label, tip: it.tip, met: hit, quote: hit ? evidence(text, all) : "" };
+    });
+    var flags = (rubric.flags || []).filter(function (f) { return rx(f.re).test(text); }).map(function (f) { return { quote: around(text, rx(f.re)), why: f.why }; });
+    return { mode: "quick", items: items, flags: flags };
+  }
+
+  function prompt(rubric, text, L) {
+    return [
+      "You are Warmup's practice coach for canvassers. A canvasser just answered a voter out loud (speech-to-text, so ignore spelling and missing punctuation).",
+      "Judge ONLY what the canvasser actually said. Never credit a point they didn't make, even partly. Be strict about facts and generous about wording.",
+      "",
+      "The voter asked: " + rubric.ask,
+      "",
+      "Approved facts for this lesson (anything that contradicts these is a misstatement; a claim not covered here is unsupported, not wrong):",
+      rubric.facts.map(function (f) { return "- " + f; }).join("\n"),
+      "",
+      "Rubric points:",
+      rubric.items.map(function (it) { return "- id \"" + it.id + "\": " + it.ai; }).join("\n"),
+      "",
+      "Watch for these misstatements:",
+      (rubric.flags || []).map(function (f) { return "- " + f.why; }).join("\n") || "- (none listed)",
+      "",
+      "The canvasser said:",
+      "\"\"\"" + text + "\"\"\"",
+      "",
+      "Return only JSON with this shape:",
+      '{"items":[{"id":"...","met":true|false,"quote":"the canvasser\'s exact words that show it, copied character for character, or empty"}],',
+      ' "flags":[{"quote":"exact words","why":"one plain sentence on what is inaccurate or unfair"}],',
+      ' "strength":"one sentence naming something specific they did well, quoting a few of their words",',
+      ' "next":"one sentence: the single most useful thing to add or fix next time, in words they could say"}',
+      "Write like a friendly field organizer: plain words, complete sentences, no em dashes."
+    ].join("\n");
+  }
+
+  /* resolve the AI channel once: the artifact runtime's sample capability, or a server endpoint */
+  var aiP = null;
+  function ai() {
+    if (aiP) return aiP;
+    aiP = new Promise(function (res) {
+      if (WU.coach.endpoint) return res({ kind: "endpoint" });
+      if (!window.claude || !window.claude.use) return res(null);
+      var done = false, t = setTimeout(function () { if (!done) { done = true; res(null); } }, 6000);
+      window.claude.use("sample").then(function (s) { if (!done) { done = true; clearTimeout(t); res(s ? { kind: "sample", s: s } : null); } }, function () { if (!done) { done = true; clearTimeout(t); res(null); } });
+    });
+    return aiP;
+  }
+
+  function validate(rubric, text, out) {
+    var T = norm(text);
+    var items = rubric.items.map(function (it) {
+      var got = (out.items || []).filter(function (x) { return x && x.id === it.id; })[0] || {};
+      var q = String(got.quote || "").trim(), ok = !!got.met && q.length >= 4 && T.indexOf(norm(q).replace(/[….]+$/, "")) >= 0;
+      return { id: it.id, label: it.label, tip: it.tip, met: ok, quote: ok ? q : "", dropped: !!got.met && !ok };
+    });
+    var flags = (out.flags || []).filter(function (f) { return f && f.quote && T.indexOf(norm(f.quote)) >= 0; }).map(function (f) { return { quote: f.quote, why: String(f.why || "") }; });
+    return { mode: "ai", items: items, flags: flags, strength: String(out.strength || ""), next: String(out.next || "") };
+  }
+
+  WU.coach = {
+    endpoint: null,
+    available: function () { return ai().then(function (a) { return !!a; }); },
+    grade: function (rubric, text, L) {
+      var base = quick(rubric, text);
+      return ai().then(function (a) {
+        if (!a || !text || text.split(/\s+/).length < 4) return finish(base);
+        var p = prompt(rubric, text, L), call;
+        if (a.kind === "sample") call = a.s.json(p, { modelTier: "default" });
+        else call = fetch(WU.coach.endpoint, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ prompt: p }) }).then(function (r) { if (!r.ok) throw new Error("coach " + r.status); return r.json(); });
+        var timeout = new Promise(function (_, rej) { setTimeout(function () { rej(new Error("timeout")); }, 25000); });
+        return Promise.race([call, timeout]).then(function (out) { return finish(validate(rubric, text, out || {})); }, function (e) { var r = finish(base); r.fellBack = String(e && (e.code || e.message) || e); return r; });
+      });
+      function finish(r) {
+        var met = r.items.filter(function (x) { return x.met; }), miss = r.items.filter(function (x) { return !x.met; });
+        if (!r.strength) r.strength = met.length ? "You " + met[0].label.charAt(0).toLowerCase() + met[0].label.slice(1).replace(/\.$/, "") + "." : "";
+        if (!r.next) r.next = miss.length ? miss[0].tip : (r.flags.length ? "Fix the line marked \u201CCheck this\u201D and you\u2019ve got it." : "");
+        r.score = met.length; r.of = r.items.length; r.text = text;
+        return r;
+      }
+    },
+    quick: quick
+  };
+})();
+
+/* ===== practice.js ===== */
+/* Warmup issue lessons v2: At the door.
+   1st try (the voter from Learn) → feedback on what you actually said → hear a strong answer → catch the mistake →
+   2nd try at a NEW door with a different situation (transfer, not repetition) → feedback and growth → done.
+   Speech uses the browser's own recognition where it's allowed; typing always works. */
+(function () {
+  "use strict";
+  var WU = (window.WU = window.WU || {}), S = WU.scene, esc = WU.esc;
+
+  /* ---------- the voter's voice (the browser's built-in voice; a stand-in until recorded voices) ---------- */
+  WU.speak = {
+    ok: !!(window.speechSynthesis && window.SpeechSynthesisUtterance),
+    stop: function () { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} WU.art && WU.art.talk && WU.art.talk(false); },
+    say: function (text, who, cb) {
+      if (!WU.speak.ok || WU.fast) { if (cb) setTimeout(cb, 10); return; }
+      try {
+        var u = new SpeechSynthesisUtterance(text), vs = speechSynthesis.getVoices().filter(function (v) { return /^en(-|_)US/i.test(v.lang); });
+        var want = who === "m" ? /(Aaron|Fred|Alex|Daniel|Guy|Male|David|Mark)/i : /(Samantha|Ava|Allison|Susan|Female|Zira|Jenny|Aria|Karen)/i;
+        var pick = vs.filter(function (v) { return want.test(v.name); })[0] || vs[0]; if (pick) u.voice = pick;
+        u.rate = 1.02; u.onstart = function () { WU.art.talk(true); }; u.onend = u.onerror = function () { WU.art.talk(false); if (cb) cb(); };
+        speechSynthesis.speak(u);
+      } catch (e) { if (cb) cb(); }
+    }
+  };
+
+  /* ---------- listening ---------- */
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  WU.listen = { can: !!SR, blocked: false };
+
+  function mineOf(ctx, n) { return (ctx.st["said" + n] || ""); }
+
+  S.door = {
+    html: function (sc, ctx) {
+      var typed = !WU.listen.can || WU.listen.blocked || ctx.st.typeMode;
+      return '<div class="doorpic">' + WU.art.door(sc.voter, sc.who) + "</div>" +
+        '<p class="small" style="margin:0">' + sc.intro + "</p>" +
+        '<div class="thread grow" id="thread"><div class="bub v"><small>' + esc(sc.name) + "</small>" + esc(sc.ask) + "</div>" +
+        '<button class="linkish" type="button" id="replay" style="align-self:flex-start">' + (WU.speak.ok ? "Hear " + esc(sc.name) + " again" : "") + "</button></div>" +
+        '<div class="speak" id="speak">' + (typed ? typeBox(sc, ctx) : micBox()) + "</div>" +
+        '<div class="row2"><button class="linkish" type="button" id="swap">' + (typed ? (WU.listen.can && !WU.listen.blocked ? "Speak instead" : "") : "Type instead") + '</button><button class="linkish" type="button" id="ex">Use an example answer</button></div>';
+    },
+    mount: function (sc, ctx) {
+      var n = sc.attempt, key = "said" + n, final = "", rec = null, on = false;
+      ctx.lock("Answer " + sc.name + " to keep going");
+      var replay = document.getElementById("replay");
+      if (replay && WU.speak.ok) replay.onclick = function () { WU.speak.say(sc.ask, sc.voice); };
+      if (!ctx.st["heard" + n]) { ctx.st["heard" + n] = true; setTimeout(function () { WU.speak.say(sc.ask, sc.voice); }, 350); }
+      document.getElementById("swap").onclick = function () { ctx.st.typeMode = !ctx.st.typeMode; stop(); WU.jump("door", WU.app.i); };
+      document.getElementById("ex").onclick = function () {
+        stop(); ctx.st[key] = sc.example; ctx.st["example" + n] = true;
+        addMine(sc.example, true); ctx.ready("See how this answer did");
+      };
+      function addMine(t, ex) {
+        var th = document.getElementById("thread"), old = th.querySelector(".bub.me"); if (old) old.remove();
+        var d = document.createElement("div"); d.className = "bub me"; d.innerHTML = "<small>" + (ex ? "Example answer, not yours" : "You") + "</small>" + esc(t);
+        th.appendChild(d); th.scrollTop = th.scrollHeight; WU.fit();
+      }
+      if (ctx.st[key]) { addMine(ctx.st[key], ctx.st["example" + n]); ctx.ready("See how you did"); }
+      var box = document.getElementById("speak");
+      var ta = box.querySelector("textarea");
+      if (ta) {
+        ta.oninput = function () { if (ta.value.trim().split(/\s+/).length >= 3) ctx.ready("Submit and see how you did"); else ctx.lock("Type your answer to keep going"); };
+        ctx.onNext(function () { var t = ta.value.trim(); if (t) { ctx.st[key] = t; ctx.st["example" + n] = false; } WU.next(); });
+        if (ctx.st[key] && !ctx.st["example" + n]) ta.value = ctx.st[key];
+        return;
+      }
+      var mbtn = box.querySelector("button.m"), live = box.querySelector(".live");
+      function start() {
+        WU.speak.stop();
+        try {
+          rec = new SR(); rec.lang = "en-US"; rec.continuous = true; rec.interimResults = true;
+        } catch (e) { return toType("Speech isn't available in this browser. Type your answer instead."); }
+        final = ""; on = true; mbtn.classList.add("on"); mbtn.innerHTML = WU.icon.stop; mbtn.setAttribute("aria-label", "Stop and submit"); live.textContent = "Listening… tap the button when you're done.";
+        rec.onresult = function (e) {
+          var interim = ""; final = "";
+          for (var i = 0; i < e.results.length; i++) { var r = e.results[i]; if (r.isFinal || i < e.results.length - 1) final += r[0].transcript + " "; else interim += r[0].transcript; }
+          if (e.results.length && e.results[e.results.length - 1].isFinal) { final = ""; for (var j = 0; j < e.results.length; j++) final += e.results[j][0].transcript + " "; interim = ""; }
+          live.textContent = (final + interim).trim() || "Listening…";
+        };
+        rec.onerror = function (e) {
+          if (e.error === "not-allowed" || e.error === "service-not-allowed" || e.error === "audio-capture") { WU.listen.blocked = true; toType("The microphone isn't available here. Type your answer instead; it's graded the same way."); }
+          else if (e.error === "no-speech") { live.textContent = "I didn't catch anything. Tap the mic and try again."; reset(); }
+        };
+        rec.onend = function () { if (on) finish(); };
+        try { rec.start(); } catch (e2) { toType("Speech didn't start. Type your answer instead."); }
+      }
+      function reset() { on = false; mbtn.classList.remove("on"); mbtn.innerHTML = WU.icon.mic; mbtn.setAttribute("aria-label", "Tap to talk"); }
+      function stop() { if (rec && on) { on = false; try { rec.stop(); } catch (e) {} } }
+      function finish() {
+        reset();
+        var t = (final || live.textContent || "").replace(/^Listening.*$/, "").trim();
+        if (t.split(/\s+/).length < 3) { live.textContent = "That was very short. Tap the mic and answer " + sc.name + " in a few sentences."; return; }
+        ctx.st[key] = t; ctx.st["example" + n] = false; live.textContent = "Got it. Tap the mic to redo it.";
+        addMine(t); ctx.ready("See how you did");
+      }
+      function toType(msg) { stop(); ctx.st.typeMode = true; WU.jump("door", WU.app.i); setTimeout(function () { var p = document.getElementById("speak"); if (p) p.insertAdjacentHTML("afterbegin", '<p class="say info">' + msg + "</p>"); WU.fit(); }, 0); }
+      mbtn.onclick = function () { if (on) { on = false; try { rec.stop(); } catch (e) {} setTimeout(finish, 350); } else start(); };
+    }
+  };
+  function micBox() { return '<div class="mic"><button class="m" type="button" aria-label="Tap to talk">' + WU.icon.mic + '</button><span class="live">Tap the mic and answer out loud, about 30 seconds.</span></div>'; }
+  function typeBox(sc, ctx) { return '<label class="sr" for="ta">Your answer to ' + esc(sc.name) + '</label><textarea class="typebox" id="ta" placeholder="Type what you’d say to ' + esc(sc.name) + '…"></textarea>'; }
+
+  /* ---------- feedback on what was actually said ---------- */
+  function resultHTML(r, sc) {
+    var mode = r.mode === "ai" ? '<span class="mode ai">AI feedback · Claude</span>' : '<span class="mode qc">Quick check · phrase matching, not AI</span>';
+    var items = r.items.map(function (it) {
+      return '<div class="ri ' + (it.met ? "ok" : "no") + '"><span class="m">' + (it.met ? WU.icon.check : WU.icon.dash) + "</span><span><b>" + esc(it.label) + "</b>" +
+        (it.met ? "<span>You said: <q>" + esc(it.quote) + "</q></span>" : "<span>" + (it.dropped ? "Not credited: the coach\u2019s quote wasn\u2019t in your answer." : "Not heard yet.") + "</span>") + "</span></div>";
+    }).join("");
+    var flags = r.flags.map(function (f) { return '<div class="ri flag"><span class="m">' + WU.icon.bang + "</span><span><b>Check this</b><span><q>" + esc(f.quote) + "</q> " + esc(f.why) + "</span></span></div>"; }).join("");
+    return '<div class="row2">' + mode + '<span class="small" style="font:700 13px var(--sans);color:var(--muted)">' + r.score + " of " + r.of + "</span></div>" +
+      '<div class="res">' + items + flags + "</div>" +
+      (r.strength ? '<p class="say good"><b>What worked:</b> ' + esc(r.strength) + "</p>" : "") +
+      (r.next ? '<p class="say info"><b>Next time:</b> ' + esc(r.next) + "</p>" : '<p class="say info"><b>Keep it:</b> Say it this way at a real door.</p>') +
+      (r.mode === "quick" ? '<p class="fine">Quick check looks for key phrases, so it can miss a good answer said another way.' + (r.fellBack ? " The AI coach didn\u2019t answer this time." : "") + "</p>" : "");
+  }
+  S.result = {
+    html: function (sc, ctx) { return "<h2 id=\"rh\">Checking your answer…</h2><div id=\"rbody\"><p class=\"small\">Reading what you said against the lesson's key points.</p></div>"; },
+    mount: function (sc, ctx) {
+      var n = sc.attempt, text = ctx.st["said" + n] || "", door = ctx.L.door.filter(function (d) { return d.type === "door" && d.attempt === n; })[0];
+      ctx.lock("Checking…");
+      var cached = ctx.st["grade" + n];
+      var p = cached && cached.text === text ? Promise.resolve(cached) : WU.coach.grade(door.rubric, text, ctx.L);
+      p.then(function (r) {
+        ctx.st["grade" + n] = r;
+        var all = r.score === r.of && !r.flags.length;
+        document.getElementById("rh").textContent = all ? sc.allH : (r.score ? "You got " + r.score + " of " + r.of + (r.flags.length ? ", with one line to fix" : "") : "Not yet. Here’s what to add");
+        document.getElementById("rbody").innerHTML = (ctx.st["example" + n] ? '<p class="say info">This is the example answer, not yours. Go back and answer it yourself for real feedback.</p>' : "") + resultHTML(r, sc) +
+          '<button class="linkish" type="button" id="again">Try ' + esc(door.name) + "’s door again</button>";
+        document.getElementById("again").onclick = function () { ctx.st["said" + n] = ""; ctx.st["grade" + n] = null; WU.jump("door", WU.app.i - 1); };
+        ctx.ready(sc.btn); WU.fit();
+      });
+    }
+  };
+
+  /* ---------- hear a strong answer, with each key point marked ---------- */
+  S.hear = {
+    html: function (sc) {
+      return "<h2>" + sc.h + '</h2><div class="bub v" style="max-width:100%"><small>' + esc(sc.name) + "</small>" + esc(WU.app.lesson.door[0].ask) + '</div><div class="thread grow" id="thread">' + sc.lines.map(function (l) {
+        return '<div class="bub ' + (l.who === "v" ? "v" : "c") + '"><small>' + esc(l.who === "v" ? sc.name : "Canvasser") + "</small>" + l.t + "</div>";
+      }).join("") + '</div><div class="row2"><button class="ghost" type="button" id="play">' + (WU.speak.ok ? "Play it out loud" : "") + '</button><span class="small" style="font:600 12.5px var(--sans);color:var(--muted)">Numbers mark the key points.</span></div>';
+    },
+    mount: function (sc) {
+      var b = document.getElementById("play"); if (!WU.speak.ok) { b.hidden = true; return; }
+      b.onclick = function () {
+        var i = 0, L = sc.lines; WU.speak.stop();
+        (function step() { if (i >= L.length) return; var l = L[i++]; WU.speak.say(l.t.replace(/<[^>]+>/g, ""), l.who === "v" ? sc.voice : (sc.voice === "m" ? "f" : "m"), step); })();
+      };
+    }
+  };
+
+  /* ---------- catch the mistake: one clean, flat misstatement ---------- */
+  S["catch"] = {
+    html: function (sc) {
+      return "<h2>" + sc.h + '</h2><div class="bub v" style="max-width:100%"><small>' + esc(sc.name) + "</small>" + esc(sc.ask) + '</div><div class="miss">' + sc.lines.map(function (l, i) { return '<button type="button" data-i="' + i + '">' + esc(l) + "</button>"; }).join("") + '</div><div id="cout"></div>';
+    },
+    mount: function (sc, ctx) {
+      ctx.lock("Tap the wrong sentence to keep going");
+      ctx.body.querySelectorAll(".miss button").forEach(function (b) {
+        b.onclick = function () {
+          var i = +b.getAttribute("data-i"), ok = i === sc.wrong;
+          if (ok) { b.classList.add("wrong"); ctx.body.querySelectorAll(".miss button").forEach(function (x) { x.disabled = true; }); }
+          else b.classList.add("picked-ok");
+          document.getElementById("cout").innerHTML = '<p class="say ' + (ok ? "good" : "bad") + '"><b>' + (ok ? "You caught it. " : "That one's accurate. ") + "</b>" + (ok ? sc.why : sc.notIt) + "</p>";
+          if (ok) ctx.ready(); WU.fit();
+        };
+      });
+    }
+  };
+
+  /* ---------- done: growth, what you can now do, sources with links, where the content came from ---------- */
+  S.done = {
+    html: function (sc, ctx) {
+      var g1 = ctx.st.grade1, g2 = ctx.st.grade2, L = ctx.L;
+      var row = function (lab, g) { return '<span>' + lab + "</span><span>" + (g ? g.score + " of " + g.of : "–") + "</span><span>" + (g ? (g.mode === "ai" ? "AI" : "Quick check") : "") + "</span>"; };
+      var demo = sc.can.map(function (c) {
+        var test = function (f) { var g = ctx.st["grade" + f[0]]; return !!g && !ctx.st["example" + f[0]] && g.items.some(function (it) { return it.id === f[1] && it.met; }); };
+        var shown = c.any ? c.from.some(test) : c.from.every(test);
+        return '<div class="ri ' + (shown ? "ok" : "no") + '"><span class="m">' + (shown ? WU.icon.check : WU.icon.dash) + "</span><span><b>" + c.t + "</b><span>" + (shown ? "You showed this at the door." : "Not shown yet at the door. " + c.tip) + "</span></span></div>";
+      }).join("");
+      var src = L.sources.map(function (s, i) { return '<li value="' + (i + 1) + '"><a href="' + esc(s.u) + '" target="_blank" rel="noopener">' + esc(s.t) + "</a></li>"; }).join("");
+      return '<div class="big-ok"><span class="ring">' + WU.icon.check + "</span><h2>" + sc.h + "</h2></div>" +
+        '<div class="growth"><span class="h">Your two doors</span><span class="h">Key points</span><span class="h">Graded by</span>' + row("1st: " + sc.d1, g1) + row("2nd: " + sc.d2 + " (new situation)", g2) + "</div>" +
+        '<div class="res">' + demo + "</div>" +
+        '<p class="say info"><b>Tomorrow, 20 seconds:</b> ' + sc.tomorrow + "</p>" +
+        '<details><summary style="font:800 14px var(--sans);cursor:pointer">Where this lesson came from</summary><p class="small" style="margin-top:6px">' + sc.origin + '</p><ol class="small" style="padding-left:20px;display:flex;flex-direction:column;gap:6px;margin:8px 0 0">' + src + "</ol></details>";
+    },
+    mount: function (sc, ctx) { ctx.ready(sc.btn || "Back to lessons"); ctx.onNext(function () { WU.go("home"); }); var d = ctx.body.querySelector("details"); if (d) d.addEventListener("toggle", WU.fit); }
+  };
+})();
+
+/* ===== home.js ===== */
+/* Warmup issue lessons v2: the lesson list (icons and voter quotes from the live five lessons). */
+window.WU = window.WU || {};
+WU.home = [
+ {
+  "id": "health",
+  "name": "Health insurance",
+  "quote": "My job doesn’t offer health insurance.",
+  "icon": "<svg viewBox=\"0 0 24 24\" width=\"34\" height=\"34\" aria-hidden=\"true\"><path d=\"M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.2 0 3.6 1.3 5.3 3.3 1.7-2 3.1-3.3 5.3-3.3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z\" fill=\"#fff\"/><path d=\"M12 9.3v6M9 12.3h6\" stroke=\"#e2557a\" stroke-width=\"2.2\" stroke-linecap=\"round\"/></svg>",
+  "color": "#e2557a",
+  "format": "Who qualifies? · Georgia governor"
+ },
+ {
+  "id": "tariffs",
+  "name": "Tariffs and auto jobs",
+  "quote": "Is my plant job safe?",
+  "icon": "<svg viewBox=\"0 0 24 24\" width=\"34\" height=\"34\" aria-hidden=\"true\"><path d=\"M3 15.5v-3l2-4.5c.3-.7 1-1 1.7-1h10.6c.7 0 1.4.3 1.7 1l2 4.5v3c0 .8-.6 1.5-1.4 1.5H4.4c-.8 0-1.4-.7-1.4-1.5z\" fill=\"#fff\"/><path d=\"M6.2 11.5 7.4 8.6h9.2l1.2 2.9z\" fill=\"#2a9d8f\"/><circle cx=\"7\" cy=\"17.5\" r=\"2.2\" fill=\"#fff\" stroke=\"#2a9d8f\" stroke-width=\"1.4\"/><circle cx=\"17\" cy=\"17.5\" r=\"2.2\" fill=\"#fff\" stroke=\"#2a9d8f\" stroke-width=\"1.4\"/></svg>",
+  "color": "#2a9d8f",
+  "format": "What causes what? · Michigan U.S. Senate"
+ },
+ {
+  "id": "vouchers",
+  "name": "School vouchers",
+  "quote": "Is my kid’s school losing money?",
+  "icon": "<svg viewBox=\"0 0 24 24\" width=\"34\" height=\"34\" aria-hidden=\"true\"><path d=\"M2.5 9.5 12 4.5l9.5 5-9.5 5z\" fill=\"#fff\"/><path d=\"M6.5 11.8v4.4c0 1.4 2.5 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-4.4\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linejoin=\"round\"/><path d=\"M20.5 10v5\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>",
+  "color": "#3b80b6",
+  "format": "Where does the money go? · Texas"
+ },
+ {
+  "id": "bills",
+  "name": "Your electric bill",
+  "quote": "Why is my power bill so high?",
+  "icon": "<svg viewBox=\"0 0 24 24\" width=\"34\" height=\"34\" aria-hidden=\"true\"><path d=\"M13.5 2 5 13.5h6L9.5 22 19 9.8h-6.2z\" fill=\"#fff\" stroke=\"#fff\" stroke-width=\"1\" stroke-linejoin=\"round\"/></svg>",
+  "color": "#e8a21a",
+  "format": "What causes what? · Ohio"
+ },
+ {
+  "id": "oil",
+  "name": "Heating oil",
+  "quote": "Can I afford to heat my house this winter?",
+  "icon": "<svg viewBox=\"0 0 24 24\" width=\"34\" height=\"34\" aria-hidden=\"true\"><path d=\"M12 22c4.4 0 7-2.9 7-6.8 0-3.6-2.4-5.6-3.6-8.6-.4 1.9-1.4 3-2.6 3.6.3-3.3-1.2-6.4-4-8.2.2 3.3-1.6 5.3-3.3 7.4C4.2 11.1 5 12.6 5 15.2 5 19.1 7.6 22 12 22z\" fill=\"#fff\"/><path d=\"M12 22c-1.9 0-3.1-1.3-3.1-3 0-2 1.6-3 2.4-4.6.9 1.2 3.8 2.2 3.8 4.6 0 1.7-1.2 3-3.1 3z\" fill=\"#f07c3c\"/></svg>",
+  "color": "#f07c3c",
+  "format": "What causes what? + Who qualifies? · Maine"
+ }
+];
+
+/* ===== lessons/health.js ===== */
+/* Lesson: Health insurance in Georgia. Format: WHO QUALIFIES? (the Rule format).
+   Real race: Georgia governor, 2026 (Keisha Lance Bottoms, D; Rick Jackson, R). Facts come from the approved
+   Georgia lesson (fact-checked Nov 1) plus three added and checked Nov 5: the 2026 poverty line for one and three
+   (HHS), Pathways' rules (ages 19 to 64, up to the poverty line, 80 hours a month) and the Georgia law that makes
+   expansion the legislature's call. Bri, Ana, Dee, Tasha and Rosa are made-up examples. */
+(function () {
+  "use strict";
+  var WU = window.WU, s = WU.sup;
+  var GAP = /(too much|too little|gap|7,?900|8,?000|seven thousand|eight thousand|poverty line|27,?3|help (buying|paying|with)|in between|in the middle|200,?000|two hundred thousand|fall(s)? through|left out)/i;
+  var REP = /(pathways|work(ing)? (hours|requirement|rules?)|report(ing)? (\w+ )?hours|80 hours|eighty hours|intelligent|tied to work|smaller plan)/i;
+  var LISTEN = /(sorry|that'?s (hard|tough|rough|frustrating|a lot)|tough spot|hard spot|not alone|i hear you|i understand|makes sense|does that help|any questions|what do you think|would you like|i can help|let me (know|help))/i;
+  var AGAINST = { re: /(jackson|republican|he)[^.]{0,25}(is against|opposes|hates|wants to (cut|end|get rid of))[^.]{0,8}medicaid/i, why: "Jackson isn’t against Medicaid. He wants a smaller plan tied to reporting work hours, like Georgia Pathways." };
+  var NOWORK = { re: /(bottoms|her plan|democrat)[^.]{0,40}(no|without|doesn'?t (need|require|have)|won'?t (need|require|have))[^.]{0,12}work (requirement|hours|rules?)/i, why: "Under a 2025 federal law, adults covered through expansion report work hours too, under either plan." };
+  var FACTS = [
+    "Georgia's regular Medicaid covers a parent in a family of three only below about $7,900 a year ($662 a month).",
+    "Help buying a marketplace plan on HealthCare.gov starts at the poverty line: $27,320 a year for a family of three in 2026 ($15,960 for one person).",
+    "Between those two lines, adults get no regular Medicaid and no help buying a plan. The only route is Georgia Pathways: adults 19 to 64 with income up to the poverty line who report 80 hours a month of work, school, job training or volunteering.",
+    "About 200,000 Georgia adults are in this gap. Most work, often as cashiers, cooks or home health aides.",
+    "Full Medicaid expansion covers adults up to 138% of the poverty line, about $37,700 a year for a family of three. 40 states and DC have it. The federal government pays 90% of the cost.",
+    "Keisha Lance Bottoms, the 2026 Democratic nominee for Georgia governor, proposes full Medicaid expansion (her CARE Plan) and says she'd make it her top priority with the legislature.",
+    "Rick Jackson, the 2026 Republican nominee, proposes what he calls 'intelligent Medicaid expansion': coverage tied to work, modeled on Georgia Pathways. He is not against Medicaid.",
+    "Under a 2025 federal law, adults covered through expansion must report work hours too, so work reporting applies under either plan.",
+    "Pathways: the state expected about 100,000 enrollees in its first year; 18,527 were enrolled as of June 30, 2026. A federal audit found it spent about twice as much running the program as on health care.",
+    "A governor can't expand Medicaid alone: Georgia law requires the legislature's approval.",
+    "Canvassers explain the rules; they don't promise a specific person will qualify."
+  ];
+  var R = {
+    family: "a family of three (a parent and two kids)", max: 48000, ticks: [0, 10000, 20000, 30000, 40000],
+    worlds: {
+      today: [
+        { to: 7944, c: "g", name: "Medicaid", edge: "$7,900", read: ["Medicaid", "Georgia’s regular Medicaid covers a parent of two only below about $7,900 a year." + s(1)] },
+        { to: 27320, c: "r", name: "The gap", edge: "$27,320", read: ["The gap: no Medicaid, no help buying a plan", "The only way in is Georgia Pathways: report 80 hours a month of work, school or volunteering." + s(3)] },
+        { to: 1e9, c: "b", name: "Help buying a plan", short: "Help buying", read: ["Help buying a plan", "From the poverty line, $27,320 for a family of three, families can get help paying for a plan on HealthCare.gov." + s(2)] }
+      ],
+      expand: [
+        { to: 37702, c: "g", name: "Medicaid", edge: "$37,700", read: ["Medicaid", "With full expansion, adults qualify up to 138% of the poverty line, about $37,700 for a family of three." + s(4)] },
+        { to: 1e9, c: "b", name: "Help buying a plan", short: "Help buying", read: ["Help buying a plan", "Above the expanded limit, families can get help paying for a plan on HealthCare.gov." + s(2)] }
+      ]
+    },
+    people: [
+      { name: "Ana", v: 7000, art: WU.art.ana, read: { today: ["Ana gets Medicaid", "At $7,000 she’s just under Georgia’s limit of about $7,900." + s(1)], expand: ["Ana gets Medicaid", "She still qualifies, with room to spare."] } },
+      { name: "Bri", v: 14000, art: function (w) { return w === "expand" ? WU.art.briUmb : WU.art.briRain; },
+        read: { today: ["Bri is in the gap", "Her only way in is Georgia Pathways, if she reports 80 hours a month." + s(3)], expand: ["Bri qualifies for Medicaid", "At $14,000 she’s well under the expanded limit, about $37,700." + s(4)] } },
+      { name: "Dee", v: 45000, art: WU.art.dee, read: { today: ["Dee gets insurance through work", "Like most Georgians, Dee gets health insurance through her job."], expand: ["Dee gets insurance through work", "Expansion doesn’t change anything for Dee."] } }
+    ]
+  };
+  var miniRuler = function (v, w) { return function () { return '<div class="ruler" style="opacity:.98">' + WU.rulerSVG(R, w, v, { mini: true }) + "</div>"; }; };
+  var ICON_LINE = '<svg viewBox="0 0 52 52" aria-hidden="true"><rect x="4" y="22" width="11" height="10" fill="#bfe9d3"/><rect x="15" y="22" width="18" height="10" fill="#f6d5d1"/><rect x="33" y="22" width="15" height="10" fill="#cfe0f5"/><path d="M24 16 V38" stroke="#262320" stroke-width="2.5"/><circle cx="24" cy="27" r="4" fill="#fff" stroke="#262320" stroke-width="2.5"/></svg>';
+  var ICON_TWO = '<svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="17" cy="26" r="11" fill="#2f5fa8"/><circle cx="35" cy="26" r="11" fill="#b04a3a"/><path d="M24 26 h4" stroke="#fff" stroke-width="2"/></svg>';
+  function nestIcon(svg) { return svg.replace("<svg ", '<svg style="width:84%;height:84%" '); }
+
+  WU.lessons.health = {
+    id: "health", tag: "GA2", title: "Health insurance in Georgia", format: "rule",
+    race: { office: "Governor", state: "Georgia", year: 2026, status: "Positions as stated during the 2026 campaign; Election Day was Nov 3, 2026." },
+    sources: [
+      { t: "Georgia DFCS, 2026 family Medicaid limits: $662 a month for a parent in a family of three (about $7,900 a year)", u: "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a2/2026-family-limits/" },
+      { t: "HHS, 2026 poverty guidelines: $27,320 a year for a family of three, where help buying a plan starts", u: "https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" },
+      { t: "Georgia Pathways rules: adults 19 to 64, income up to the poverty line, 80 hours a month of work, school, training or volunteering (Disability Benefits 101, Georgia)", u: "https://ga.db101.org/ga/programs/health_coverage/medicaid-magi/faqs.htm" },
+      { t: "HealthCare.gov, Medicaid expansion: adults up to 138% of the poverty line; the federal government pays 90%. 138% of $27,320 is about $37,700 (our math)", u: "https://www.healthcare.gov/medicaid-chip/medicaid-expansion-and-you/" },
+      { t: "KFF, which states accepted Medicaid expansion (40 states and DC)", u: "https://www.kff.org/status-of-state-medicaid-expansion-decisions/" },
+      { t: "Georgia Recorder via Cobb County Courier, Sept 2026: about 200,000 Georgia adults in the gap", u: "https://cobbcountycourier.com/2026/09/is-jacksons-intelligent-medicaid-expansion-weak-tea-or-a-revolutionary-fix/" },
+      { t: "US Census QuickFacts, Savannah (about 148,000 people)", u: "https://www.census.gov/quickfacts/savannahcitygeorgia" },
+      { t: "Georgetown Center for Children and Families, Georgia’s low-wage uninsured workers", u: "https://ccf.georgetown.edu/2021/04/28/a-profile-of-georgias-low-wage-uninsured-workers/" },
+      { t: "KFF Health News, March 2024 (the clipping; also in The Atlanta Journal-Constitution)", u: "https://kffhealthnews.org/news/article/georgia-medicaid-work-requirements-experiment-high-cost-low-enrollment/" },
+      { t: "Capitol Beat, June 2023: the state’s first-year estimate of about 100,000", u: "https://capitol-beat.org/2023/06/limited-georgia-medicaid-expansion-launches-this-weekend/" },
+      { t: "GBPI: 18,527 enrolled as of June 30, 2026", u: "https://gbpi.org/pathways-to-coverage-three-years/" },
+      { t: "GAO report via WABE, Sept 2025: about twice as much spent running the program as on health care", u: "https://www.wabe.org/report-georgia-pathways-spending-twice-as-much-on-admin-costs-compared-to-health-care/" },
+      { t: "Bottoms campaign: the CARE Plan", u: "https://www.keishaforgovernor.com/klb-policy-careplan-1.pdf" },
+      { t: "Atlanta News First, Sept 8, 2026: both candidates’ health care plans", u: "https://www.atlantanewsfirst.com/2026/09/08/work-requirements-or-full-coverage-georgia-governor-hopefuls-roll-out-healthcare-proposals/" },
+      { t: "GPB News, Oct 1, 2026: Medicaid work requirements stay no matter who wins", u: "https://www.gpb.org/news/2026/10/01/medicaid-work-requirements-are-here-stay-no-matter-who-wins-georgia-governors-race" },
+      { t: "Official Code of Georgia § 49-4-142.2: expansion needs the General Assembly’s approval (via Justia)", u: "https://law.justia.com/codes/georgia/2022/title-49/chapter-4/article-7/section-49-4-142-2/" }
+    ],
+    learn: [
+      { type: "cover", race: "Georgia governor · 2026", when: "Election Day was Nov 3", h: "Three things you’ll be able to explain about health insurance in Georgia",
+        goals: [
+          { icon: nestIcon(WU.art.briRain), t: "Who Georgia’s Medicaid leaves out" },
+          { icon: ICON_LINE, t: "Where any family lands on one income line" },
+          { icon: ICON_TWO, t: "What each candidate for governor would change" }
+        ], times: [3, 2], fine: "Built by Warmup from public sources. Not affiliated with or approved by either campaign.", btn: "Start: Bri’s question" },
+      { type: "ask", key: "p1", voter: "bri", who: "Bri, a mom of two in Georgia, at her front door",
+        quote: "My job doesn’t offer health insurance, and I can’t afford a plan. Can’t I just get Medicaid?",
+        q: "Your guess: can Bri, who earns $14,000 a year, get Georgia’s regular Medicaid?",
+        opts: ["Yes, $14,000 is low enough", "No, $14,000 is too much for it", "I’m not sure"],
+        after: "Hold that guess. The next screen shows where Bri lands.", btn: "See where Bri lands" },
+      { type: "ruler", task: "zones", start: 14000, ruler: R, src: [1, 2, 3, 6, 8],
+        h: "Georgia’s Medicaid stops at $7,900 a year for a parent of two. Help buying a plan starts at $27,320.",
+        p: "Three sisters, each a mom of two. Drag the line or tap a sister.",
+        reveal: { key: "p1", right: 1, opts: ["Yes, $14,000 is low enough", "No, $14,000 is too much for it", "I’m not sure"], yes: "She’s in the gap, with about 200,000 Georgia adults, most of them working." + s(6, 8), no: "At $14,000 she’s in the gap, with about 200,000 Georgia adults, most of them working." + s(6, 8), none: "At $14,000 Bri is in the gap, with about 200,000 Georgia adults, most of them working." + s(6, 8) },
+        btn: "Change one rule and watch Bri" },
+      { type: "ruler", task: "flip", start: 14000, ruler: R, src: [4, 5],
+        toggle: [{ w: "today", t: "Georgia today" }, { w: "expand", t: "With full expansion" }],
+        h: "Full Medicaid expansion would raise Georgia’s limit to about $37,700 for a family of three" + s(4),
+        doText: "Flip to “With full expansion” and watch Bri.", lockText: "Flip the switch to keep going",
+        flipped: "One rule changed and Bri moved from the gap to Medicaid. 40 states and DC have made this change." + s(5) + " The federal government pays 90% of the cost." + s(4),
+        btn: "Try it on a new family" },
+      { type: "apply", key: "apply", src: [1, 2, 4], h: "Your turn: where does Tasha land?",
+        p: "Tasha is a mom of two. Her job doesn’t offer health insurance.",
+        cases: [
+          { q: "Tasha earns $20,000 a year. Under Georgia’s rules today, what can she get?",
+            opts: [
+              { t: "Regular Medicaid", ok: false, why: "Georgia’s regular Medicaid stops at about $7,900 for a family of three. $20,000 is well above it." },
+              { t: "Nothing, unless she reports 80 hours a month for Pathways", ok: true, why: "$20,000 is above the Medicaid limit and below $27,320, where help buying a plan starts. She’s in the gap." },
+              { t: "Help buying a plan", ok: false, why: "Help buying a plan starts at the poverty line, $27,320 for a family of three. She’s below it." }
+            ], after: function (box) { box.querySelector("#qa").insertAdjacentHTML("beforebegin", miniRuler(20000, "today")()); } },
+          { q: "Same $20,000. If Georgia passed full Medicaid expansion, what could she get?",
+            opts: [
+              { t: "Medicaid", ok: true, why: "Expansion covers a family of three up to about $37,700, so $20,000 qualifies." },
+              { t: "Nothing, she’d still be in the gap", ok: false, why: "Expansion closes the gap for families up to about $37,700." },
+              { t: "Help buying a plan", ok: false, why: "Under $37,700 she’d qualify for Medicaid instead." }
+            ], after: function (box) { box.querySelector("#qa").insertAdjacentHTML("beforebegin", miniRuler(20000, "expand")()); } }
+        ], btn: "What Georgia’s work-tied program has done" },
+      { type: "bars", src: [9, 10, 11, 12], clipFirst: true,
+        h: "Georgia Pathways, the state’s work-tied program, has enrolled fewer than 1 in 5 of the people the state expected",
+        clip: { o: "KFF Health News", h: "Georgia’s Medicaid work requirements costing taxpayers millions despite low enrollment", d: "March 2024" + s(9) },
+        bars: [{ lab: "The state expected in year one", v: 100000, txt: "100,000" + s(10), dash: true }, { lab: "Enrolled after three years (June 2026)", v: 18527, txt: "18,527" + s(11), c: "#1b7a4d" }],
+        alt: "The state expected about 100,000 people in Georgia Pathways in its first year. Three years in, 18,527 are enrolled.",
+        p: "A federal audit found it spent twice as much on running the program as on care." + s(12), btn: "Where the candidates for governor stand" },
+      { type: "compare", src: [3, 4, 5, 13, 14, 15, 16],
+        h: "Both candidates for governor have a plan. The big difference is how many people like Bri would qualify.",
+        cands: [{ side: "d", ini: "KB", name: "Keisha Lance Bottoms", role: "Democratic nominee" }, { side: "r", ini: "RJ", name: "Rick Jackson", role: "Republican nominee" }],
+        rows: [
+          { l: "The plan", d: "Full Medicaid expansion, in her CARE Plan, as in 40 states and DC" + s(13, 5), r: "What he calls <q>intelligent Medicaid expansion</q>, modeled on Georgia Pathways" + s(14) },
+          { l: "Work reporting", d: "Yes. A 2025 federal law requires it for expansion either way" + s(15), r: "Yes. Reporting work hours is the center of the plan" + s(14) },
+          { l: "Who could qualify", d: "Adults up to about $37,700 a year in a family of three" + s(4), r: "Pathways today: adults up to $27,320 for three who report 80 hours a month" + s(3) }
+        ],
+        office: "A governor can’t expand Medicaid alone. Georgia law requires the legislature to approve it." + s(16), btn: "Practice it at a door" }
+    ],
+    door: [
+      { type: "door", attempt: 1, voter: "bri", name: "Bri", voice: "f", who: "Bri at her front door",
+        intro: "Bri brings up health insurance. Answer out loud in about 30 seconds, accurately and fairly.",
+        ask: "My job doesn’t offer health insurance, and I can’t afford a plan. Why can’t I get Medicaid, and what would the candidates for governor do about it?",
+        example: "That's a tough spot, and you're not alone. About 200,000 Georgians earn too much for regular Medicaid but too little to get help buying a plan. Bottoms wants full Medicaid expansion, so people like you would qualify. Jackson wants a smaller plan tied to reporting work hours, like Georgia Pathways.",
+        rubric: {
+          ask: "My job doesn't offer health insurance, and I can't afford a plan. Why can't I get Medicaid, and what would the candidates for governor do about it?",
+          facts: FACTS,
+          items: [
+            { id: "gap", label: "Explained why Bri is stuck", all: [GAP], ai: "Explains why she can't get Medicaid: she earns too much for Georgia's regular Medicaid (about $7,900 for a family of three) but too little for help buying a plan (which starts at the poverty line, $27,320), or names the roughly 200,000 Georgians in that gap.", tip: "Say why she’s stuck: too much for Medicaid, too little for help buying a plan." },
+            { id: "dem", label: "Said where Bottoms stands", all: [/(bottoms|democrat|she |her plan)/i, /expan/i], ai: "States that the Democratic nominee (Bottoms) wants full Medicaid expansion, so adults like Bri would qualify.", tip: "Say Bottoms wants full Medicaid expansion, so people like Bri would qualify." },
+            { id: "rep", label: "Said where Jackson stands, fairly", all: [/(jackson|republican|he |his |other)/i, REP], ai: "States that the Republican nominee (Jackson) wants a smaller, work-tied plan like Georgia Pathways (coverage if you report work hours), without calling him anti-Medicaid.", tip: "Say Jackson wants a smaller plan tied to reporting work hours, like Georgia Pathways." },
+            { id: "listen", label: "Spoke to Bri, not just the issue", all: [LISTEN], ai: "Acknowledges Bri's own situation or feelings, or checks in with her (a question, an offer to help), rather than only reciting policy.", tip: "Start with Bri (“That’s a tough spot”) or end with a check-in (“Does that help?”)." }
+          ],
+          flags: [AGAINST, NOWORK]
+        } },
+      { type: "result", attempt: 1, allH: "All four. That’s a complete, fair answer.", btn: "Hear a strong answer" },
+      { type: "hear", name: "Bri", voice: "f", h: "A strong answer to Bri, with each key point marked",
+        lines: [
+          { who: "c", t: '<span class="pt" data-n="4">That\u2019s a tough spot, and you\u2019re not alone.</span> <span class="pt" data-n="1">Georgia\u2019s Medicaid stops at about $7,900 for a mom of two, and help buying a plan starts at about $27,300. About 200,000 Georgians are stuck in between.</span>' },
+          { who: "c", t: '<span class="pt" data-n="2">Bottoms wants full Medicaid expansion, so people in your spot would qualify.</span> <span class="pt" data-n="3">Jackson wants a smaller plan tied to reporting work hours, like Georgia Pathways.</span>' },
+          { who: "c", t: 'Either way you\u2019d report work hours under a new federal law. The difference is how many people like you get covered. <span class="pt" data-n="4">Does that help?</span>' }
+        ], btn: "Spot the mistake in another answer" },
+      { type: "catch", name: "Bri", h: "This canvasser gets one thing wrong. Tap it.", ask: "What would the candidates for governor do about health insurance?",
+        lines: ["About 200,000 Georgians earn too much for Medicaid and too little for help buying a plan.", "Bottoms wants full Medicaid expansion, so people like you would qualify.", "Jackson is against Medicaid."], wrong: 2,
+        why: "Jackson isn’t against Medicaid. He wants a smaller plan tied to reporting work hours, like Georgia Pathways. Getting the other side right is how voters learn to trust you.",
+        notIt: "That line is accurate. Look for the one that misstates a candidate’s position.", btn: "Try tomorrow’s door now" },
+      { type: "door", attempt: 2, voter: "rosa", name: "Rosa", voice: "f", who: "Rosa at her front door",
+        intro: "Tomorrow’s warmup (try it now in this preview): a different family. Use the income line, not a memorized answer.",
+        ask: "My husband and I make about $30,000 a year, and we have one son. Neither job offers insurance. Would either plan change anything for us?",
+        example: "From what you've told me, at $30,000 for a family of three you're above the poverty line, so today you can get help buying a plan on HealthCare.gov. If Georgia passed full Medicaid expansion, like Bottoms wants, the limit would be about $37,700, so you'd likely qualify for Medicaid. HealthCare.gov can check your details.",
+        rubric: {
+          ask: "My husband and I make about $30,000 a year, and we have one son. Neither job offers insurance. Would either plan change anything for us?",
+          facts: FACTS.concat(["A family of three earning about $30,000 is above the poverty line ($27,320), so today it can get help buying a marketplace plan. It would be under the expanded Medicaid limit (about $37,700). Whether Jackson's plan would cover them is not known from public sources, so a canvasser shouldn't claim either way."]),
+          items: [
+            { id: "today", label: "Placed Rosa’s family under today’s rules", all: [/(help (buying|paying|with)|healthcare\.gov|health care \.?gov|marketplace|exchange|subsid|tax credit|obamacare|affordable care act|above the (poverty|line))/i], ai: "Says that today, at about $30,000 for a family of three, they are above the poverty line ($27,320), so they can get help buying a plan on HealthCare.gov (the marketplace). Saying they are in the gap or get Medicaid today is wrong.", tip: "Say what they can get today: at $30,000 they’re above $27,320, so they can get help buying a plan on HealthCare.gov." },
+            { id: "expand", label: "Applied full expansion to them", all: [/(expan|bottoms)/i, /(qualify|eligible|37,?7|thirty.seven|138|under the (new |expanded )?limit|get medicaid|be covered|medicaid would)/i], ai: "Says that under full Medicaid expansion (Bottoms's plan), a family of three earning about $30,000 would likely qualify for Medicaid, because the limit would be about $37,700 (138% of poverty).", tip: "Say that with full expansion the limit for three would be about $37,700, so at $30,000 they’d likely qualify for Medicaid." },
+            { id: "hedge", label: "Didn’t overpromise", all: [/(likely|probably|should|might|depend|check|from what you|based on what|sounds like|i think|i believe)/i], ai: "Signals that eligibility depends on details or points them to check (for example HealthCare.gov or 'from what you've told me'), instead of guaranteeing coverage.", tip: "Add a hedge: “From what you’ve told me, you’d likely qualify. HealthCare.gov can check.”" }
+          ],
+          flags: [{ re: /(you'?re|you are|your family is)[^.]{0,12}in the gap|(get|qualify for) medicaid (now|today|already)/i, why: "At $30,000 a family of three is above the poverty line, so today they can get help buying a plan, not Medicaid." }, AGAINST]
+        } },
+      { type: "result", attempt: 2, allH: "You applied the rule to a new family. That’s the skill.", btn: "Finish the lesson" },
+      { type: "done", scroll: true, h: "You can explain health insurance in Georgia", d1: "Bri", d2: "Rosa",
+        can: [
+          { t: "Explain who Georgia’s Medicaid leaves out", from: [[1, "gap"]], tip: "Say why Bri is stuck: too much for Medicaid, too little for help buying a plan." },
+          { t: "Place a new family on the income line", from: [[2, "today"], [2, "expand"]], tip: "Use the three lines for a family of three: $7,900, $27,320 and $37,700." },
+          { t: "Say fairly where both candidates stand", from: [[1, "dem"], [1, "rep"]], tip: "Name both plans: full expansion, and a smaller plan tied to work hours." }
+        ],
+        tomorrow: "We’ll ask you where help buying a plan starts for a family of three, and what full expansion would change.",
+        origin: "A real 2026 race: Keisha Lance Bottoms (Democrat) and Rick Jackson (Republican) for governor of Georgia. Their positions come from their own plans and news coverage during the campaign, which ended on Election Day, Nov 3, 2026. Built by Warmup from public sources; not affiliated with or approved by either campaign. Bri, Ana, Dee, Tasha and Rosa are made-up examples.",
+        btn: "Back to lessons" }
+    ]
+  };
+})();
+
+/* ===== lessons/tariffs.js ===== */
+/* Lesson: Tariffs and auto jobs in Michigan. Format: WHAT CAUSES WHAT? (the Chain format).
+   Real race: Michigan U.S. Senate, 2026 (Abdul El-Sayed, D; Mike Rogers, R). Facts come from the approved Michigan
+   lesson (fact-checked Nov 1) plus five added and checked Nov 5: the 50% steel duty and USMCA's partial exemptions
+   (a July 2026 trade brief), vehicle jobs up about 500 (Bridge Michigan's fact-check via Vehicle Service Pros), the
+   University of Michigan's 2025 forecast and its "very uncertain" caveat (Crain's), other forces on auto jobs (Motor1)
+   and who sets tariffs (CRS). Samira, Ray and the Grand Rapids furniture maker are made-up examples. */
+(function () {
+  "use strict";
+  var WU = window.WU, s = WU.sup;
+  var CANADA_PAYS = { re: /canada (pays|is paying|will pay|paid|pays for)/i, why: "Canada doesn’t pay the US tariff. The US company bringing the goods in pays it." };
+  var CAUSED_ALL = { re: /(tariffs?|they) (caused|cost us|killed|wiped out|destroyed|took) (all )?(of )?(those |the |our |4,?000 )?(\w+ )?jobs/i, why: "The job numbers don’t prove tariffs caused the losses. Say tariffs may be one reason." };
+  var ANTI_ALL = { re: /(el.?sayed|the democrat)[^.]{0,20}(opposes|is against|wants to (end|get rid of)) (all )?tariffs/i, why: "El-Sayed isn’t against all tariffs, only what he calls dumb ones." };
+  var FACTS = [
+    "A tariff is a tax on imported goods, paid to US Customs by the US company bringing the goods into the country.",
+    "That company can pass the cost on in higher prices, take a smaller profit or switch suppliers. New York Fed economists found about 90% of the cost of 2025's tariffs fell on US businesses and consumers.",
+    "Steel and aluminum from Canada are taxed at 50%. Parts that meet the USMCA trade deal's rules skip some other US tariffs. Canada has its own counter-tariffs on some US goods.",
+    "Auto parts can cross the US-Canada border several times before a car is finished (NBC News followed one part that crossed four times), so tariffs can apply more than once.",
+    "Michigan had about 4,000 fewer auto parts manufacturing jobs in June 2026 than in June 2025 (113,600 to 109,600, about 3.5%). Vehicle manufacturing added about 500 jobs over the same period.",
+    "The job numbers show timing, not cause. Other forces, such as shifts in electric vehicle plans and pressure on suppliers, also affect auto jobs. A 2025 University of Michigan forecast estimated tariffs would cost Michigan about 3,300 auto jobs and called the estimate very uncertain.",
+    "Abdul El-Sayed (2026 Democratic nominee, Michigan U.S. Senate): \"I'm not against tariffs per se. I'm just against dumb tariffs.\" He wants smart, targeted tariffs tied to Michigan jobs, with unions at the table. The UAW endorsed him in June 2026.",
+    "Mike Rogers (2026 Republican nominee): backed the tariffs in September 2026; in October said \"Canada is not our enemy\" and called to end the Canada tariff fight, while saying \"there are tariffs that have helped.\"",
+    "Presidents imposed these tariffs using powers Congress has delegated. A senator votes on trade laws and can vote to limit those powers but can't set tariffs alone.",
+    "Canvassers explain the mechanism and the evidence; they don't claim certainty the evidence doesn't support."
+  ];
+  var ICON_BORDER = '<svg viewBox="0 0 52 52" aria-hidden="true"><path d="M26 6 V46" stroke="#9aa3ad" stroke-width="3" stroke-dasharray="5 5"/><path d="M28 30 h14 l5 5 -5 5 h-14 z" fill="#b3261e"/><circle cx="14" cy="22" r="8" fill="#8d98a6"/><circle cx="14" cy="22" r="3.5" fill="#6f7b88"/></svg>';
+  var ICON_ROUTE = '<svg viewBox="0 0 52 52" aria-hidden="true"><path d="M2 26 H50" stroke="#9aa3ad" stroke-width="2.5" stroke-dasharray="4 4"/><path d="M6 14 C14 14 14 38 22 38 C30 38 30 14 38 14 C44 14 44 38 48 38" stroke="#545b63" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="14" cy="26" r="4" fill="#b3261e"/><circle cx="30" cy="26" r="4" fill="#b3261e"/></svg>';
+  var ICON_CHART = '<svg viewBox="0 0 52 52" aria-hidden="true"><rect x="8" y="14" width="34" height="9" rx="4" fill="#a7adb5"/><rect x="8" y="29" width="30" height="9" rx="4" fill="#b3261e"/><text x="44" y="38" style="font:800 14px var(--sans);fill:#c27c12">?</text></svg>';
+
+  WU.lessons.tariffs = {
+    id: "tariffs", tag: "MI2", title: "Tariffs and auto jobs in Michigan", format: "chain",
+    race: { office: "U.S. Senate", state: "Michigan", year: 2026, status: "Positions as stated during the 2026 campaign; Election Day was Nov 3, 2026." },
+    sources: [
+      { t: "New York Fed, Feb 2026: who paid the 2025 tariffs (about 90% fell on US businesses and consumers)", u: "https://libertystreeteconomics.newyorkfed.org/2026/02/who-is-paying-for-the-2025-u-s-tariffs/" },
+      { t: "White House fact sheet, July 2026: additional tariffs on Canada (up to 50%)", u: "https://www.whitehouse.gov/fact-sheets/2026/07/fact-sheet-president-donald-j-trump-imposes-additional-tariffs-on-canada/" },
+      { t: "Carra Globe trade brief, updated July 2026: steel and aluminum duties at 50%; goods that meet USMCA rules skip some other tariffs (a commercial summary of official notices)", u: "https://carraglobe.com/?p=7130" },
+      { t: "Michigan Public (NPR), Aug 22, 2026: Canada strikes back with its own tariffs", u: "https://www.michiganpublic.org/2026-08-22/hours-after-u-s-imposes-tariffs-canada-says-itll-strike-back-starting-sept-8" },
+      { t: "Bridge Michigan, July 2025: Canada is Michigan’s biggest trade partner", u: "https://bridgemi.com/michigan-government/trump-plans-35-tariffs-canada-michigans-biggest-trade-partner/" },
+      { t: "NBC News: one auto part crosses the border four times on its way to a car", u: "https://www.nbcnewyork.com/news/national-international/one-auto-part-crosses-border-four-times/6245493/" },
+      { t: "Michigan auto jobs dashboard, Q2 2026: 113,600 parts jobs in June 2025, 109,600 in June 2026", u: "https://www.michiganbusiness.org/globalassets/documents/car-medc-michigan-dashboard-q2-2026.pdf" },
+      { t: "Vehicle Service Pros, July 29, 2026, on Bridge Michigan’s fact-check: parts jobs down about 3.5%; vehicle manufacturing up about 500", u: "https://www.vehicleservicepros.com/aftermarket-business-world/news/news/55394515/michigan-auto-parts-sector-sheds-4000-jobs-despite-trump-tariff-claims" },
+      { t: "Crain’s Detroit Business, May 2025: University of Michigan forecast of about 3,300 auto jobs lost to tariffs, “very uncertain”", u: "https://prod.crainsdetroit.com/node/921496" },
+      { t: "Motor1, July 28, 2026: EV shifts and supplier pressures also shape Michigan auto jobs", u: "https://www.motor1.com/news/803024/trump-michigan-auto-comeback-claim/" },
+      { t: "IMPO, July 30, 2026: announced US production moves whose jobs haven’t arrived yet", u: "https://www.impomag.com/operations/news/22971566/michigan-auto-jobs-lag-despite-tariffdriven-production-push" },
+      { t: "ClickOnDetroit, Oct 21, 2026: where El-Sayed and Rogers stand on tariffs", u: "https://www.clickondetroit.com/news/local/2026/10/21/heres-where-michigan-us-senate-candidates-el-sayed-rogers-stand-on-tariffs/" },
+      { t: "El-Sayed campaign ad on trade deals, Sept 2026", u: "https://abdulforsenate.com/2026/09/new-ad-nafta/" },
+      { t: "Newsweek: Rogers’s September statement backing the tariffs", u: "https://www.newsweek.com/mike-rogers-turns-on-trumps-tariffs-what-michigan-republican-said-before-12538135" },
+      { t: "Reuters via GV Wire, Oct 7, 2026: Rogers’s ad calling to end the Canada tariff fight", u: "https://gvwire.com/2026/10/07/michigan-republican-rogers-calls-for-end-to-canada-tariff-fight-breaking-with-trump-again/" },
+      { t: "UAW statement, Aug 25, 2026: tariffs aimed at low-wage countries, no escalation with Canada", u: "https://uaw.org/uaw-president-shawn-fain-on-u-s-trade-escalation-with-canada/" },
+      { t: "Michigan Public, June 5, 2026: the UAW endorses El-Sayed", u: "https://www.michiganpublic.org/politics-government/2026-06-05/uaw-backs-el-sayed-over-other-democrats-running-for-us-senate" },
+      { t: "Congressional Research Service, R48435: Congressional and presidential authority to impose import tariffs", u: "https://www.everycrsreport.com/reports/R48435.html" }
+    ],
+    learn: [
+      { type: "cover", race: "Michigan U.S. Senate · 2026", when: "Election Day was Nov 3", h: "Three things you’ll be able to explain about tariffs and auto jobs",
+        goals: [
+          { icon: ICON_BORDER, t: "Where a tariff is charged, and who pays it first" },
+          { icon: ICON_ROUTE, t: "Why parts that cross the border again and again cost more" },
+          { icon: ICON_CHART, t: "What the job numbers show and don’t, and where each candidate stands" }
+        ], times: [3, 2], fine: "Built by Warmup from public sources. Not affiliated with or approved by either campaign.", btn: "Start: Samira’s question" },
+      { type: "ask", key: "p1", voter: "samira", who: "Samira, who stamps car parts at a plant in Warren, Michigan",
+        quote: "Tariffs are supposed to protect jobs like mine. So why is our plant hurting?",
+        q: "Your guess: when steel from Canada comes into Michigan, who pays the US tariff?",
+        opts: ["The Canadian steel mill", "The Michigan company bringing it in", "Canada’s government"],
+        after: "Hold that guess. You’ll see the answer on the next screen.", btn: "Send steel across the border" },
+      { type: "border", key: "p1", src: [1, 3], rate: "Tariff: 50%",
+        h: "A tariff is a tax the US company bringing goods in pays at the border",
+        alt: "A coil of steel crosses from Canada into Michigan. A red tag reads Tariff: 50%. An arrow shows the Michigan parts maker paying the tariff to US Customs.",
+        reveal: { key: "p1", right: 1, opts: ["The Canadian steel mill", "The Michigan company bringing it in", "Canada’s government"], yes: "The Michigan company bringing the steel in pays it to US Customs.", no: "The Michigan company bringing the steel in pays it to US Customs, not Canada." },
+        p: "Steel from Canada is taxed at 50%." + s(3) + " Then the company has three choices:",
+        next: [{ i: "price", t: "Raise its prices" }, { i: "profit", t: "Take a smaller profit" }, { i: "switch", t: "Find other suppliers" }],
+        who: { lab: "Who ended up paying for 2025’s tariffs, measured by New York Fed economists" + s(1), us: 90, txt: "About 90% US businesses and shoppers" },
+        btn: "Follow one part across the border" },
+      { type: "route", src: [3, 4, 6],
+        h: "A car part can cross the border four times, and costs can pile up each time a tariff applies" + s(6),
+        alt: "A car part's route: steel made in Ontario, stamped into a part in Michigan, welded into a bigger piece in Ontario, more parts added in Michigan, finished car in Ontario. Four border crossings.",
+        stops: [{ t: "Steel made", c: "ca", icon: "coil" }, { t: "Stamped into a part", c: "us", icon: "part" }, { t: "Welded into a bigger piece", c: "ca", icon: "frame" }, { t: "More parts added", c: "us", icon: "plus" }, { t: "Into a finished car", c: "ca", icon: "car" }],
+        cross: [
+          { tax: true, tag: "50%", text: "Into Michigan. The US tariff on steel from Canada applies: 50%, paid by the Michigan plant bringing it in." + s(3) },
+          { tax: true, tag: "Canada\u2019s tariff", text: "Into Ontario. Canada’s own counter-tariffs can apply to some US goods, paid by the Canadian company bringing it in." + s(4) },
+          { tax: "maybe", tag: "Maybe", text: "Into Michigan again. Parts that meet the USMCA trade deal’s rules skip some US tariffs, but the steel and aluminum in them are taxed either way." + s(3) },
+          { tax: "maybe", tag: "Maybe", text: "Into Ontario again. Whether a tariff applies depends on the part and the trade rules. Each crossing is another chance for one." }
+        ],
+        start: "Follow one part from Canadian steel to a finished car, and watch its cost.",
+        end: "Every tariff adds to the part’s cost. That can show up as a higher car price, a smaller profit or fewer orders.",
+        note: "An example route. Real parts take many routes; NBC News followed one that crossed four times." + s(6) + " The cost column is an illustration, not real prices.",
+        btn: "What happened to Michigan’s auto parts jobs" },
+      { type: "bars", src: [7, 8, 9, 10],
+        h: "Michigan had about 4,000 fewer auto parts jobs in June 2026 than a year before" + s(7),
+        bars: [{ lab: "Michigan auto parts jobs, June 2025", v: 113600, txt: "113,600" + s(7), c: "#8a8f96" }, { lab: "Michigan auto parts jobs, June 2026", v: 109600, txt: "109,600" + s(7), c: "#b3261e" }],
+        alt: "Two bars drawn to scale: 113,600 Michigan auto parts jobs in June 2025 and 109,600 in June 2026, a drop of about 3.5%.",
+        p: "That’s a 3.5% drop. Over the same year, vehicle assembly jobs rose by about 500." + s(8),
+        q: { t: "Does this show the tariffs caused the drop?", lock: "Answer to keep going",
+          opts: [
+            { t: "Yes. Jobs fell while tariffs went up.", ok: false, why: "Timing alone can’t show cause. Other things moved auto jobs that year too, like shifts in electric vehicle plans and pressure on suppliers." + s(10) },
+            { t: "No. It shows when jobs fell, not why.", ok: true, why: "Tariffs may be one reason, but these numbers alone can’t say how much. In 2025, University of Michigan economists forecast tariffs would cost Michigan about 3,300 auto jobs, and called that estimate “very uncertain.”" + s(9) },
+            { t: "No. Tariffs can’t affect jobs.", ok: false, why: "They can. Tariffs raise costs for companies that buy steel and parts from abroad. The question is how much, and the job numbers alone can’t answer it." }
+          ] },
+        btn: "Sort what’s shown from what isn’t" },
+      { type: "sort", src: [1, 8, 11], h: "Some tariff claims are shown by evidence. Others aren’t, at least not yet.",
+        p: "Sort each claim. Getting this right is what makes you trustworthy.", labels: ["Shown by evidence", "Not shown"],
+        items: [
+          { t: "US companies pay the tariff when goods cross into the US.", a: "k", why: "That’s how tariffs are collected: the company bringing goods in pays US Customs." },
+          { t: "Most of the cost of 2025’s tariffs stayed with US businesses and shoppers.", a: "k", why: "New York Fed economists measured it: about 90%." + s(1) },
+          { t: "Tariffs caused all 4,000 lost auto parts jobs.", a: "n", why: "Jobs fell while tariffs rose, but other forces moved jobs too. Nobody has measured the tariffs’ share." },
+          { t: "Tariffs have already brought back more Michigan auto jobs than they cost.", a: "n", why: "Not so far: parts jobs fell about 4,000 and vehicle jobs rose about 500. Announced plant moves haven’t added jobs yet." + s(8, 11) }
+        ], btn: "Where the candidates for Senate stand" },
+      { type: "compare", src: [12, 13, 14, 15, 16, 17, 18],
+        h: "Both candidates for Senate back some tariffs. They differ on which ones, and on Canada.",
+        cands: [{ side: "d", ini: "AE", name: "Abdul El-Sayed", role: "Democratic nominee" }, { side: "r", ini: "MR", name: "Mike Rogers", role: "Republican nominee" }],
+        rows: [
+          { l: "In their words", d: "<q>I’m not against tariffs per se. I’m just against dumb tariffs.</q>" + s(12), r: "<q>Canada is not our enemy,</q> but <q>there are tariffs that have helped.</q>" + s(12) },
+          { l: "On these tariffs", d: "Smart, targeted tariffs tied to Michigan jobs, with unions at the table" + s(12, 13), r: "Backed them in September; in October called to end the Canada tariff fight" + s(14, 15) }
+        ],
+        office: "Presidents imposed these tariffs using powers Congress has given the office. A senator votes on trade laws and can vote to limit those powers, but can’t set tariffs alone." + s(18),
+        p: "The autoworkers’ union backs tariffs on low-wage countries, not a fight with Canada, and endorsed El-Sayed." + s(16, 17),
+        btn: "Practice it at a door" }
+    ],
+    door: [
+      { type: "door", attempt: 1, voter: "samira", name: "Samira", voice: "f", who: "Samira at her apartment door",
+        intro: "Samira brings up tariffs. Answer out loud in about 30 seconds, accurately and fairly.",
+        ask: "These tariffs on Canada are hitting our plant. Who actually pays for them, and what would the candidates for Senate do?",
+        example: "The tariff is paid by the US company bringing the parts in, and most of that cost ends up in our prices. Parts cross the border back and forth, so they can get hit more than once. Michigan has about 4,000 fewer auto parts jobs than a year ago, and tariffs may be one reason. El-Sayed wants targeted tariffs, not dumb ones, with unions at the table. Rogers backed the tariffs, and now he wants the Canada fight ended.",
+        rubric: {
+          ask: "These tariffs on Canada are hitting our plant. Who actually pays for them, and what would the candidates for Senate do?",
+          facts: FACTS,
+          items: [
+            { id: "who", label: "Explained who pays", all: [/(compan(y|ies)|business(es)?|importer|plant|we pay|you pay|americans pay|paid (here|in the us)|higher prices|prices|90|ninety)/i], ai: "Explains that the US company bringing goods in pays the tariff at the border, and that most of the cost stays with US businesses and shoppers (for example through higher prices). Saying Canada pays is wrong.", tip: "Say who pays: the US company bringing goods in, and much of it ends up in prices." },
+            { id: "chain", label: "Explained why autos get hit hard", all: [/(cross(es|ing)?|back and forth|four times|more than once|again and again|supply chain|multiple times|twice)/i], ai: "Explains that auto parts cross the US-Canada border several times, so tariffs can apply more than once and costs pile up.", tip: "Add why autos get hit hard: parts cross the border back and forth, so tariffs can hit more than once." },
+            { id: "honest", label: "Was careful about the job numbers", all: [/(4,?000|four thousand|jobs)/i, /(may|might|could|one reason|part of|not the only|hard to (say|know|tell)|can'?t (say|prove|tell)|other (reasons|things|factors)|doesn'?t prove|not proven|likely)/i], ai: "Mentions jobs AND shows caution: Michigan had about 4,000 fewer auto parts jobs in a year, and the numbers alone don't prove how much tariffs caused (tariffs may be one reason). Credit only if both are present.", tip: "Mention the jobs carefully: about 4,000 fewer auto parts jobs, and tariffs may be one reason." },
+            { id: "sides", label: "Said where both candidates stand, fairly", all: [/(el.?sayed|democrat|dumb|targeted|smart tariffs)/i, /(rogers|republican|he backed|backed (them|the tariffs)|not our enemy|end the (canada )?(fight|tariff))/i], ai: "States El-Sayed's position (not against all tariffs, against 'dumb' ones; targeted tariffs tied to Michigan jobs, unions at the table) AND Rogers's (backed the tariffs; now wants the Canada fight ended while keeping others he says helped).", tip: "Give both sides: El-Sayed wants targeted tariffs, not “dumb” ones; Rogers backed them and now wants the Canada fight ended." }
+          ],
+          flags: [CANADA_PAYS, CAUSED_ALL, ANTI_ALL]
+        } },
+      { type: "result", attempt: 1, allH: "All four. That’s a complete, careful answer.", btn: "Hear a strong answer" },
+      { type: "hear", name: "Samira", voice: "f", h: "A strong answer to Samira, with each key point marked",
+        lines: [
+          { who: "c", t: '<span class="pt" data-n="1">The US company bringing goods in pays the tariff, like a plant buying Canadian steel, and most of it ends up in higher prices here.</span> <span class="pt" data-n="2">Car parts cross the border back and forth, so tariffs can hit the same part more than once.</span>' },
+          { who: "c", t: '<span class="pt" data-n="3">Michigan has about 4,000 fewer auto parts jobs than a year ago. Tariffs may be one reason, but nobody\u2019s measured how much.</span>' },
+          { who: "c", t: '<span class="pt" data-n="4">El-Sayed wants targeted tariffs, not \u201Cdumb\u201D ones, with unions at the table. Rogers backed the tariffs, and now wants the Canada fight ended.</span>' }
+        ], btn: "Spot the mistake in another answer" },
+      { type: "catch", name: "Samira", h: "This canvasser gets one thing wrong. Tap it.", ask: "Who actually pays for these tariffs?",
+        lines: ["The tariff is paid by the US company bringing the steel in.", "Parts cross the border back and forth, so tariffs can hit them more than once.", "Canada pays these tariffs, so they don’t cost us anything."], wrong: 2,
+        why: "The US company bringing goods in pays the tariff, and most of the cost stays in the US. It’s the most common mix-up about tariffs.",
+        notIt: "That line is accurate. Look for the one that gets who pays wrong.", btn: "Try tomorrow’s door now" },
+      { type: "door", attempt: 2, voter: "ray", name: "Ray", voice: "m", who: "Ray at his front door",
+        intro: "Tomorrow’s warmup (try it now in this preview): a different business. Use the chain you learned, not a memorized answer.",
+        ask: "I run a hardware store in Lansing. A lot of my tools and lumber come from suppliers in Canada. If tariffs go up on that stuff, does that hurt me or help me?",
+        example: "Most likely it costs you more. The tariff is paid at the border by whoever brings the goods in, so either you or your US supplier pays it, and they'd probably charge you more. Then you'd have to raise prices, take a smaller profit, or look for other suppliers. How much it hurts depends on whether you can pass it on.",
+        rubric: {
+          ask: "I run a hardware store in Lansing. A lot of my tools and lumber come from suppliers in Canada. If tariffs go up on that stuff, does that hurt me or help me?",
+          facts: FACTS.concat(["For Ray: the tariff is paid at the border by whoever imports the goods into the US, Ray himself if he imports directly or his US supplier, who will likely charge him more. He may then raise prices, take a smaller profit or switch suppliers; the overall effect depends on details."]),
+          items: [
+            { id: "who2", label: "Said who pays first", all: [/(supplier|importer|whoever brings|bring(s|ing)? (it|them|the goods|that stuff|stuff) in|at the border|(you|he|they)( would|'d| will)? pay(s)? (the|that|a) (tariff|tax))/i], ai: "Explains that the tariff is paid at the border by whoever imports the goods into the US: Ray if he imports directly, or his US supplier, who will likely charge him more.", tip: "Start with who pays: Ray, or the US supplier bringing the goods in, pays the tariff at the border." },
+            { id: "options2", label: "Named what can happen next", all: [/(raise|higher|pass (it|that|the cost)|prices?|profit|margin|eat|absorb|switch|other suppliers?|somewhere else|elsewhere|american.made|us.made)/i], ai: "Names at least one realistic response: Ray pays more and raises prices, takes a smaller profit, or switches to other suppliers.", tip: "Say what he can do: raise prices, take a smaller profit or find other suppliers." },
+            { id: "honest2", label: "Was honest about the uncertainty", all: [/(depend|might|may|could|not sure|hard to say|probably|likely)/i], ai: "Says the effect depends on details (how much he can pass on, competitors, other suppliers) instead of promising it will only hurt or only help.", tip: "Be honest: “It depends on whether you can pass the cost on or switch suppliers.”" }
+          ],
+          flags: [CANADA_PAYS, { re: /(definitely|guarantee|for sure)[^.]{0,20}(help|hurt)/i, why: "Nobody can promise that. It depends on his costs and his options." }]
+        } },
+      { type: "result", attempt: 2, allH: "You traced a tariff through a new business. That’s the skill.", btn: "Finish the lesson" },
+      { type: "done", scroll: true, h: "You can explain tariffs and auto jobs", d1: "Samira", d2: "Ray",
+        can: [
+          { t: "Say where a tariff is charged and who pays it first", any: true, from: [[1, "who"], [2, "who2"]], tip: "The US company bringing goods in pays at the border." },
+          { t: "Explain why parts that cross back and forth cost more", from: [[1, "chain"]], tip: "Parts cross the border several times, so tariffs can hit more than once." },
+          { t: "Be honest about what the job numbers show", from: [[1, "honest"]], tip: "About 4,000 fewer parts jobs; tariffs may be one reason, not proven." },
+          { t: "Say fairly where both candidates stand", from: [[1, "sides"]], tip: "El-Sayed: targeted tariffs, not dumb ones. Rogers: backed them, now wants the Canada fight ended." }
+        ],
+        tomorrow: "We’ll ask you who pays a US tariff, and why auto parts can get hit more than once.",
+        origin: "A real 2026 race: Abdul El-Sayed (Democrat) and Mike Rogers (Republican) for U.S. Senate in Michigan. Their positions come from their own statements and news coverage during the campaign, which ended on Election Day, Nov 3, 2026. Built by Warmup from public sources; not affiliated with or approved by either campaign. Samira, Ray and the Grand Rapids furniture maker are made-up examples.",
+        btn: "Back to lessons" }
+    ]
+  };
+})();
+
+WU.boot();
+</script>
+</body>
+</html>
